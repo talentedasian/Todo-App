@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,23 +14,26 @@ import com.example.forum_4_stupid.service.AuthService;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
-	private final RegisterRequest registerRequest;
 	private final AuthService authService;
 	
-	public AuthenticationController(RegisterRequest registerRequest, AuthService authService) {
-		this.registerRequest = registerRequest;
+	public AuthenticationController(AuthService authService) {
 		this.authService = authService;
 	}
 	
 	//change to redirect!!
 	@GetMapping("/signup")
 	public void signupUser (@RequestBody RegisterRequest registerRequest) {
-		authService.signUp(registerRequest);
+		authService.signup(registerRequest);
 	}
 	
 	//change to redirect!!
-	@GetMapping("/verify")
-	public void verifyEmailUser (@RequestParam) {
+	@PostMapping("/verify")
+	public void verifyEmailUser (@RequestParam String token) {
+		
+	}
+	
+	@PostMapping("/login")
+	public void loginUser () {
 		
 	}
 }
