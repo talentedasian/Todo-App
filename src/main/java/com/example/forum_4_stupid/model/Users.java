@@ -27,6 +27,9 @@ public class Users {
 	@Column(nullable = false)
 	private String password;
 	
+	@Column(nullable = false)
+	private boolean enabled;
+	
 	@OneToMany(mappedBy = "commentedBy")
 	private List<Comments> comments;
 	
@@ -65,6 +68,14 @@ public class Users {
 		this.password = password;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	public List<Comments> getComments() {
 		return comments;
 	}
@@ -81,25 +92,24 @@ public class Users {
 		this.posts = posts;
 	}
 
-	public Users(Integer users_id, String username, Instant dateCreated, String password) {
-		super();
-		this.users_id = users_id;
-		this.username = username;
-		this.dateCreated = dateCreated;
-		this.password = password;
-	}
-	
-	
-	
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	public Users(Integer users_id, String username, Instant dateCreated, String password, boolean enabled) {
+		super();
+		this.users_id = users_id;
+		this.username = username;
+		this.dateCreated = dateCreated;
+		this.password = password;
+		this.enabled = enabled;
+	}
+
 	@Override
 	public String toString() {
 		return "Users [users_id=" + users_id + ", username=" + username + ", dateCreated=" + dateCreated + ", password="
-				+ password + ", comments=" + comments + ", posts=" + posts + "]";
+				+ password + ", enabled=" + enabled + ", comments=" + comments + ", posts=" + posts + "]";
 	}
 
 	@Override
@@ -108,6 +118,7 @@ public class Users {
 		int result = 1;
 		result = prime * result + ((comments == null) ? 0 : comments.hashCode());
 		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((posts == null) ? 0 : posts.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
@@ -134,6 +145,8 @@ public class Users {
 				return false;
 		} else if (!dateCreated.equals(other.dateCreated))
 			return false;
+		if (enabled != other.enabled)
+			return false;
 		if (password == null) {
 			if (other.password != null)
 				return false;
@@ -156,8 +169,5 @@ public class Users {
 			return false;
 		return true;
 	}
-	
-	
 
-	
 }
