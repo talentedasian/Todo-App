@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.service.AuthService;
 
@@ -21,19 +22,13 @@ public class AuthenticationController {
 	}
 	
 	//change to redirect!!
-	@GetMapping("/signup")
+	@PostMapping("/signup")
 	public void signupUser (@RequestBody RegisterRequest registerRequest) {
 		authService.signup(registerRequest);
 	}
 	
-	//change to redirect!!
-	@PostMapping("/verify")
-	public void verifyEmailUser (@RequestParam String token) {
-		
-	}
-	
 	@PostMapping("/login")
-	public void loginUser () {
-		
+	public void loginUser (@RequestBody LoginRequest loginRequest) {
+		authService.login(loginRequest);
 	}
 }
