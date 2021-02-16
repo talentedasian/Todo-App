@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.model.Users;
-import com.example.forum_4_stupid.model.VerificationToken;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.repository.VerificationTokenRepository;
 
@@ -20,14 +19,11 @@ public class AuthService {
 	
 	private final UsersRepository usersRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final VerificationTokenRepository verificationTokenRepository;
 	
 	@Autowired
-	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder, 
-			VerificationTokenRepository verifacationRepository) {
+	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder) {
 		this.usersRepository = usersRepository;
 		this.passwordEncoder = passwordEncoder;
-		this.verificationTokenRepository = verifacationRepository;
 	}
 	
 	@Transactional
@@ -44,23 +40,5 @@ public class AuthService {
 	public void login () {
 		
 	}
-	
-	@Transactional
-	private String generateVerificationToken () {
-		var verificationToken = new VerificationToken();
-		verificationToken.setExpiryDate(Date.from(Instant.now().plusSeconds(172800L)));
-		verificationToken.setToken(UUID.randomUUID().toString());
-		verificationTokenRepository.save(verificationToken);
-		
-		return verificationToken.getToken();
-		
-	}
-	
-	
-	public void verifyUser () {
-		
-	}
-	
-	
 	
 }
