@@ -1,12 +1,14 @@
 package com.example.forum_4_stupid.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.service.AuthService;
@@ -23,8 +25,10 @@ public class AuthenticationController {
 	
 	//change to redirect!!
 	@PostMapping("/signup")
-	public void signupUser (@RequestBody RegisterRequest registerRequest) {
-		authService.signup(registerRequest);
+	public ResponseEntity<String> signupUser (@ModelAttribute RegisterRequest registerRequest, @ModelAttribute EmailRequest emailRequest) {
+		authService.signup(registerRequest, emailRequest);
+		String nice = "nice";
+		return new ResponseEntity<>(nice,HttpStatus.OK);
 	}
 	
 	@PostMapping("/login")

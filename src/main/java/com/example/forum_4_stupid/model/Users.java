@@ -1,7 +1,6 @@
 package com.example.forum_4_stupid.model;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;

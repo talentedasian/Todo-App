@@ -20,15 +20,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable()
-			.authorizeRequests()
-				.antMatchers("/api/auth/**")
-				.authenticated()
-			.and()
-			.formLogin()
-				.loginPage("/api/auth/loginUrl")
-				.loginProcessingUrl("/api/auth/login")
-				.defaultSuccessUrl("/no-link-yet", true)
-				;
+			.httpBasic().disable()
+			;
 		
 	}
 
@@ -39,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		// TODO Auto-generated method stub
 		auth.userDetailsService(userDetailsServiceImpl)
 			.passwordEncoder(passwordEncoder());
 			

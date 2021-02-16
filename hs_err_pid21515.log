@@ -1,0 +1,21 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007f99a463efa3, pid=21515, tid=21531
+#
+# JRE version: OpenJDK Runtime Environment (15.0.2+7) (build 15.0.2+7)
+# Java VM: OpenJDK 64-Bit Server VM (15.0.2+7, mixed mode, tiered, compressed oops, g1 gc, linux-amd64)
+# Problematic frame:
+# C  [libjimage.so+0x2fa3]
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/lib/systemd/systemd-coredump %P %u %g %s %t %c %h" (or dumping to /home/almir/backend projects/forum_4_stupid/core.21515)
+#
+# If you would like to submit a bug report, please visit:
+#   https://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -XX:+ShowCodeDetailsInExceptionMessages -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:34473 -javaagent:/home/almir/.eclipse/org.eclipse.platform_4.17.0_1473617060_linux_gtk_x86_64/configuration/org.eclipse.osgi/210/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 com.example.forum_4_stupid.DemoApplication
+
+Host: 
