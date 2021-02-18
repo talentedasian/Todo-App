@@ -1,8 +1,13 @@
 package com.example.forum_4_stupid.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,8 +29,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		Optional<Users> user = Optional.of(usersRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("No username found by the username " + username)));
 		
+		
 		return new User(username, user.get().getPassword(), user.get().isEnabled(), true, 
-				true, true, null);
+				true, true, getAuthoritiesAuthority("USER"));
+	}
+	
+	public Collection<? extends GrantedAuthority> getAuthoritiesAuthority (String role) {
+		List<GrantedAuthority> list = new ArrayList<>();
+		list.add(new SimpleGrantedAuthority(role));
+		
+		return list;
+		
 	}
 
 }

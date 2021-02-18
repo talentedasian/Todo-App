@@ -20,7 +20,7 @@ public class Email {
 	private String email;
 	
 	@ManyToOne
-	@JoinColumn(nullable = false, name = "owner_id")
+	@JoinColumn(nullable = true, name = "owner_id")
 	private Users user;
 
 	public Integer getId() {

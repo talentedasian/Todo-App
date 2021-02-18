@@ -2,9 +2,16 @@ package com.example.forum_4_stupid.service;
 
 import java.security.Key;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,41 +34,51 @@ public class AuthService {
 	private final UsersRepository usersRepository;
 	private final EmailRepository emailRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
 	
 	@Autowired
-	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder, EmailRepository emailRepository) {
+	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder, EmailRepository 
+			emailRepository, AuthenticationManager authenticationManager) {
 		this.usersRepository = usersRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.emailRepository = emailRepository;
+		this.authenticationManager = authenticationManager;
 	}
 	
 	@Transactional
-	public void signup (RegisterRequest registerRequest, EmailRequest emailRequest) {
+	public void signup (RegisterRequest registerRequest) {
 		var user = new Users();
 		user.setUsername(registerRequest.getUsername());
 		user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 		user.setDateCreated(Instant.now());
 		user.setEnabled(true);
 		usersRepository.save(user);
-		addEmail(emailRequest, user);
 
 	}
 	
-	public void login (LoginRequest loginRequest) {
+	public String login (LoginRequest loginRequest) {
+		
+		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+		
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 		
 		String jws = Jwts.builder()
-							.setSubject(loginRequest.getUsername())
-							.setExpiration(new Date(System.currentTimeMillis() + 43200000))
-							.signWith(key)
-							.compact();
+				.setSubject(SecurityContextHolder.getContext().getAuthentication().getName())
+				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
+				.signWith(key)
+				.compact();
+		
+		return jws;
+		
 	}
 	
+	
 	@Transactional
-	public void addEmail (EmailRequest emailRequest, Users user) {
+	public void addEmail (EmailRequest emailRequest) {
 		var email = new Email();
 		email.setEmail(emailRequest.getEmail());
-		email.setUser(user);
 		emailRepository.save(email);
 	}
 	

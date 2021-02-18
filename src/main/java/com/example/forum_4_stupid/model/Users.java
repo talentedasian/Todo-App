@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 
@@ -35,8 +36,8 @@ public class Users {
 	@Column(nullable = false, name = "posts_id")
 	private Set<Todos> todos;
 
-	@OneToMany(mappedBy = "user")
-	@Column(nullable = false, name = "email_id")
+	@OneToMany
+	@JoinColumn(name = "email_id")
 	private Set<Email> email;
 
 	public Integer getId() {
