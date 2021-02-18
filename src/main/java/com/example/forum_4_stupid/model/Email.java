@@ -2,6 +2,7 @@ package com.example.forum_4_stupid.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,9 +20,12 @@ public class Email {
 	@Column(nullable = false)
 	private String email;
 	
-	@ManyToOne
-	@JoinColumn(nullable = true, name = "owner_id")
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Users.class)
+	@JoinColumn(nullable = true, name = "userKey", referencedColumnName = "user_ids")
 	private Users user;
+	
+	@Column(name = "userKey", insertable = false, updatable = false)
+	private Integer userKey;
 
 	public Integer getId() {
 		return id;
@@ -46,22 +50,33 @@ public class Email {
 	public void setUser(Users user) {
 		this.user = user;
 	}
+	
+	
+
+	public Integer getuserKey() {
+		return userKey;
+	}
+
+	public void setuserKey(Integer userKey) {
+		this.userKey = userKey;
+	}
 
 	public Email() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Email(Integer id, String email, Users user) {
+	public Email(Integer id, String email, Users user, Integer userKey) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.user = user;
+		this.userKey = userKey;
 	}
 
 	@Override
 	public String toString() {
-		return "Email [id=" + id + ", email=" + email + ", user=" + user + "]";
+		return "Email [id=" + id + ", email=" + email + ", user=" + user + ", userKey=" + userKey + "]";
 	}
 
 	@Override
@@ -71,6 +86,7 @@ public class Email {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((userKey == null) ? 0 : userKey.hashCode());
 		return result;
 	}
 
@@ -98,7 +114,12 @@ public class Email {
 				return false;
 		} else if (!user.equals(other.user))
 			return false;
+		if (userKey == null) {
+			if (other.userKey != null)
+				return false;
+		} else if (!userKey.equals(other.userKey))
+			return false;
 		return true;
 	}
-	
+
 }
