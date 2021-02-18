@@ -36,11 +36,7 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) {
-		String login = authService.login(loginRequest);
-		HttpHeaders headers = new HttpHeaders();
-//		authService.jwtToken();
-		headers.add("Set-Cookie", "jwt=" + login + "; Expires=" + new Date());
-		return new ResponseEntity<String>("nice",headers,HttpStatus.OK);
+	public void loginUser (@ModelAttribute LoginRequest loginRequest) {
+		authService.login(loginRequest);
 	}
 }

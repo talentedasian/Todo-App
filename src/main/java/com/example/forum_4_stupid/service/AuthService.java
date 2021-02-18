@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -56,22 +57,22 @@ public class AuthService {
 
 	}
 	
-	public String login (LoginRequest loginRequest) {
+	public void login (LoginRequest loginRequest) {
 		
 		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 		
+	}
+	
+	public String jwtLogin () {
 		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-		
 		String jws = Jwts.builder()
 				.setSubject(SecurityContextHolder.getContext().getAuthentication().getName())
 				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
 				.signWith(key)
 				.compact();
 		
-		return jws;
-		
+		return jws;		
 	}
 	
 	
@@ -79,6 +80,7 @@ public class AuthService {
 	public void addEmail (EmailRequest emailRequest) {
 		var email = new Email();
 		email.setEmail(emailRequest.getEmail());
+		email.setUser(usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get());
 		emailRepository.save(email);
 	}
 	

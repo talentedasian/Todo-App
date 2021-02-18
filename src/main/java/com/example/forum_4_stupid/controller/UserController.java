@@ -48,5 +48,7 @@ public class UserController {
 		authService.addEmail(emailRequest);
 	}
 	
+	@GetMapping("")
+	
 	
 }
