@@ -42,6 +42,12 @@ public class UserService {
 		return user;
 	}
 	
+	public Optional<Users> findUserById (Integer user_id) {
+		Optional<Users> user = Optional.ofNullable(usersRepository.findById(user_id).orElseThrow());
+		
+		return user;
+	}
+	
 	public List<Email> getEmail (String owner_id) {
 		try {	
 			return emailRepository.findByUser_Id(Integer.parseInt(owner_id));

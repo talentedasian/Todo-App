@@ -6,11 +6,12 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -27,9 +28,11 @@ public class Users {
 	@Column(nullable = false)
 	private Instant dateCreated;
 	
+	@JsonIgnore
 	@Column(nullable = false)
 	private String password;
 	
+	@JsonIgnore
 	@Column(nullable = false)
 	private boolean enabled;
 	
@@ -37,6 +40,7 @@ public class Users {
 	@Column(nullable = false, name = "posts_id")
 	private Set<Todos> todos;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Email> email;
 
