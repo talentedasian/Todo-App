@@ -27,6 +27,8 @@ public class EmailService {
 	@Transactional
 	public void addEmail (EmailRequest emailRequest) {
 		var email = new Email();
+		System.out.println(Thread.currentThread())
+		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 		email.setEmail(emailRequest.getEmail());
 		email.setUser(usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get());
 		emailRepository.save(email);

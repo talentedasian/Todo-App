@@ -1,12 +1,14 @@
 package com.example.forum_4_stupid.controller;
 
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,7 +58,7 @@ public class UserController {
 //	}
 //	
 	@PostMapping("/add-email")
-	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
+	public void addEmail (@ModelAttribute EmailRequest emailRequest, @AuthenticationPrincipal Principal principal) {
 		emailService.addEmail(emailRequest);
 	}
 	

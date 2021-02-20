@@ -17,7 +17,6 @@ import org.springframework.web.filter.GenericFilterBean;
 import com.example.forum_4_stupid.exceptions.JwtExpiredException;
 import com.example.forum_4_stupid.exceptions.JwtNotFoundException;
 import com.example.forum_4_stupid.exceptions.JwtNotFromUserException;
-import com.example.forum_4_stupid.service.JwtAuthenticationSuccessHandler;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -30,16 +29,21 @@ public class JwtAuthFilter extends GenericFilterBean{
 			throws IOException, ServletException {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request; 
+		
 			//checkIfJwtTokenIsNotExpired method already checks if JWT is null
-		Claims jwt = Jwts.parserBuilder().setSigningKey(JwtAuthenticationSuccessHandler.getJwtKey()).build()
-				.parseClaimsJws(req.getHeader("Authorization")).getBody();
-		if (checkIfJwtTokenIsNotExpired(res, req)) {
-			if (SecurityContextHolder.getContext().getAuthentication().getName() != jwt.getSubject()) {
-				throw new AccessDeniedException("Access Denied, token is not owned by authenticated user", new JwtNotFromUserException("Jwt Token Is not From Original User"));
-			}
-		} else {
-			throw new AccessDeniedException("Jwt Token Validation failed");			
-		}
+//		if (req.getRequestURI().subSequence(0, 4).equals("/user")) {
+//			Claims jwt = Jwts.parserBuilder().setSigningKey(JwtAuthenticationSuccessHandler.getJwtKey()).build()
+//					.parseClaimsJws(req.getHeader("Authorization")).getBody();
+//			System.out.println(req.getRequestURI());
+//			if (checkIfJwtTokenIsNotExpired(res, req)) {
+//				if (SecurityContextHolder.getContext().getAuthentication().getName() != jwt.getSubject()) {
+//					throw new AccessDeniedException("Access Denied, token is not owned by authenticated user", new JwtNotFromUserException("Jwt Token Is not From Original User"));
+//				}
+//			} else {
+//				throw new AccessDeniedException("Jwt Token Validation failed");			
+//			}
+//		}
+		
 		chain.doFilter(req, res);
 		
 	}

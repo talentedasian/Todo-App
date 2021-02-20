@@ -37,7 +37,7 @@ public class EmailDTO {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public EmailDTO(Integer id, String email, Users usersForeignKey) {
+	public EmailDTO(Integer id, String email, UserDTO usersForeignKey) {
 		super();
 		this.id = id;
 		this.email = email;
