@@ -25,4 +25,5 @@ public class TodoController {
 	public void addTodo (@ModelAttribute TodoRequest todoRequest) {
 		todoService.addTodos(todoRequest);
 	}
+	
 }

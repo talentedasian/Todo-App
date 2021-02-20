@@ -61,15 +61,4 @@ public class AuthService {
 		
 	}
 	
-	public String jwtLogin () {
-		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-		String jws = Jwts.builder()
-				.setSubject(SecurityContextHolder.getContext().getAuthentication().getName())
-				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
-				.signWith(key)
-				.compact();
-		
-		return jws;		
-	}
-	
 }
