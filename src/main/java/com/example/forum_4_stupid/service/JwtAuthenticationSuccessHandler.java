@@ -31,6 +31,11 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
 		
 	}
 	
+	public static Key getJwtKey () {
+		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+		return key;
+	}
+	
 	protected void handle (HttpServletRequest request, HttpServletResponse response) {
 		if (response.isCommitted()) {
 			LoggerClass.getLogger().log(Level.DEBUG, "Response already has headers and status codes");
@@ -41,11 +46,10 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
 	}
 	
 	private String jwtLogin () {
-		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 		String jws = Jwts.builder()
 				.setSubject(SecurityContextHolder.getContext().getAuthentication().getName())
 				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
-				.signWith(key)
+				.signWith(getJwtKey)
 				.compact();
 		
 		return jws;		
