@@ -22,6 +22,7 @@ import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.AuthService;
+import com.example.forum_4_stupid.service.EmailService;
 import com.example.forum_4_stupid.service.UserService;
 
 import javassist.NotFoundException;
@@ -32,12 +33,13 @@ public class UserController {
 
 	private final UserService userService;
 	private final AuthService authService;
-	
+	private final EmailService emailService;
 	
 	@Autowired
-	public UserController (UserService userService, AuthService authService) {
+	public UserController (UserService userService, AuthService authService, EmailService emailService) {
 		this.userService = userService;
 		this.authService = authService;
+		this.emailService = emailService;
 	}
 	//implement posts endpoint first
 //	@GetMapping("/user/{username}")
@@ -55,7 +57,7 @@ public class UserController {
 //	
 	@PostMapping("/add-email")
 	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
-		authService.addEmail(emailRequest);
+		emailService.addEmail(emailRequest);
 	}
 	
 	@GetMapping("/email/{owner_id}")

@@ -33,16 +33,13 @@ import io.jsonwebtoken.security.Keys;
 public class AuthService {
 	
 	private final UsersRepository usersRepository;
-	private final EmailRepository emailRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager authenticationManager;
 	
 	@Autowired
-	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder, EmailRepository 
-			emailRepository, AuthenticationManager authenticationManager) {
+	public AuthService (UsersRepository usersRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
 		this.usersRepository = usersRepository;
 		this.passwordEncoder = passwordEncoder;
-		this.emailRepository = emailRepository;
 		this.authenticationManager = authenticationManager;
 	}
 	
@@ -58,8 +55,8 @@ public class AuthService {
 	}
 	
 	public void login (LoginRequest loginRequest) {
-		
-		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
+				(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		
 	}
@@ -73,15 +70,6 @@ public class AuthService {
 				.compact();
 		
 		return jws;		
-	}
-	
-	
-	@Transactional
-	public void addEmail (EmailRequest emailRequest) {
-		var email = new Email();
-		email.setEmail(emailRequest.getEmail());
-		email.setUser(usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get());
-		emailRepository.save(email);
 	}
 	
 }

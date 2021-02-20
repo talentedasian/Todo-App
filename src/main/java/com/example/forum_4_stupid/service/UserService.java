@@ -6,14 +6,10 @@ import java.util.Optional;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.example.forum_4_stupid.LoggerClass;
-import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.model.Users;
