@@ -1,11 +1,8 @@
 package com.example.forum_4_stupid.controller;
 
-import java.util.Date;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +12,6 @@ import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.service.AuthService;
 
-import io.jsonwebtoken.Jwts;
 
 @RestController
 @RequestMapping("/api/auth")
