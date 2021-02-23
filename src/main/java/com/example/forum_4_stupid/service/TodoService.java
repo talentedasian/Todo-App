@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.service;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,7 +27,6 @@ public class TodoService {
 		this.usersRepository = usersRepository;
 	}
 	
-	@Transactional(timeout = 20)
 	public void addTodos (TodoRequest todoRequest) {
 		var todos = new Todos();
 		todos.setContent(todoRequest.getContent());
@@ -38,5 +38,11 @@ public class TodoService {
 		todosRepository.save(todos);
 	}
 	
+	@Transactional(readOnly = true)
+	public Optional<Todos> findTodosByOwnerId (Integer id) {
+		Optional<Todos> todo = Optional.of(todosRepository.findById(id)).get();
+		
+		return todo;
+	}
 	
 }

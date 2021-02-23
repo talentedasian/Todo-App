@@ -1,14 +1,10 @@
 package com.example.forum_4_stupid.controller;
 
-
-import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
+import com.example.forum_4_stupid.dto.TodoRequest;
+import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.model.Email;
+import com.example.forum_4_stupid.model.Todos;
 import com.example.forum_4_stupid.model.Users;
-import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.EmailService;
+import com.example.forum_4_stupid.service.TodoService;
 import com.example.forum_4_stupid.service.UserService;
 
 import javassist.NotFoundException;
@@ -34,31 +33,34 @@ import javassist.NotFoundException;
 public class UserController {
 
 	private final UserService userService;
-	private final AuthService authService;
+	private final TodoService todoService;
 	private final EmailService emailService;
 	
 	@Autowired
-	public UserController (UserService userService, AuthService authService, EmailService emailService) {
+	public UserController (UserService userService, EmailService emailService, TodoService todoService) {
 		this.userService = userService;
-		this.authService = authService;
 		this.emailService = emailService;
+		this.todoService = todoService;
 	}
+	
 	//implement posts endpoint first
-//	@GetMapping("/user/{username}")
-//	public ResponseEntity<Optional<Users>> getUserInformation (@PathVariable String username) throws NotFoundException {
-//		Users user = userService.getUser(username).get();
-//		
-//		var userDtoMapper = new UserDtoMapper();
-//		
-//		userDtoMapper.returnUser(user, todos);	
-//		
-//		
-//		
-//		return new ResponseEntity<Optional<Users>>(user, HttpStatus.OK);
-//	}
-//	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<UserDTO> getUserInformation (@PathVariable String id) throws NotFoundException {
+		Users users = userService.findUserById(Integer.parseInt(id)).get();
+		
+		var user = new UserDtoMapper().returnUser(users);
+		
+		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+	}
+	
+	@PostMapping("add-todo")
+	public void addTodo (@ModelAttribute TodoRequest todoRequest) {
+		todoService.addTodos(todoRequest);
+	}
+	
+	
 	@PostMapping("/add-email")
-	public void addEmail (@ModelAttribute EmailRequest emailRequest, @AuthenticationPrincipal Principal principal) {
+	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
 		emailService.addEmail(emailRequest);
 	}
 	
@@ -68,7 +70,7 @@ public class UserController {
 		Email email = userService.getEmail(owner_id).get(0);
 		
 		var emailDtoMapper = new EmailDtoMapper();
-		EmailDTO emailResponse = emailDtoMapper.returnEmail(email, user);
+		EmailDTO emailResponse = emailDtoMapper.returnEmail(email);
 		
 		return new ResponseEntity<EmailDTO>(emailResponse, HttpStatus.OK);
 	}

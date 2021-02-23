@@ -1,9 +1,12 @@
 package com.example.forum_4_stupid.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class UserDTO {
 	
 	private Integer id;
 	private String username;
+	@JsonIgnore
 	private TodoDTO todoForeignKey;
 	
 	public Integer getId() {

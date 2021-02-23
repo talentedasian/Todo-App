@@ -8,14 +8,12 @@ public class EmailDtoMapper {
 	
 	private UserDtoMapper userDtoMapper = new UserDtoMapper();
 	
-	public EmailDTO returnEmail (Email email, Users users) {
+	public EmailDTO returnEmail (Email email) {
 		var emailDTO = new EmailDTO();
 		emailDTO.setId(email.getId());
 		emailDTO.setEmail(email.getEmail());
-		emailDTO.setUsersForeignKey(userDtoMapper.returnUserForeignKey(users));
 		
 		return emailDTO;
 	}
-
 	
 }

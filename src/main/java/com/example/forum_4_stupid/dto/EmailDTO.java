@@ -1,7 +1,5 @@
 package com.example.forum_4_stupid.dto;
 
-import com.example.forum_4_stupid.model.Users;
-
 public class EmailDTO {
 	
 	private Integer id;

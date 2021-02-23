@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.filter;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Date;
 
 import javax.servlet.FilterChain;
@@ -18,10 +19,13 @@ import com.example.forum_4_stupid.exceptions.JwtExpiredException;
 import com.example.forum_4_stupid.exceptions.JwtNotFoundException;
 import com.example.forum_4_stupid.exceptions.JwtNotFromUserException;
 
+import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import javax.servlet.Filter;
 
-public class JwtAuthFilter extends GenericFilterBean{
+public class JwtAuthFilter implements Filter{
 
 	//throw an appropriate error and status code
 	@Override
@@ -30,44 +34,28 @@ public class JwtAuthFilter extends GenericFilterBean{
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request; 
 		
-			//checkIfJwtTokenIsNotExpired method already checks if JWT is null
-//		if (req.getRequestURI().subSequence(0, 4).equals("/user")) {
-//			Claims jwt = Jwts.parserBuilder().setSigningKey(JwtAuthenticationSuccessHandler.getJwtKey()).build()
-//					.parseClaimsJws(req.getHeader("Authorization")).getBody();
-//			System.out.println(req.getRequestURI());
-//			if (checkIfJwtTokenIsNotExpired(res, req)) {
-//				if (SecurityContextHolder.getContext().getAuthentication().getName() != jwt.getSubject()) {
-//					throw new AccessDeniedException("Access Denied, token is not owned by authenticated user", new JwtNotFromUserException("Jwt Token Is not From Original User"));
-//				}
-//			} else {
-//				throw new AccessDeniedException("Jwt Token Validation failed");			
-//			}
-//		}
+			//checks if user has gone to a protected resource
+		if (req.getRequestURI().subSequence(0, 5).equals("/user")) {
+			try {
+				Claims jwt = Jwts.parserBuilder().setSigningKey(JwtAuthenticationSuccessHandler.getJwtKey()).build()
+						.parseClaimsJws(req.getHeader("Authorization")).getBody();		
+				date = jwt.getExpiration();
+			} catch (IllegalArgumentException e) {
+				throw new AccessDeniedException("Access Denied! User Accessed protected resource without proper authorization",
+						new JwtNotFoundException("No Jwt Found on Authorization Header"));
+			} catch (ExpiredJwtException e) {
+				throw new AccessDeniedException("Access Denied! User accessed protected resource without proper authorization", 
+						new JwtExpiredException("Jwt Token Expired"));
+			} catch (ClaimJwtException e) {
+				throw new AccessDeniedException("Access Denied! User accessed protected resource without proper authorization", 
+						new JwtNotFromUserException("Jwt token not from user"));
+			}
+		}
 		
 		chain.doFilter(req, res);
-		
 	}
 	
-	//do appropriate token validation!!
-	private boolean checkIfJwtTokenIsNotExpired (HttpServletResponse res, HttpServletRequest req) {
-		if (checkIfAuthorizationHeaderIsNull(req)) {
-			Claims jwt = Jwts.parserBuilder().setSigningKey(JwtAuthenticationSuccessHandler.getJwtKey()).build()
-								.parseClaimsJws(req.getHeader("Authorization")).getBody();
-			Date expiry = new Date();
-			if (jwt.getExpiration().toInstant().isBefore(expiry.toInstant()) && !jwt.getExpiration().toInstant().isAfter(expiry.toInstant())) {
-				return true;
-			}
-			throw new AccessDeniedException("Access Denied token is already expired.", new JwtExpiredException("Jwt Token Is Expired Already"));
-		}
-		return false;
-	}
+}
 	
-	private boolean checkIfAuthorizationHeaderIsNull (HttpServletRequest req) {
-		if (req.getHeader("Authorization") == null) {
-			throw new JwtNotFoundException("No Jwt Token Is found On the Authorization Header");
-		}
-		return true;
-	}
 	
 
-}

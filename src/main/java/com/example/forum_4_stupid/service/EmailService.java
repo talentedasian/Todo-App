@@ -1,7 +1,6 @@
 package com.example.forum_4_stupid.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,10 +26,8 @@ public class EmailService {
 	@Transactional
 	public void addEmail (EmailRequest emailRequest) {
 		var email = new Email();
-		System.out.println(Thread.currentThread())
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
 		email.setEmail(emailRequest.getEmail());
-		email.setUser(usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get());
+		email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
 		emailRepository.save(email);
 	}
 }

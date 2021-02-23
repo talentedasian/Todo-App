@@ -11,9 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
+import com.example.forum_4_stupid.filter.JwtAuthenticationSuccessHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -21,14 +23,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
-		.authorizeRequests()
-			.antMatchers("/api/auth/**")
-				.permitAll()
-		.and()
-		.sessionManagement()
-			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and();
+		http.csrf().disable()
+			.authorizeRequests()
+				.antMatchers("/api/auth/**")
+					.permitAll()
+			.and()
+				.httpBasic().disable()
+				.sessionManagement()
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 		
 	}
@@ -55,5 +59,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	public UserDetailsService userDetailsService () {
 		return new UserDetailsServiceImpl();
 	}
+	
+//	@Bean
+//	public AuthenticationSuccessHandler authenticationSuccessHandler () {
+//		return new JwtAuthenticationSuccessHandler();
+//	}
 	
 }

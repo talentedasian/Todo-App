@@ -2,21 +2,17 @@ package com.example.forum_4_stupid.service;
 
 import java.time.Instant;
 
-import org.apache.tomcat.jni.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
-import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
@@ -48,22 +44,7 @@ public class AuthService {
 	public void login (LoginRequest loginRequest) {
 		Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken
 				(loginRequest.getUsername(), loginRequest.getPassword()));
-		System.out.println(java.lang.Thread.currentThread());
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		context.setAuthentication(auth);
-		SecurityContextHolder.setContext(context);
-		System.out.println(context.getAuthentication().getName());
-	}
-	
-
-	@Transactional
-	public void addEmail (EmailRequest emailRequest) {
-		var email = new Email();
-		System.out.println(Thread.currentThread());
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-		email.setEmail(emailRequest.getEmail());
-		email.setUser(usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).get());
-		emailRepository.save(email);
+		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 	
 }

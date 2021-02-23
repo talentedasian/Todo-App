@@ -40,19 +40,8 @@ public class AuthenticationController {
 		authService.login(loginRequest);
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Set-Cookie", "auth=" + jwtLogin());
 		
 		return new ResponseEntity<String>("login successful", headers, HttpStatus.OK);
-	}
-	
-	private String jwtLogin () {
-		System.out.println(Thread.currentThread());
-		String jws = Jwts.builder()
-				.setSubject(SecurityContextHolder.getContext().getAuthentication().getName())
-				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
-				.compact();
-		
-		return jws;	
 	}
 	
 }
