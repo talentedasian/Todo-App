@@ -11,11 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
-import com.example.forum_4_stupid.filter.JwtAuthenticationSuccessHandler;
 
 @EnableWebSecurity
 @Configuration

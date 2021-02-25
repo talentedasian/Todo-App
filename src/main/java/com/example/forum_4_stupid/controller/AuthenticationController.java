@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.service.AuthService;
+import com.example.forum_4_stupid.service.JwtProvider;
 
 
 @RestController
@@ -36,8 +37,11 @@ public class AuthenticationController {
 		authService.login(loginRequest);
 		
 		HttpHeaders headers = new HttpHeaders();
+		JwtProvider jwtProvider = new JwtProvider();
 		
-		return new ResponseEntity<String>("login successful", headers, HttpStatus.OK);
+		String jwt = jwtProvider.jwtLogin(loginRequest);
+		
+		return new ResponseEntity<String>(jwt, headers, HttpStatus.OK);
 	}
 	
 }

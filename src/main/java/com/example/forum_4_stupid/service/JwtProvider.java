@@ -3,15 +3,12 @@ package com.example.forum_4_stupid.service;
 import java.security.KeyPair;
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -37,6 +34,5 @@ public class JwtProvider {
 		
 		return jws;	
 	}
-	
 	
 }

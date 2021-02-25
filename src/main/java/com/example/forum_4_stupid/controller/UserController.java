@@ -53,12 +53,6 @@ public class UserController {
 		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
 	}
 	
-	@PostMapping("add-todo")
-	public void addTodo (@ModelAttribute TodoRequest todoRequest) {
-		todoService.addTodos(todoRequest);
-	}
-	
-	
 	@PostMapping("/add-email")
 	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
 		emailService.addEmail(emailRequest);
@@ -66,7 +60,6 @@ public class UserController {
 	
 	@GetMapping("/email/{owner_id}")
 	public ResponseEntity<EmailDTO> getEmail(@PathVariable String owner_id) {
-		Users user = userService.findUserById(Integer.parseInt(owner_id)).get();
 		Email email = userService.getEmail(owner_id).get(0);
 		
 		var emailDtoMapper = new EmailDtoMapper();
