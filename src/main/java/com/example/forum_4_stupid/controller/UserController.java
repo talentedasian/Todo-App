@@ -35,38 +35,32 @@ public class UserController {
 	private final UserService userService;
 	private final TodoService todoService;
 	private final EmailService emailService;
+	private final UserDtoMapper userDtoMapper;
 	
 	@Autowired
-	public UserController (UserService userService, EmailService emailService, TodoService todoService) {
+	public UserController (UserService userService, EmailService emailService, TodoService todoService, UserDtoMapper userDtoMapper) {
 		this.userService = userService;
 		this.emailService = emailService;
 		this.todoService = todoService;
+		this.userDtoMapper = userDtoMapper;
 	}
 	
-	//implement posts endpoint first
-	@GetMapping("/user/{id}")
-	public ResponseEntity<UserDTO> getUserInformation (@PathVariable String id) throws NotFoundException {
+	@GetMapping("/userById/{id}")
+	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) throws NotFoundException {
 		Users users = userService.findUserById(Integer.parseInt(id)).get();
 		
-		var user = new UserDtoMapper().returnUser(users);
+		var user = userDtoMapper.returnUser(users);
 		
 		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
 	}
 	
-	@PostMapping("/add-email")
-	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
-		emailService.addEmail(emailRequest);
-	}
-	
-	@GetMapping("/email/{owner_id}")
-	public ResponseEntity<EmailDTO> getEmail(@PathVariable String owner_id) {
-		Email email = userService.getEmail(owner_id).get(0);
+	@GetMapping("/userByUsername")
+	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) throws NotFoundException {
+		Users users = userService.getUser(username).get();
 		
-		var emailDtoMapper = new EmailDtoMapper();
-		EmailDTO emailResponse = emailDtoMapper.returnEmail(email);
+		var user = userDtoMapper.returnUser(users);
 		
-		return new ResponseEntity<EmailDTO>(emailResponse, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
 	}
-	
 	
 }

@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
+import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
 
@@ -18,18 +20,22 @@ import com.example.forum_4_stupid.service.JwtProvider;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
+	private final UserDtoMapper userMapper;
+	private final JwtProvider jwtProvider;
 	private final AuthService authService;
 	
-	public AuthenticationController(AuthService authService) {
+	public AuthenticationController(UserDtoMapper userMapper, JwtProvider jwtProvider
+			, AuthService authService) {
+		this.userMapper = userMapper;
+		this.jwtProvider = jwtProvider;
 		this.authService = authService;
 	}
 	
-	//change to redirect!!
 	@PostMapping("/signup")
-	public ResponseEntity<String> signupUser (@ModelAttribute RegisterRequest registerRequest) {
-		authService.signup(registerRequest);
-		String nice = "nice";
-		return new ResponseEntity<>(nice,HttpStatus.OK);
+	public RedirectView signupUser (@ModelAttribute RegisterRequest registerRequest) {
+		RedirectView redirectUserAfterSignup = userMapper.saveUser(registerRequest);
+		
+		return redirectUserAfterSignup;
 	}
 	
 	@PostMapping("/login")
@@ -37,7 +43,6 @@ public class AuthenticationController {
 		authService.login(loginRequest);
 		
 		HttpHeaders headers = new HttpHeaders();
-		JwtProvider jwtProvider = new JwtProvider();
 		
 		String jwt = jwtProvider.jwtLogin(loginRequest);
 		

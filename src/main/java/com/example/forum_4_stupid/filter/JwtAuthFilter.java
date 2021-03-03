@@ -34,7 +34,7 @@ public class JwtAuthFilter implements Filter {
 			//checks if user has gone to a protected resource
 		if (req.getRequestURI().subSequence(0, 5).equals("/user")) {
 			try {
-				Claims jwt = Jwts.parserBuilder().setSigningKey(JwtProvider.key().getPrivate()).build()
+				Claims jwt = Jwts.parserBuilder().build()
 						.parseClaimsJws(req.getHeader("Authorization")).getBody();
 				if (req.getParameter("id").equals(jwt.getId().toString())) {
 					return;
