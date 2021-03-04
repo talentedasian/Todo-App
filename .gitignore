@@ -33,5 +33,7 @@ build/
 
 .mvn/
 *.log
+mvnw.cmd
+mvnw
 
 
