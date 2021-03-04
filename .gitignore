@@ -1,8 +1,6 @@
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
 *.log
 
 ### STS ###
@@ -34,8 +32,6 @@ build/
 .vscode/
 
 .mvn/
-hs_err_pid16197.log
-hs_err_pid17076.log
-hs_err_pid27658.log
-mvnw
-mvnw.cmd
+*.log
+
+
