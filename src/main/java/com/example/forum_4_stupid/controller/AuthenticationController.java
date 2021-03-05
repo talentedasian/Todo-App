@@ -39,7 +39,7 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) {
+	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) throws IllegalArgumentException	 {
 		authService.login(loginRequest);
 		
 		HttpHeaders headers = new HttpHeaders();

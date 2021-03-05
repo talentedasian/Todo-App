@@ -13,8 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.forum_4_stupid.filter.JwtAuthFilter;
 import com.example.forum_4_stupid.filter.LoginFilter;
-
 
 @EnableWebSecurity
 @Configuration
@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-				.addFilterAfter(new LoginFilter(), UsernamePasswordAuthenticationFilter.class);
+				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 		
 	}

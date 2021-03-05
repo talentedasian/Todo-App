@@ -11,6 +11,9 @@ public class JwtNotFoundException extends RuntimeException{
 		super(message);
 	}
 
-	
-	
+	public JwtNotFoundException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 }

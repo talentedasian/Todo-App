@@ -10,10 +10,13 @@ public class AccountDoesNotExistException extends RuntimeException {
 		super(errMessage, err);
 	}
 
+	public AccountDoesNotExistException(String errMessage) {
+		super(errMessage);
+	}
+
 	public AccountDoesNotExistException() {
 		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-	
 	
 }
