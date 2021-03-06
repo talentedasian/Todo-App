@@ -46,7 +46,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/userById/{id}")
-	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) throws NotFoundException {
+	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) {
 		Users users = userService.findUserById(Integer.parseInt(id)).get();
 		
 		var user = userDtoMapper.returnUser(users);
@@ -55,12 +55,13 @@ public class UserController {
 	}
 	
 	@GetMapping("/userByUsername")
-	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) throws NotFoundException {
+	public ResponseEntity<Users> getUserInformationByUsername (@RequestParam String username) {
 		Users users = userService.getUser(username).get();
 		
 		var user = userDtoMapper.returnUser(users);
+		user.setUsername("tanga");
 		
-		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+		return new ResponseEntity<Users>(users, HttpStatus.OK);
 	}
 	
 }

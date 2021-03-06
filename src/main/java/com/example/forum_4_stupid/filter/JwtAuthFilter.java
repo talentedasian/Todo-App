@@ -1,6 +1,8 @@
 package com.example.forum_4_stupid.filter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import org.apache.logging.log4j.Level;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.example.forum_4_stupid.JwtKeys;
 import com.example.forum_4_stupid.LoggerClass;
 import com.example.forum_4_stupid.exceptions.AccessIsDeniedException;
 import com.example.forum_4_stupid.exceptions.JwtExpiredException;
@@ -20,15 +23,18 @@ import com.example.forum_4_stupid.exceptions.JwtNotFoundException;
 import com.example.forum_4_stupid.exceptions.JwtNotFromUserException;
 import com.example.forum_4_stupid.exceptions.ProtectedResourceException;
 import com.example.forum_4_stupid.service.JwtProvider;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ch.qos.logback.classic.joran.action.LevelAction;
 import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
+
 import javax.servlet.Filter;
 
 public class JwtAuthFilter implements Filter {
-	
 	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -39,34 +45,71 @@ public class JwtAuthFilter implements Filter {
 			//checks if user has gone to a protected resource
 		if (req.getRequestURI().subSequence(0, 5).equals("/user")) {
 			try {
-				Claims jwt = Jwts.parserBuilder().build()
-						.parseClaimsJwt(req.getHeader("Authorization")).getBody();
-				if (!req.getParameter("username").equals(jwt.getId().toString())) {
+				System.out.println(JwtKeys.getSigningKey());
+				Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
+						.parseClaimsJws(req.getHeader("Authorization")).getBody();
+				if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
+					handleIllegalAccessOfResourceException(res);
 					return;
-				} else {
-					throw new AccessIsDeniedException("Access Denied! User Accessed protected resouce from another user",
-							new ProtectedResourceException("Unauthorized User accessed resource " + req.getRequestURL() + "query parameters " + req.getQueryString()));
 				}
 			} catch (IllegalArgumentException e) {
-				LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource without proper authorization");
 				handleIllegalArgumentException(res);
 				return;
 			} catch (ExpiredJwtException e) {
-				throw new AccessIsDeniedException("Access Denied! User accessed protected resource without proper authorization", 
-						new JwtExpiredException("Jwt Token Expired"));
-			} catch (ClaimJwtException e) {
-				throw new AccessIsDeniedException("Access Denied! User accessed protected resource without proper authorization", 
-						new JwtNotFromUserException("Jwt token not from user"));
+				handleExpiredJwtException(res);
+				return;
+			} catch (SignatureException e) {
+				handleInvalidSignatureJwtException(res);
+				return;
 			}
 		}
 		chain.doFilter(req, res);
 	}
 	
 	private void handleIllegalArgumentException (HttpServletResponse res) throws IOException {
+		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource without proper authorization");
+		Map<String, String> errResponse = new HashMap<>();
+		errResponse.put("code", "401");
+		errResponse.put("err", "No JWT Found on Authorization Header");
+		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		res.setContentType("application/json");
 		res.setStatus(401);
-		res.getWriter().write("{\n\"code\": " + "401\n" + "\"err\": " + "\"No JWT Found on Authorizatio Header\"\n}");
+		res.getWriter().write(servletErrResponse);
 	}
 	
+	private void handleIllegalAccessOfResourceException (HttpServletResponse res) throws IOException {
+		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed resource from another user");
+		Map<String, String> errResponse = new HashMap<>();
+		errResponse.put("code", "401");
+		errResponse.put("err", "Illegal Access of Resource");
+		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		res.setContentType("application/json");
+		res.setStatus(401);
+		res.getWriter().write(servletErrResponse);
+	}
+	
+	private void handleExpiredJwtException (HttpServletResponse res) throws IOException {
+		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource with expired JWT");
+		Map<String, String> errResponse = new HashMap<>();
+		errResponse.put("code", "401");
+		errResponse.put("err", "Expired JWT");
+		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		res.setContentType("application/json");
+		res.setStatus(401);
+		res.getWriter().write(servletErrResponse);
+	}
+	
+	private void handleInvalidSignatureJwtException (HttpServletResponse res) throws IOException {
+		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource with invalid signature of JWT. Server Might have Restarted");
+		Map<String, String> errResponse = new HashMap<>();
+		errResponse.put("code", "401");
+		errResponse.put("err", "Invalid Signature of JWT");
+		errResponse.put("reason", "Server might have restarted or JWT was tampered");
+		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		res.setContentType("application/json");
+		res.setStatus(401);
+		res.getWriter().write(servletErrResponse);
+	}
 }
 	
 	
