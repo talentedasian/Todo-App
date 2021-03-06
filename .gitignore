@@ -33,7 +33,8 @@ build/
 
 .mvn/
 *.log
-mvnw.cmd
 mvnw
+mvnw.cmd
+/src/main/com/example/forum_4_stupid/JwtKeys
 
 

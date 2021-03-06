@@ -64,7 +64,7 @@ public class JwtAuthFilter implements Filter {
 	
 	private void handleIllegalArgumentException (HttpServletResponse res) throws IOException {
 		res.setStatus(401);
-		res.getWriter().write("\"code\": " + "401\n" + "\"err\": " + "\"No JWT Found on Authorizatio Header\"");
+		res.getWriter().write("{\n\"code\": " + "401\n" + "\"err\": " + "\"No JWT Found on Authorizatio Header\"\n}");
 	}
 	
 }

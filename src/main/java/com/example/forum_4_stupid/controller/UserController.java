@@ -55,7 +55,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/userByUsername")
-	public ResponseEntity<UserDTO> getUserInformationByUsername (@PathVariable String username) throws NotFoundException {
+	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) throws NotFoundException {
 		Users users = userService.getUser(username).get();
 		
 		var user = userDtoMapper.returnUser(users);
