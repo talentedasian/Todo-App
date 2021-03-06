@@ -1,11 +1,15 @@
 package com.example.forum_4_stupid.dtoMapper;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
+import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.AuthService;
 
@@ -34,11 +38,12 @@ public class UserDtoMapper {
 		return userDTO;
 	}
 	
-	public RedirectView saveUser (RegisterRequest registerRequest) {
-		RedirectView todosRedirect = new RedirectView("http://localhost:8080/user/userByUsername?username=" + registerRequest.getUsername());
-		authService.signup(registerRequest);
-		
-		return todosRedirect;
+	public void saveUser (RegisterRequest registerRequest) {
+		try {
+			authService.signup(registerRequest);			
+		} catch (DataIntegrityViolationException e) {
+			throw new AccountDoesNotExistException("Account Already Exists, Try a Different Username");
+		}
 	}
 	
 }

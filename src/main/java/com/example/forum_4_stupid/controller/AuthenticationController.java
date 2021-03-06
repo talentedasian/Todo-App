@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid.controller;
 
+import java.sql.SQLException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,10 +34,9 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/signup")
-	public RedirectView signupUser (@ModelAttribute RegisterRequest registerRequest) {
-		RedirectView redirectUserAfterSignup = userMapper.saveUser(registerRequest);
+	public void signupUser (@ModelAttribute RegisterRequest registerRequest) throws SQLException {
+		userMapper.saveUser(registerRequest);
 		
-		return redirectUserAfterSignup;
 	}
 	
 	@PostMapping("/login")

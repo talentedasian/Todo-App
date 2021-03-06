@@ -48,7 +48,7 @@ public class UserService {
 		try {	
 			return emailRepository.findByUser_Id(Integer.parseInt(owner_id));
 		} catch (EmailNotFoundByUsernameException e) {
-			Logger logger = LoggerClass.getLogger();
+			Logger logger = LoggerClass.getLogger(UserService.class);
 			logger.log(Level.INFO, "Someone Searched for an Email that does not Exist.");
 			throw new EmailNotFoundByUsernameException("Email Does Not Exist", e);
 		}

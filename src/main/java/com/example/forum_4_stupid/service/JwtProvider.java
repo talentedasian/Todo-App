@@ -1,9 +1,11 @@
 package com.example.forum_4_stupid.service;
 
 import java.security.Key;
+import java.security.KeyPair;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,28 +25,17 @@ public class JwtProvider {
 	
 	private final UsersRepository usersRepository;
 	
-	public static final Key getKey() {
-		return Keys.secretKeyFor(SignatureAlgorithm.HS256);
-	}
-	
-	
-	
 	@Autowired
 	public JwtProvider(UsersRepository usersRepository) {
 		super();
 		this.usersRepository = usersRepository;
 	}
 	
-	public static final byte[] encodedKey () {
-		return getKey().getEncoded();
-	}
-
 	public String jwtLogin (LoginRequest loginRequest) {
 		Users user = usersRepository.findByUsername(loginRequest.getUsername()).get();
 		
 		String jws = Jwts.builder()
 				.setSubject(loginRequest.getUsername())
-				.signWith(getKey())
 				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
 				.setId(user.getId().toString())
 				.compact();

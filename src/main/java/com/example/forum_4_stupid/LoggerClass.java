@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid;
 
+import java.lang.invoke.MethodHandles;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -7,10 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggerClass {
 	
-	private static final Logger logger = LogManager.getLogger(LoggerClass.class);
-	
-	public static Logger getLogger () {
-		return logger;
+	public static Logger getLogger (Class<?> clazz) {
+		return LogManager.getLogger(clazz);
 	}
 	
 	private LoggerClass() {}
