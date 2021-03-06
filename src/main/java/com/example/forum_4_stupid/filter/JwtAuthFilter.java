@@ -12,21 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.forum_4_stupid.JwtKeys;
 import com.example.forum_4_stupid.LoggerClass;
-import com.example.forum_4_stupid.exceptions.AccessIsDeniedException;
-import com.example.forum_4_stupid.exceptions.JwtExpiredException;
-import com.example.forum_4_stupid.exceptions.JwtNotFoundException;
-import com.example.forum_4_stupid.exceptions.JwtNotFromUserException;
-import com.example.forum_4_stupid.exceptions.ProtectedResourceException;
-import com.example.forum_4_stupid.service.JwtProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ch.qos.logback.classic.joran.action.LevelAction;
-import io.jsonwebtoken.ClaimJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

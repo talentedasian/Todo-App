@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
-import com.example.forum_4_stupid.filter.LoginFilter;
 
 @EnableWebSecurity
 @Configuration

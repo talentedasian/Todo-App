@@ -1,11 +1,6 @@
 package com.example.forum_4_stupid.service;
 
-import java.security.Key;
-import java.security.KeyPair;
 import java.util.Date;
-
-import javax.annotation.PostConstruct;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,9 +12,6 @@ import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtProvider {

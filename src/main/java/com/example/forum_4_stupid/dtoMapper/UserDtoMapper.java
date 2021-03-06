@@ -1,11 +1,8 @@
 package com.example.forum_4_stupid.dtoMapper;
 
-import java.sql.SQLException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
