@@ -1,11 +1,13 @@
 package com.example.forum_4_stupid.exceptions;
 
-import org.springframework.stereotype.Component;
 
-@SuppressWarnings("serial")
-@Component
 public class AccountDoesNotExistException extends RuntimeException {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public AccountDoesNotExistException (String errMessage, Throwable err) {
 		super(errMessage, err);
 	}

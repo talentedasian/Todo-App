@@ -1,19 +1,14 @@
 package com.example.forum_4_stupid.service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.forum_4_stupid.LoggerClass;
-import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
-import com.example.forum_4_stupid.model.Email;
+import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.model.Users;
-import com.example.forum_4_stupid.repository.EmailRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
 @Service
@@ -24,23 +19,28 @@ public class UserService {
 	private final UsersRepository usersRepository;
 	
 	@Autowired
-	public UserService (UsersRepository usersRepository, EmailRepository emailRepository) {
+	public UserService (UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
-		this.emailRepository = emailRepository;
 	}
 	
 	@org.springframework.transaction.annotation.Transactional(readOnly = true)
-	public Optional<Users> getUser (String username) {
-		
-		Optional<Users> user = Optional.ofNullable(usersRepository.findByUsername(username).orElseThrow());
-		
-		return user;
+	public Users findUserByUsername (String username) {
+		try {
+			Users user = usersRepository.findByUsername(username).get();
+			return user;
+		} catch (NoSuchElementException e) {
+			throw new AccountDoesNotExistException("Account Does Not Exist");
+		}
 	}
 	
-	public Optional<Users> findUserById (Integer user_id) {
-		Optional<Users> user = Optional.ofNullable(usersRepository.findById(user_id).orElseThrow());
-		
-		return user;
+	@Transactional(readOnly = true)
+	public Users findUserById (Integer user_id) {
+		try {
+			Users user = usersRepository.findById(user_id).get();
+			return user;
+		} catch (NoSuchElementException e) {
+			throw new AccountDoesNotExistException("Account Does Not Exist");
+		}
 	}
 	
 }

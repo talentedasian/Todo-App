@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
@@ -27,12 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/api/auth/**")
 					.permitAll()
-			.and()
-				.formLogin()
-					.loginPage("http://localhost:8080/api/auth/loginPage")
-					.loginProcessingUrl("http://localhost:8080/api/auth/login")	
-					.failureHandler(customAuthenticationFailureHandler())
-					.permitAll()
+					.antMatchers("/user")
+					.hasRole("USER")
 			.and()
 				.httpBasic().disable()
 				.sessionManagement()
@@ -40,14 +36,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 		
-		
 	}
 
-	@Bean
-	public AuthenticationFailureHandler customAuthenticationFailureHandler () {
-		return new LoginCustomAuthenticationFailureHandler();
-	}
-	
+//	@Bean
+//	public AuthenticationFailureHandler customAuthenticationFailureHandler () {
+//		return new LoginCustomAuthenticationFailureHandler();
+//	}
+//	
 	@Bean
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder();
@@ -71,9 +66,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new UserDetailsServiceImpl();
 	}
 	
-//	@Bean
-//	public AuthenticationSuccessHandler authenticationSuccessHandler () {
-//		return new JwtAuthenticationSuccessHandler();
-//	}
+
+	@Bean
+	public AuthenticationSuccessHandler authenticationSuccessHandler () {
+		return new LoginCustomAuthenticationFailureHandler();
+	}
 	
 }

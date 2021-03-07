@@ -34,7 +34,7 @@ public class JwtAuthFilter implements Filter {
 		
 		try {
 				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
-			if (req.getRequestURL().toString().subSequence(0, 26).equals("http://localhost:8080/user")) {
+			if (req.getRequestURI().subSequence(0, 4).equals("/api")) {
 				try {
 					System.out.println(JwtKeys.getSigningKey());
 					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()

@@ -1,5 +1,6 @@
 package com.example.forum_4_stupid.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,35 +18,29 @@ import com.example.forum_4_stupid.service.EmailService;
 import com.example.forum_4_stupid.service.UserService;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/email")
 public class EmailController {
 
 	private final EmailService emailService; 
-	private final UserService userService;
+	private final EmailDtoMapper emailDtoMapper; 
 	
-	
-	public EmailController(EmailService emailService, UserService userService) {
+	@Autowired
+	public EmailController(EmailService emailService, EmailDtoMapper emailDtoMapper) {
 		this.emailService = emailService;
-		this.userService = userService;
+		this.emailDtoMapper = emailDtoMapper;
 	}
 
 	@PostMapping("/add-email")
-	public ResponseEntity<EmailDTO> addEmail (@ModelAttribute EmailRequest emailRequest) {
-		EmailDTO emailDTO = new EmailDTO();
-		emailDTO.setEmail(emailRequest.getEmail());
-		emailService.addEmail(emailRequest);
-		
-		return new ResponseEntity<EmailDTO>(emailDTO, HttpStatus.OK);
+	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
+		emailDtoMapper.save(emailRequest);
 	}
 	
-	@GetMapping("/email/{owner_id}")
+	@GetMapping("/{owner_id}")
 	public ResponseEntity<EmailDTO> getEmail(@PathVariable String owner_id) {
-		Email email = userService.getEmail(owner_id).get(0);
+		Email email = emailService.getEmailByOwnerId(Integer.parseInt(owner_id));
+		EmailDTO response = emailDtoMapper.returnEntity(email);
 		
-		var emailDtoMapper = new EmailDtoMapper();
-		EmailDTO emailResponse = emailDtoMapper.returnEmail(email);
-		
-		return new ResponseEntity<EmailDTO>(emailResponse, HttpStatus.OK);
+		return new ResponseEntity<EmailDTO>(response, HttpStatus.OK);
 	}
 	
 }

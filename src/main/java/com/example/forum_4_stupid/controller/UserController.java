@@ -16,33 +16,32 @@ import com.example.forum_4_stupid.service.UserService;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
 	private final UserService userService;
+	private final UserDtoMapper userDtoMapper;
 	
 	@Autowired
-	public UserController (UserService userService) {
+	public UserController (UserService userService, UserDtoMapper userDtoMapper) {
 		this.userService = userService;
+		this.userDtoMapper = userDtoMapper;
 	}
 	
 	@GetMapping("/userById/{id}")
 	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) {
-		Users users = userService.findUserById(Integer.parseInt(id)).get();
-		var userDtoMapper = new UserDtoMapper(authService);
+		Users users = userService.findUserById(Integer.parseInt(id));
+		var response = userDtoMapper.returnEntity(users);
 		
-		var user = userDtoMapper.returnUser(users);
-		
-		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
 	}
 	
 	@GetMapping("/userByUsername")
 	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) {
-		Users users = userService.getUser(username).get();
+		Users users = userService.findUserByUsername(username);
+		var response = userDtoMapper.returnEntity(users);
 		
-		var user = userDtoMapper.returnUser(users);
-		
-		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
 	}
 	
 }

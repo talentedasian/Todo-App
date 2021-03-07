@@ -32,7 +32,7 @@ public class Todos {
 			
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "users_id")
-	private Users creator;
+	private Users user;
 
 	public Integer getId() {
 		return id;
@@ -74,12 +74,12 @@ public class Todos {
 		this.created = created;
 	}
 
-	public Users getCreator() {
-		return creator;
+	public Users getUser() {
+		return user;
 	}
 
-	public void setCreator(Users creator) {
-		this.creator = creator;
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	public Todos() {
@@ -87,75 +87,14 @@ public class Todos {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Todos(Integer id, String content, String title, Date deadline, Date created, Users creator) {
+	public Todos(Integer id, String content, String title, Date deadline, Date created, Users user) {
 		super();
 		this.id = id;
 		this.content = content;
 		this.title = title;
 		this.deadline = deadline;
 		this.created = created;
-		this.creator = creator;
-	}
-
-	@Override
-	public String toString() {
-		return "Todos [id=" + id + ", content=" + content + ", title=" + title + ", deadline=" + deadline + ", created="
-				+ created + ", creator=" + creator + "]";
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((content == null) ? 0 : content.hashCode());
-		result = prime * result + ((created == null) ? 0 : created.hashCode());
-		result = prime * result + ((creator == null) ? 0 : creator.hashCode());
-		result = prime * result + ((deadline == null) ? 0 : deadline.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Todos other = (Todos) obj;
-		if (content == null) {
-			if (other.content != null)
-				return false;
-		} else if (!content.equals(other.content))
-			return false;
-		if (created == null) {
-			if (other.created != null)
-				return false;
-		} else if (!created.equals(other.created))
-			return false;
-		if (creator == null) {
-			if (other.creator != null)
-				return false;
-		} else if (!creator.equals(other.creator))
-			return false;
-		if (deadline == null) {
-			if (other.deadline != null)
-				return false;
-		} else if (!deadline.equals(other.deadline))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
-		return true;
+		this.user = user;
 	}
 
 }

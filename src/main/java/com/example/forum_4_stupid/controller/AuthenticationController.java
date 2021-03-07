@@ -1,11 +1,8 @@
 package com.example.forum_4_stupid.controller;
 
-import java.sql.SQLException;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,23 +14,23 @@ import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
 
-
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
 	private final JwtProvider jwtProvider;
 	private final AuthService authService;
+	private final UserDtoMapper userMapper;
 	
-	public AuthenticationController(JwtProvider jwtProvider
+	public AuthenticationController(JwtProvider jwtProvider, UserDtoMapper userDtoMapper
 			, AuthService authService) {
 		this.jwtProvider = jwtProvider;
 		this.authService = authService;
+		this.userMapper = userDtoMapper;
 	}
 	
 	@PostMapping("/signup")
-	public void signupUser (@ModelAttribute RegisterRequest registerRequest) throws SQLException {
-		var userMapper = new UserDtoMapper();
+	public void signupUser (@ModelAttribute RegisterRequest registerRequest) {
 		
 		userMapper.save(registerRequest);
 	}
@@ -41,9 +38,7 @@ public class AuthenticationController {
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) throws IllegalArgumentException	 {
 		authService.login(loginRequest);
-		
 		HttpHeaders headers = new HttpHeaders();
-		
 		String jwt = jwtProvider.jwtLogin(loginRequest);
 		
 		return new ResponseEntity<String>(jwt, headers, HttpStatus.OK);
