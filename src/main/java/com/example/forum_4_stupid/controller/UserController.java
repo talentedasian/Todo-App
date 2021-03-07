@@ -20,17 +20,16 @@ import com.example.forum_4_stupid.service.UserService;
 public class UserController {
 
 	private final UserService userService;
-	private final UserDtoMapper userDtoMapper;
 	
 	@Autowired
-	public UserController (UserService userService, UserDtoMapper userDtoMapper) {
+	public UserController (UserService userService) {
 		this.userService = userService;
-		this.userDtoMapper = userDtoMapper;
 	}
 	
 	@GetMapping("/userById/{id}")
 	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) {
 		Users users = userService.findUserById(Integer.parseInt(id)).get();
+		var userDtoMapper = new UserDtoMapper(authService);
 		
 		var user = userDtoMapper.returnUser(users);
 		
@@ -38,13 +37,12 @@ public class UserController {
 	}
 	
 	@GetMapping("/userByUsername")
-	public ResponseEntity<Users> getUserInformationByUsername (@RequestParam String username) {
+	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) {
 		Users users = userService.getUser(username).get();
 		
 		var user = userDtoMapper.returnUser(users);
-		user.setUsername("tanga");
 		
-		return new ResponseEntity<Users>(users, HttpStatus.OK);
+		return new ResponseEntity<UserDTO>(user, HttpStatus.OK);
 	}
 	
 }

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,21 +22,20 @@ import com.example.forum_4_stupid.service.JwtProvider;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
-	private final UserDtoMapper userMapper;
 	private final JwtProvider jwtProvider;
 	private final AuthService authService;
 	
-	public AuthenticationController(UserDtoMapper userMapper, JwtProvider jwtProvider
+	public AuthenticationController(JwtProvider jwtProvider
 			, AuthService authService) {
-		this.userMapper = userMapper;
 		this.jwtProvider = jwtProvider;
 		this.authService = authService;
 	}
 	
 	@PostMapping("/signup")
 	public void signupUser (@ModelAttribute RegisterRequest registerRequest) throws SQLException {
-		userMapper.saveUser(registerRequest);
+		var userMapper = new UserDtoMapper();
 		
+		userMapper.save(registerRequest);
 	}
 	
 	@PostMapping("/login")

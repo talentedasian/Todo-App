@@ -32,27 +32,32 @@ public class JwtAuthFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request; 
 		
-			//checks if user has gone to a protected resource
-		if (req.getRequestURI().subSequence(0, 5).equals("/user")) {
-			try {
-				System.out.println(JwtKeys.getSigningKey());
-				Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
-						.parseClaimsJws(req.getHeader("Authorization")).getBody();
-				if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
-					handleIllegalAccessOfResourceException(res);
+		try {
+				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
+			if (req.getRequestURL().toString().subSequence(0, 26).equals("http://localhost:8080/user")) {
+				try {
+					System.out.println(JwtKeys.getSigningKey());
+					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
+							.parseClaimsJws(req.getHeader("Authorization")).getBody();
+					if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
+						handleIllegalAccessOfResourceException(res);
+						return;
+					}
+				} catch (IllegalArgumentException e) {
+					handleIllegalArgumentException(res);
+					return;
+				} catch (ExpiredJwtException e) {
+					handleExpiredJwtException(res);
+					return;
+				} catch (SignatureException e) {
+					handleInvalidSignatureJwtException(res);
 					return;
 				}
-			} catch (IllegalArgumentException e) {
-				handleIllegalArgumentException(res);
-				return;
-			} catch (ExpiredJwtException e) {
-				handleExpiredJwtException(res);
-				return;
-			} catch (SignatureException e) {
-				handleInvalidSignatureJwtException(res);
-				return;
-			}
+			}			
+		} catch (StringIndexOutOfBoundsException | NullPointerException e) {
+			
 		}
+			
 		chain.doFilter(req, res);
 	}
 	

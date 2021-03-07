@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 
 @RestControllerAdvice
-public class JwtGlocalExceptionHandling extends ResponseEntityExceptionHandler{
+public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(AccountDoesNotExistException.class)
 	public ResponseEntity<Map<String, String>> handleDataIntegrityException (AccountDoesNotExistException ex, WebRequest request) { 
@@ -24,4 +24,6 @@ public class JwtGlocalExceptionHandling extends ResponseEntityExceptionHandler{
 		
 		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.CONFLICT);
 	}
+	
+	
 }

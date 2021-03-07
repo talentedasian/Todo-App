@@ -11,9 +11,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
+import com.example.forum_4_stupid.login.LoginCustomAuthenticationFailureHandler;
 
 @EnableWebSecurity
 @Configuration
@@ -26,6 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/auth/**")
 					.permitAll()
 			.and()
+				.formLogin()
+					.loginPage("http://localhost:8080/api/auth/loginPage")
+					.loginProcessingUrl("http://localhost:8080/api/auth/login")	
+					.failureHandler(customAuthenticationFailureHandler())
+					.permitAll()
+			.and()
 				.httpBasic().disable()
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -35,6 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 	}
 
+	@Bean
+	public AuthenticationFailureHandler customAuthenticationFailureHandler () {
+		return new LoginCustomAuthenticationFailureHandler();
+	}
+	
 	@Bean
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder();
