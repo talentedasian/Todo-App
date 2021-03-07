@@ -39,7 +39,7 @@ public class JwtAuthFilter implements Filter {
 					System.out.println(JwtKeys.getSigningKey());
 					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
-					if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
+					if (!req.getParameter("username").equals(jwt.getSubject().toString()) || !req.getRequestURI().substring(req.getRequestURI().length() -1).equals(jwt.getId())) {
 						handleIllegalAccessOfResourceException(res);
 						return;
 					}
