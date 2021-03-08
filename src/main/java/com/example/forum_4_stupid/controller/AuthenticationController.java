@@ -30,10 +30,11 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/signup")
-	public void signupUser (@ModelAttribute RegisterRequest registerRequest) {
-		
+	public ResponseEntity<Void> signupUser (@ModelAttribute RegisterRequest registerRequest) {
 		userMapper.save(registerRequest);
-	}
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+				}
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) throws IllegalArgumentException	 {

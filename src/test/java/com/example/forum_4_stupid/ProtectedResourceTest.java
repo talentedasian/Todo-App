@@ -22,7 +22,7 @@ import com.example.forum_4_stupid.service.UserService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = UserController.class)
-public class UserControllerTest {
+public class ProtectedResourceTest {
 
 	@Autowired
 	private MockMvc mockMvc;
