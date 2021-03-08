@@ -43,4 +43,13 @@ public class AuthenticationControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isCreated());
 	}
+	
+	@Test
+	public void assertThatloginShouldReturnJwt() throws URISyntaxException, Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
+				.param("username", "test")
+				.param("password", "testpassword"))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
 }
