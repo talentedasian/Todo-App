@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid;
 
+import java.lang.invoke.MethodHandles;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;

@@ -49,7 +49,7 @@ public class TodoService {
 	@Transactional(readOnly = true)
 	public Todos findTodosByOwnerId (Integer id) {
 		try {
-			Todos todo = todosRepository.findById(id).get();
+			Todos todo = todosRepository.findByUser_Id(id).get();
 			return todo;			
 		} catch (NoSuchElementException e) {
 			throw new TodoNotFoundException("Todo Does Not Exist");

@@ -1,6 +1,5 @@
 package com.example.forum_4_stupid.controller;
 
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,12 +21,10 @@ import com.example.forum_4_stupid.service.TodoService;
 @RequestMapping("/api/todo")
 public class TodoController {
 
-	private final TodoService todoService;
 	private final TodoDtoMapper todoDtoMapper;
 	
 	@Autowired
-	public TodoController (TodoService todoService, TodoDtoMapper todoDtoMapper) {
-		this.todoService = todoService;
+	public TodoController (TodoDtoMapper todoDtoMapper) {
 		this.todoDtoMapper = todoDtoMapper;
 	}
 	
@@ -37,13 +34,13 @@ public class TodoController {
 		
 		todoDtoMapper.save(todoRequest);
 	}
-	
-	@GetMapping("todo")
-	public ResponseEntity<TodoDTO> getTodo (@RequestParam String id) {
-		var todo = todoService.findTodosByOwnerId(Integer.parseInt(id));
-		var response = todoDtoMapper.returnEntity(todo);
-		
-		return new ResponseEntity<TodoDTO>(response, new HttpHeaders(), HttpStatus.OK);	
-	}
+//	
+//	@GetMapping("todo")
+//	public ResponseEntity<TodoDTO> getTodo (@RequestParam String id) {
+//		var todo = todoService.findTodosByOwnerId(Integer.parseInt(id));
+//		var response = todoDtoMapper.returnEntity(todo);
+//		
+//		return new ResponseEntity<TodoDTO>(response, new HttpHeaders(), HttpStatus.OK);	
+//	}
 	
 }

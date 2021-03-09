@@ -12,4 +12,7 @@ public interface EmailRepository extends JpaRepository<Email, Integer> {
 
 	
 	List<Email> findByUser_Id(Integer user_ids);
+	
+	List<Email> findByUser_Username(String username);
+	
 }

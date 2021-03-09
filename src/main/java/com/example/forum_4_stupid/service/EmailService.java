@@ -52,9 +52,18 @@ public class EmailService {
 		}
 	}
 	
-	public List<Email> getAllEmailFromUser (String owner_id) {
+	public List<Email> getAllEmailFromUserByUserId (String owner_id) {
 		try {	
 			return emailRepository.findByUser_Id(Integer.parseInt(owner_id));
+		} catch (NoSuchElementException e) {
+			LoggerClass.getLogger(EmailService.class).log(Level.INFO, "Someone Searched for an Email that does not Exist.");
+			throw new EmailNotFoundByUsernameException("Email Does Not Exist");
+		}
+	}
+	
+	public List<Email> getAllEmaiLFromUserByUsername(String username) {
+		try {	
+			return emailRepository.findByUser_Username(username);
 		} catch (NoSuchElementException e) {
 			LoggerClass.getLogger(EmailService.class).log(Level.INFO, "Someone Searched for an Email that does not Exist.");
 			throw new EmailNotFoundByUsernameException("Email Does Not Exist");
