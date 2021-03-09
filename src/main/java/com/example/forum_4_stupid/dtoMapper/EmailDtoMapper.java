@@ -5,12 +5,13 @@ import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
-import com.example.forum_4_stupid.dtoMapper.interfaces.EmailDTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.DTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.PersistentDTOMapper;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.service.EmailService;
 
 @Component
-public class EmailDtoMapper implements EmailDTOMapper<EmailDTO,EmailRequest,Email> {
+public class EmailDtoMapper implements PersistentDTOMapper<EmailRequest, Email>,DTOMapper<EmailDTO, Email>{
 	
 	@Autowired
 	private EmailService emailService;

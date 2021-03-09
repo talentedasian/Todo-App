@@ -5,27 +5,16 @@ import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.TodoRequest;
-import com.example.forum_4_stupid.dtoMapper.interfaces.TodoDTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.PersistentDTOMapper;
 import com.example.forum_4_stupid.model.Todos;
 import com.example.forum_4_stupid.service.TodoService;
 
 @Component
-public class TodoDtoMapper implements TodoDTOMapper<TodoDTO, TodoRequest, Todos>{
+public class TodoDtoMapper implements PersistentDTOMapper<X, Z>{
 
 	@Autowired
 	private TodoService todoService;
 	
-	@Override
-	public void save(TodoRequest request) {
-		todoService.addTodos(request);
-	}
-
-	@Override
-	public void delete(Todos entity) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public TodoDTO returnEntity(Todos entity) {
 		var todoDTO = new TodoDTO();

@@ -45,11 +45,20 @@ public class AuthenticationControllerTest {
 	}
 	
 	@Test
-	public void assertThatloginShouldReturnJwt() throws URISyntaxException, Exception {
+	public void assertThatLoginShouldReturnJwt() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
 				.param("username", "test")
 				.param("password", "testpassword"))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isOk());
+	}
+	
+	@Test
+	public void assertThatFailedLoginShouldReturnForbidden() throws URISyntaxException, Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
+				.param("username", "test")
+				.param("password", "wrongtestpassword"))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 }

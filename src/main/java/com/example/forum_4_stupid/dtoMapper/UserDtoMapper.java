@@ -5,12 +5,13 @@ import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.dtoMapper.interfaces.UserDTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.DTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.PersistentDTOMapper;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.AuthService;
 
 @Component
-public class UserDtoMapper implements UserDTOMapper<UserDTO,RegisterRequest, Users>{
+public class UserDtoMapper implements PersistentDTOMapper<RegisterRequest, Users>, DTOMapper<UserDTO, Users>{
 	
 	@Autowired
 	private final AuthService authService;

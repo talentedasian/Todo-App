@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.DTOMapper;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.UserService;
 
@@ -20,10 +20,10 @@ import com.example.forum_4_stupid.service.UserService;
 public class UserController {
 
 	private final UserService userService;
-	private final UserDtoMapper userDtoMapper;
+	private final DTOMapper<UserDTO, Users> userDtoMapper;
 	
 	@Autowired
-	public UserController (UserService userService, UserDtoMapper userDtoMapper) {
+	public UserController (UserService userService, DTOMapper<UserDTO, Users> userDtoMapper) {
 		this.userService = userService;
 		this.userDtoMapper = userDtoMapper;
 	}

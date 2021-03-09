@@ -13,7 +13,7 @@ import com.example.forum_4_stupid.repository.UsersRepository;
 
 @Service
 @EnableTransactionManagement
-public class UserService {
+public class UserService{
 
 	
 	private final UsersRepository usersRepository;
@@ -42,5 +42,5 @@ public class UserService {
 			throw new AccountDoesNotExistException("Account Does Not Exist");
 		}
 	}
-	
+
 }

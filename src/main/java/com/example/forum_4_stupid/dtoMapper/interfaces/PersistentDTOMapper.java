@@ -5,7 +5,7 @@ package com.example.forum_4_stupid.dtoMapper.interfaces;
  * X type should be a valid register request from DTO package.
  * Z type should be a valid entity class from MODEL package.
  */
-public interface PersistentDTOMapper <T,X,Z> extends DTOMapper<T,Z>{
+public interface PersistentDTOMapper<X,Z>{
 	
 	public void save(X request);
 	

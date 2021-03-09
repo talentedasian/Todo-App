@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.DTOMapper;
+import com.example.forum_4_stupid.dtoMapper.interfaces.PersistentDTOMapper;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.service.EmailService;
 import com.example.forum_4_stupid.service.UserService;
