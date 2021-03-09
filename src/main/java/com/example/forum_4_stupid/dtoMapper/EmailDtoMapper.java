@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
-import com.example.forum_4_stupid.dtoMapper.interfaces.DTOMapper;
 import com.example.forum_4_stupid.dtoMapper.interfaces.EmailDTOMapper;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.service.EmailService;

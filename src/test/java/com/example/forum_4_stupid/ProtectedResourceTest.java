@@ -3,8 +3,6 @@ package com.example.forum_4_stupid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
