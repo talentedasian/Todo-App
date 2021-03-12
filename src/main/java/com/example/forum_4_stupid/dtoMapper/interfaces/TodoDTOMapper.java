@@ -1,9 +1,11 @@
 package com.example.forum_4_stupid.dtoMapper.interfaces;
 
+import java.util.List;
+
 public interface TodoDTOMapper<T, X, Z> extends DTOMapper<T, X, Z>{
 	
-	public T getAllByUserId(Integer id);
+	public List<T> getAllByUserId(Integer id);
 	
-	public T getAllByUserUsername(String username);
+	public List<T> getAllByUserUsername(String username);
 	
 }

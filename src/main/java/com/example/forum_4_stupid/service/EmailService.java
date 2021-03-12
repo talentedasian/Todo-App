@@ -31,7 +31,7 @@ public class EmailService {
 		this.emailRepository = emailRepository;
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
 	public void addEmail (EmailRequest emailRequest) {
 		try {
 			var email = new Email();
@@ -43,34 +43,52 @@ public class EmailService {
 		}
 	}
 	
-	public Email getEmailByOwnerId(Integer user_ids) {
+	@Transactional(readOnly = true)
+	public List<Email> getEmailByOwnerId(Integer user_ids) {
 		try {
-			Email email = emailRepository.findByUser_Id(user_ids).get(0);
+			List<Email> email = emailRepository.findByUser_Id(user_ids);
 			return email;			
 		} catch (NoSuchElementException e) {
 			throw new EmailNotFoundByUsernameException("No Email associated with user");
 		}
 	}
 	
-	public List<Email> getAllEmailFromUserByUserId (String owner_id) {
+	@Transactional(readOnly = true)
+	public List<Email> getAllEmailFromUserByUserId (Integer owner_id) {
 		try {	
-			return emailRepository.findByUser_Id(Integer.parseInt(owner_id));
+			return emailRepository.findByUser_Id(owner_id);
 		} catch (NoSuchElementException e) {
 			LoggerClass.getLogger(EmailService.class).log(Level.INFO, "Someone Searched for an Email that does not Exist.");
 			throw new EmailNotFoundByUsernameException("Email Does Not Exist");
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public List<Email> getAllEmaiLFromUserByUsername(String username) {
 		try {	
-			return emailRepository.findByUser_Username(username);
+			List<Email> email = emailRepository.findByUser_Username(username);
+			return email;
 		} catch (NoSuchElementException e) {
 			LoggerClass.getLogger(EmailService.class).log(Level.INFO, "Someone Searched for an Email that does not Exist.");
 			throw new EmailNotFoundByUsernameException("Email Does Not Exist");
 		}
 	}
 	
+	@Transactional(readOnly = true)
+	public Email getEmailById(Integer id) {
+		try {	
+			Email email = emailRepository.findById(id).get();
+			return email;
+		} catch (NoSuchElementException e) {
+			LoggerClass.getLogger(EmailService.class).log(Level.INFO, "Someone Searched for an Email that does not Exist.");
+			throw new EmailNotFoundByUsernameException("Email Does Not Exist");
+		}
+	}	
+	
+	
+	@Transactional
 	public void deleteEmail (Email entity) {
 		emailRepository.delete(entity);;
 	}
+	
 }

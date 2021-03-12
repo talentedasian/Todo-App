@@ -4,7 +4,7 @@ package com.example.forum_4_stupid.dtoMapper.interfaces;
  * X type = request type
  * Z type = entity type
  */
-public interface DTOMapper <T,X,Z>{
+public interface DTOMapper <T,X,Z> {
 	
 	public T getById(Integer id);
 	

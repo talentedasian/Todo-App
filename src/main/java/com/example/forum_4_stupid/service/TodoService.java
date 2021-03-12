@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,9 +46,9 @@ public class TodoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Todos findAllTodosByOwnerId(Integer id) {
+	public List<Todos> findAllTodosByOwnerId(Integer id) {
 		try {
-			Todos todo = todosRepository.findByUser_Id(id).get();
+			List<Todos> todo = todosRepository.findByUser_Id(id);
 			return todo;			
 		} catch (NoSuchElementException e) {
 			throw new TodoNotFoundException("Todo Does Not Exist");
@@ -55,9 +56,9 @@ public class TodoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Todos findAllTodosByOwnerUsername(String username) {
+	public List<Todos> findAllTodosByOwnerUsername(String username) {
 		try {
-			Todos todo = todosRepository.findByUser_Username(username).get();
+			List<Todos> todo = todosRepository.findByUser_Username(username);
 			return todo;			
 		} catch (NoSuchElementException e) {
 			throw new TodoNotFoundException("Todo Does Not Exist");
@@ -65,7 +66,7 @@ public class TodoService {
 	}
 	
 	@Transactional(readOnly = true)
-	public Todos findAllTodosById(Integer id) {
+	public Todos findTodosById(Integer id) {
 		try {
 			Todos todo = todosRepository.findById(id).get();
 			return todo;			

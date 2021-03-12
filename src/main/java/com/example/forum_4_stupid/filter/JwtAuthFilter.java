@@ -41,8 +41,7 @@ public class JwtAuthFilter implements Filter {
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
 					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE THEY SHOULD BE NOT
 					if (!req.getParameter("username").equals(jwt.getSubject().toString()) 
-							|| !req.getRequestURI().substring(req.getRequestURL().length() -1,
-									req.getRequestURL().length() -1).equals(jwt.getId())) {
+							|| !String.valueOf(req.getRequestURI().charAt(req.getRequestURI().length() -1)).equals(jwt.getId())) {
 						handleIllegalAccessOfResourceException(res);
 						return;
 					}
