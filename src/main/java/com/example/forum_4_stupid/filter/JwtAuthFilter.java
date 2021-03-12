@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.example.forum_4_stupid.JwtKeys;
 import com.example.forum_4_stupid.LoggerClass;
@@ -36,14 +37,20 @@ public class JwtAuthFilter implements Filter {
 				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
 			if (req.getRequestURI().subSequence(0, 4).equals("/api")) {
 				try {
-					System.out.println(JwtKeys.getSigningKey());
+					String[] path = req.getServletPath().split("/");
 					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
-					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE THEY SHOULD BE NOT
-					if (!req.getParameter("username").equals(jwt.getSubject().toString()) 
-							|| !String.valueOf(req.getRequestURI().charAt(req.getRequestURI().length() -1)).equals(jwt.getId())) {
-						handleIllegalAccessOfResourceException(res);
-						return;
+					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE 
+					if(req.getMethod().equalsIgnoreCase("get")) {
+						if(req.getParameter("username") != null) {
+							if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
+								handleIllegalAccessOfResourceException(res);
+								return;							
+							}
+						} else if(!path[path.length -1].equals(jwt.getId())) {
+							handleIllegalAccessOfResourceException(res);
+							return;
+						}
 					}
 				} catch (IllegalArgumentException e) {
 					handleIllegalArgumentException(res);
@@ -108,6 +115,4 @@ public class JwtAuthFilter implements Filter {
 		res.getWriter().write(servletErrResponse);
 	}
 }
-	
-	
 

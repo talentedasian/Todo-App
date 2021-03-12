@@ -31,7 +31,7 @@ public class EmailService {
 		this.emailRepository = emailRepository;
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional
 	public void addEmail (EmailRequest emailRequest) {
 		try {
 			var email = new Email();
