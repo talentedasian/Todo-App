@@ -1,10 +1,23 @@
 package com.example.forum_4_stupid.dto;
 
-public class EmailDTO {
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.stereotype.Component;
+
+@Component
+public class EmailDTO extends RepresentationModel<EmailDTO>{
 	
 	private Integer id;
 	private String email;
+	private UserDTO user;
 	
+	public UserDTO getUser() {
+		return user;
+	}
+
+	public void setUser(UserDTO user) {
+		this.user = user;
+	}
+
 	public Integer getId() {
 		return id;
 	}

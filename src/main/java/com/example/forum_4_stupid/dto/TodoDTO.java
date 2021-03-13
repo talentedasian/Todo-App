@@ -2,7 +2,9 @@ package com.example.forum_4_stupid.dto;
 
 import java.util.Date;
 
-public class TodoDTO {
+import org.springframework.hateoas.RepresentationModel;
+
+public class TodoDTO extends RepresentationModel<TodoDTO>{
 	
 	private Integer id;
 	private String content;

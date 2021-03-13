@@ -20,8 +20,8 @@ public class Email {
 	@Column(nullable = false, unique = true)
 	private String email;
 	
-	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Users.class)
-	@JoinColumn(nullable = true, name = "userKey", referencedColumnName = "user_ids")
+	@ManyToOne
+	@JoinColumn(nullable = false, name = "userKey")
 	private Users user;
 	
 	public Integer getId() {

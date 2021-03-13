@@ -39,7 +39,6 @@ public class Users {
 	@OneToMany(mappedBy = "user")
 	private List<Todos> todos;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Email> email;
 

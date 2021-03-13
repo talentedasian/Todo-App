@@ -1,13 +1,12 @@
 package com.example.forum_4_stupid.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.hateoas.RepresentationModel;
 
-public class UserDTO {
+public class UserDTO extends RepresentationModel<UserDTO>{
 	
 	private Integer id;
 	private String username;
-	@JsonIgnore
-	private TodoDTO todoForeignKey;
+	private TodoDTO todo;
 	
 	public Integer getId() {
 		return id;
@@ -25,12 +24,12 @@ public class UserDTO {
 		this.username = username;
 	}
 
-	public TodoDTO getTodoForeignKey() {
-		return todoForeignKey;
+	public TodoDTO gettodo() {
+		return todo;
 	}
 
-	public void setTodoForeignKey(TodoDTO todoForeignKey) {
-		this.todoForeignKey = todoForeignKey;
+	public void settodo(TodoDTO todo) {
+		this.todo = todo;
 	}
 
 	public UserDTO() {
@@ -38,16 +37,16 @@ public class UserDTO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserDTO(Integer id, String username, TodoDTO todoForeignKey) {
+	public UserDTO(Integer id, String username, TodoDTO todo) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.todoForeignKey = todoForeignKey;
+		this.todo = todo;
 	}
 
 	@Override
 	public String toString() {
-		return "UserDTO [id=" + id + ", username=" + username + ", todoForeignKey=" + todoForeignKey + "]";
+		return "UserDTO [id=" + id + ", username=" + username + ", todo=" + todo + "]";
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class UserDTO {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((todoForeignKey == null) ? 0 : todoForeignKey.hashCode());
+		result = prime * result + ((todo == null) ? 0 : todo.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -74,10 +73,10 @@ public class UserDTO {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (todoForeignKey == null) {
-			if (other.todoForeignKey != null)
+		if (todo == null) {
+			if (other.todo != null)
 				return false;
-		} else if (!todoForeignKey.equals(other.todoForeignKey))
+		} else if (!todo.equals(other.todo))
 			return false;
 		if (username == null) {
 			if (other.username != null)
