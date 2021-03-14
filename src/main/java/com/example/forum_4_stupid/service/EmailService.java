@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.forum_4_stupid.LoggerClass;
 import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.exceptions.EmailAlreadyExistsException;
+import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
 import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.repository.EmailRepository;
@@ -34,10 +35,15 @@ public class EmailService {
 	@Transactional
 	public void addEmail (EmailRequest emailRequest) {
 		try {
-			var email = new Email();
-			email.setEmail(emailRequest.getEmail());
-			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
-			emailRepository.save(email);			
+			List<Email> emailCount = emailRepository.findByUser_Username(emailRequest.getUsername());
+			if (!(emailCount.size() == 5)) {
+				var email = new Email();
+				email.setEmail(emailRequest.getEmail());
+				email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
+				emailRepository.save(email);				
+			} 
+			
+			throw new EmailLimitHasReachedException("There can only be 5 emails per user"); 
 		} catch (DataIntegrityViolationException e) {
 			throw new EmailAlreadyExistsException("Email Already Exists");
 		}

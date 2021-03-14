@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
+import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
@@ -46,11 +47,20 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(EmailLimitHasReachedException.class)
+	public ResponseEntity<Map<String, String>> handleEmailLimitReachedException() {
+		Map<String, String> errResponse = new HashMap<>();
+		errResponse.put("code", "404");
+		errResponse.put("reason", "Email Does Not Exist");
+		
+		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+	}
+	
 	@ExceptionHandler(TodoNotFoundException.class)
 	public ResponseEntity<Map<String, String>> handleTodoDoesNotExistException () { 
 		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "404");
-		errResponse.put("reason", "Todo Does Not Exist");
+		errResponse.put("code", "403");
+		errResponse.put("reason", "Email limit has been reached");
 		
 		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}

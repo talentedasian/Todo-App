@@ -45,7 +45,6 @@ public class EmailController {
 		EmailDTO email = emailDtoMapper.getById(id);
 		EntityModel<EmailDTO> assembler = emailAssembler.toModel(email);
 		
-		
 		return new ResponseEntity<EntityModel<EmailDTO>>(assembler, HttpStatus.OK);
 	}
 	
@@ -58,7 +57,6 @@ public class EmailController {
 			}
 		
 		return ResponseEntity.ok(emailAssembler.toCollectionModel(email));
-
 	}
 	
 }
