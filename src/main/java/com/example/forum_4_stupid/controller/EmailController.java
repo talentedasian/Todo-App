@@ -1,12 +1,9 @@
 package com.example.forum_4_stupid.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.RepresentationModel;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -50,19 +50,19 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(EmailLimitHasReachedException.class)
 	public ResponseEntity<Map<String, String>> handleEmailLimitReachedException() {
 		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "404");
-		errResponse.put("reason", "Email Does Not Exist");
+		errResponse.put("code", "403");
+		errResponse.put("reason", "Email limit per user reached");
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(TodoNotFoundException.class)
 	public ResponseEntity<Map<String, String>> handleTodoDoesNotExistException () { 
 		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "403");
-		errResponse.put("reason", "Email limit has been reached");
+		errResponse.put("code", "404");
+		errResponse.put("reason", "Todo does not exist");
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
+		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(TodoAlreadyExistException.class)

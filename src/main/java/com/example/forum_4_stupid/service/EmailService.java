@@ -36,14 +36,14 @@ public class EmailService {
 	public void addEmail (EmailRequest emailRequest) {
 		try {
 			List<Email> emailCount = emailRepository.findByUser_Username(emailRequest.getUsername());
-			if (!(emailCount.size() == 5)) {
-				var email = new Email();
-				email.setEmail(emailRequest.getEmail());
-				email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
-				emailRepository.save(email);				
+			if (emailCount.size() == 5) {
+				throw new EmailLimitHasReachedException("There can only be 5 emails per user"); 
 			} 
-			
-			throw new EmailLimitHasReachedException("There can only be 5 emails per user"); 
+
+			var email = new Email();
+			email.setEmail(emailRequest.getEmail());
+			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
+			emailRepository.save(email);				
 		} catch (DataIntegrityViolationException e) {
 			throw new EmailAlreadyExistsException("Email Already Exists");
 		}
