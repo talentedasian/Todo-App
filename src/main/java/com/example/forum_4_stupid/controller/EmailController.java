@@ -51,12 +51,10 @@ public class EmailController {
 	}
 	
 	@GetMapping("/emailByOwnerId/{owner_id}")
-	public ResponseEntity<CollectionModel<EmailDTO>> getEmailByOwnerId(@PathVariable Integer owner_id) {
+	public ResponseEntity<CollectionModel<EntityModel<EmailDTO>>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
 		
 			for (EmailDTO emailDTO : email) {
-				emailDTO.add(linkTo(methodOn(EmailController.class)
-						.getEmailById(emailDTO.getId())).withSelfRel());
 				emailDTO.getUser().add(linkTo(methodOn(UserController.class)
 						.getUserInformationById(String.valueOf(owner_id))).withSelfRel());
 			}
@@ -64,7 +62,7 @@ public class EmailController {
 		Link allEmailByOwnerId = linkTo(methodOn(EmailController.class)
 				.getEmailByOwnerId(owner_id)).withSelfRel();
 		
-		return ResponseEntity.ok(CollectionModel.of(email, allEmailByOwnerId));
+		return ResponseEntity.ok(emailAssembler.toCollectionModel(email));
 
 	}
 	

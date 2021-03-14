@@ -19,14 +19,21 @@ public class EmailDTOAssembler implements SimpleRepresentationModelAssembler<Ema
 				.withSelfRel());
 		resource.add(linkTo(methodOn(EmailController.class)
 				.getEmailByOwnerId(resource.getContent().getUser().getId()))
-			.withRel("inUser"));
+			.withRel("inUserEmail"));
 		
 	}
 
 	@Override
 	public void addLinks(CollectionModel<EntityModel<EmailDTO>> resources) {
-		// TODO Auto-generated method stub
-		
+		EmailDTO entityModel = null;
+		for (EntityModel<EmailDTO> entityModels : resources) {
+			entityModel = entityModels.getContent();
+		}
+		resources.add(linkTo(methodOn(EmailController.class)
+					.getEmailByOwnerId(entityModel.getUser().getId()))
+				.withSelfRel());
+
+		System.out.println(entityModel.getEmail());
 	}
 
 }
