@@ -41,7 +41,7 @@ public class EmailController {
 		emailDtoMapper.save(emailRequest);
 	}
 	
-	@GetMapping("/id")
+	@GetMapping("/emailById")
 	public ResponseEntity<EntityModel<EmailDTO>> getEmailById(@RequestParam Integer id) {
 		EmailDTO email = emailDtoMapper.getById(id);
 		EntityModel<EmailDTO> assembler = emailAssembler.toModel(email);
@@ -50,7 +50,7 @@ public class EmailController {
 		return new ResponseEntity<EntityModel<EmailDTO>>(assembler, HttpStatus.OK);
 	}
 	
-	@GetMapping("/{owner_id}")
+	@GetMapping("/emailByOwnerId/{owner_id}")
 	public ResponseEntity<CollectionModel<EmailDTO>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
 		

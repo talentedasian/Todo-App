@@ -42,14 +42,28 @@ public class JwtAuthFilter implements Filter {
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
 					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE 
 					if(req.getMethod().equalsIgnoreCase("get")) {
-						if(req.getParameter("username") != null) {
-							if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
-								handleIllegalAccessOfResourceException(res);
-								return;							
+						if(path[1].equalsIgnoreCase("user")) {
+							if (req.getParameter("username") != null) {
+								if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
+									handleIllegalAccessOfResourceException(res);
+									return;							
+								} else {
+									if (!path[3].equals(jwt.getId())) {
+										handleIllegalAccessOfResourceException(res);
+										return;
+									}
+								}
+								
 							}
-						} else if(!path[path.length -1].equals(jwt.getId())) {
-							handleIllegalAccessOfResourceException(res);
-							return;
+						} else if(path[1].equalsIgnoreCase("email")) {
+							if (req.getParameter("id") != null) {
+																	
+								} else {
+									if (!path[3].equals(jwt.getId())) {
+										handleIllegalAccessOfResourceException(res);
+										return;
+									}
+							}
 						}
 					}
 				} catch (IllegalArgumentException e) {

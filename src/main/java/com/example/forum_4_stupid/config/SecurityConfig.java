@@ -33,7 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.httpBasic().disable()
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and();
+			.and()
+				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 		
 	}
 
