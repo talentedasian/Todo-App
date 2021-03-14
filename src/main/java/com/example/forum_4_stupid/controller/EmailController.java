@@ -22,7 +22,6 @@ import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
-import com.example.forum_4_stupid.service.EmailService;
 
 @RestController
 @RequestMapping("/api/email")
@@ -53,14 +52,10 @@ public class EmailController {
 	@GetMapping("/emailByOwnerId/{owner_id}")
 	public ResponseEntity<CollectionModel<EntityModel<EmailDTO>>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
-		
 			for (EmailDTO emailDTO : email) {
 				emailDTO.getUser().add(linkTo(methodOn(UserController.class)
 						.getUserInformationById(String.valueOf(owner_id))).withSelfRel());
 			}
-			
-		Link allEmailByOwnerId = linkTo(methodOn(EmailController.class)
-				.getEmailByOwnerId(owner_id)).withSelfRel();
 		
 		return ResponseEntity.ok(emailAssembler.toCollectionModel(email));
 

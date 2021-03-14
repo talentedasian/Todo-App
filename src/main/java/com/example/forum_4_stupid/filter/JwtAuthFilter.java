@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.Level;
-import org.springframework.web.servlet.HandlerMapping;
 
 import com.example.forum_4_stupid.JwtKeys;
 import com.example.forum_4_stupid.LoggerClass;
