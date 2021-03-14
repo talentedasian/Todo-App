@@ -62,7 +62,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		errResponse.put("code", "403");
 		errResponse.put("reason", "Email limit has been reached");
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
 	}
 
 	@ExceptionHandler(TodoAlreadyExistException.class)
