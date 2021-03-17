@@ -8,7 +8,7 @@ public interface DTOMapper <T,X,Z> {
 	
 	public T getById(Integer id);
 	
-	public void save(X request);
+	public T save(X request);
 	
 	public void delete(Z entity);
 }

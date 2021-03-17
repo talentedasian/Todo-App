@@ -35,14 +35,16 @@ public class AuthService {
 	}
 	
 	@Transactional
-	public void signup (RegisterRequest registerRequest) {
+	public Users signup (RegisterRequest registerRequest) {
 		try {
 			var user = new Users();
 			user.setUsername(registerRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 			user.setDateCreated(Instant.now());
 			user.setEnabled(true);
-			usersRepository.save(user);			
+			usersRepository.save(user);
+			
+			return user;
 		} catch (DataIntegrityViolationException e) {
 			throw new AccountAlreadyExistsException("Account already exists");
 		}

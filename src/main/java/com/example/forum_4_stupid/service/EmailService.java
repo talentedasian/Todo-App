@@ -33,7 +33,7 @@ public class EmailService {
 	}
 
 	@Transactional
-	public void addEmail (EmailRequest emailRequest) {
+	public Email addEmail (EmailRequest emailRequest) {
 		try {
 			List<Email> emailCount = emailRepository.findByUser_Username(emailRequest.getUsername());
 			if (emailCount.size() == 5) {
@@ -43,7 +43,9 @@ public class EmailService {
 			var email = new Email();
 			email.setEmail(emailRequest.getEmail());
 			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
-			emailRepository.save(email);				
+			emailRepository.save(email);
+			
+			return email;
 		} catch (DataIntegrityViolationException e) {
 			throw new EmailAlreadyExistsException("Email Already Exists");
 		}

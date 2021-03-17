@@ -36,6 +36,7 @@ public class JwtAuthFilter implements Filter {
 				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
 			if (req.getRequestURI().subSequence(0, 4).equals("/api")) {
 				try {
+					System.out.println(req.getServletPath().split("/"));
 					String[] path = req.getServletPath().split("/");
 					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();

@@ -7,4 +7,6 @@ public interface EmailDTOMapper<T, X, Z> extends DTOMapper<T, X, Z>{
 	public List<T> getAllEmailByUsersUsername(String username);
 	
 	public List<T> getAllEmailByUsersId(Integer id);
+	
+	
 }

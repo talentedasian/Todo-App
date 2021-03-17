@@ -25,17 +25,24 @@ public class UserDtoMapper implements UserDTOMapper<UserDTO,RegisterRequest,User
 
 	@Override
 	public UserDTO getById(Integer id) {
-		var userDTO = new UserDTO();
 		Users users = getUserById(id);
+		var userDTO = new UserDTO();
 		userDTO.setId(users.getId());
 		userDTO.setUsername(users.getUsername());
+		userDTO.setTotalEmails(users.getEmail().size());
+		userDTO.setTotalTodos(users.getTodos().size());
 		
 		return userDTO;
 	}
 
 	@Override
-	public void save(RegisterRequest request) {
-		authService.signup(request);
+	public UserDTO save(RegisterRequest request) {
+		Users users = authService.signup(request);
+		var userDTO = new UserDTO();
+		userDTO.setId(users.getId());
+		userDTO.setUsername(users.getUsername());
+		
+		return userDTO;
 	}
 
 	@Override
@@ -50,6 +57,8 @@ public class UserDtoMapper implements UserDTOMapper<UserDTO,RegisterRequest,User
 		Users users = getUserByUsername(username);
 		userDTO.setId(users.getId());
 		userDTO.setUsername(users.getUsername());
+		userDTO.setTotalEmails(users.getEmail().size());
+		userDTO.setTotalTodos(users.getTodos().size());
 		
 		return userDTO;
 	}

@@ -30,7 +30,7 @@ public class TodoService {
 		this.usersRepository = usersRepository;
 	}
 	
-	public void addTodos (TodoRequest todoRequest) {
+	public Todos addTodos (TodoRequest todoRequest) {
 		try {
 			var todos = new Todos();
 			todos.setContent(todoRequest.getContent());
@@ -39,7 +39,9 @@ public class TodoService {
 			todos.setCreated(new Date());
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
 			
-			todosRepository.save(todos);			
+			todosRepository.save(todos);
+			
+			return todos;
 		} catch (DataIntegrityViolationException e) {
 			throw new TodoAlreadyExistException("Todo Already Exist");	
 		}

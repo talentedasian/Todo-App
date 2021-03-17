@@ -23,8 +23,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/userById/{id}")
-	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable String id) {
-		var response = userDtoMapper.getById(Integer.parseInt(id));
+	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable Integer id) {
+		var response = userDtoMapper.getById(id);
 		
 		return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
 	}

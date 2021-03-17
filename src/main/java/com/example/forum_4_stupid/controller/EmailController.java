@@ -19,6 +19,8 @@ import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
+import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
+import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @RestController
 @RequestMapping("/api/email")
@@ -33,8 +35,14 @@ public class EmailController {
 	}
 
 	@PostMapping("/add-email")
-	public void addEmail (@ModelAttribute EmailRequest emailRequest) {
-		emailDtoMapper.save(emailRequest);
+	public ResponseEntity<EntityModel<EmailDTO>> addEmail (@ModelAttribute EmailRequest emailRequest) {		
+		EmailDTO emailDTO = emailDtoMapper.save(emailRequest);
+		EntityModel<EmailDTO> assembler = emailAssembler.toModel(emailDTO);
+		var utilityMethod = new NestedDTOAssembler();
+		utilityMethod.addUserNestedEntityLink(assembler);
+		
+		
+		return new ResponseEntity<EntityModel<EmailDTO>>(assembler, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/emailById")
@@ -48,10 +56,6 @@ public class EmailController {
 	@GetMapping("/emailByOwnerId/{owner_id}")
 	public ResponseEntity<CollectionModel<EntityModel<EmailDTO>>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
-			for (EmailDTO emailDTO : email) {
-				emailDTO.getUser().add(linkTo(methodOn(UserController.class)
-						.getUserInformationById(String.valueOf(owner_id))).withSelfRel());
-			}
 		
 		return ResponseEntity.ok(emailAssembler.toCollectionModel(email));
 	}
