@@ -31,35 +31,33 @@ public class JwtAuthFilter implements Filter {
 			throws IOException, ServletException {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request; 
+		String[] path = req.getServletPath().split("/");
 		
 		try {
 				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
 			if (req.getRequestURI().subSequence(0, 4).equals("/api")) {
 				try {
-					System.out.println(req.getServletPath().split("/"));
-					String[] path = req.getServletPath().split("/");
 					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
 					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE 
 					if(req.getMethod().equalsIgnoreCase("get")) {
-						if(path[1].equalsIgnoreCase("user")) {
+						if(path[2].equalsIgnoreCase("user")) {
 							if (req.getParameter("username") != null) {
 								if (!req.getParameter("username").equals(jwt.getSubject().toString())) {
 									handleIllegalAccessOfResourceException(res);
 									return;							
-								} else {
-									if (!path[3].equals(jwt.getId())) {
-										handleIllegalAccessOfResourceException(res);
-										return;
-									}
+								} 
+							} else {
+								if (!path[4].equals(jwt.getId())) {
+									handleIllegalAccessOfResourceException(res);
+									return;
 								}
-								
 							}
-						} else if(path[1].equalsIgnoreCase("email")) {
+						} else if(path[2].equalsIgnoreCase("email")) {
 							if (req.getParameter("id") != null) {
 																	
 								} else {
-									if (!path[3].equals(jwt.getId())) {
+									if (!path[4].equals(jwt.getId())) {
 										handleIllegalAccessOfResourceException(res);
 										return;
 									}
