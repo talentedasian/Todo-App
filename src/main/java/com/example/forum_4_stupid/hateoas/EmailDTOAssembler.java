@@ -7,7 +7,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.controller.EmailController;
-import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.EmailDTO;
 
 @Component
@@ -33,8 +32,6 @@ public class EmailDTOAssembler implements SimpleRepresentationModelAssembler<Ema
 		resources.add(linkTo(methodOn(EmailController.class)
 					.getEmailByOwnerId(entityModel.getUser().getId()))
 				.withSelfRel());
-
-		System.out.println(entityModel.getEmail());
 	}
 
 }

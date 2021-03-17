@@ -1,5 +1,6 @@
 package com.example.forum_4_stupid.controller;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
+import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 
 
 @RestController
@@ -17,23 +19,28 @@ import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 public class UserController {
 
 	private final UserDtoMapper userDtoMapper;
+	private final UserDTOAssembler userAssembler;
 	
-	public UserController (UserDtoMapper userDtoMapper) {
+	public UserController (UserDtoMapper userDtoMapper, UserDTOAssembler userAssembler) {
 		this.userDtoMapper = userDtoMapper;
+		this.userAssembler = userAssembler;
 	}
 	
 	@GetMapping("/userById/{id}")
-	public ResponseEntity<UserDTO> getUserInformationById (@PathVariable Integer id) {
-		var response = userDtoMapper.getById(id);
+	public ResponseEntity<EntityModel<UserDTO>> getUserInformationById (@PathVariable Integer id) {
+		var user = userDtoMapper.getById(id);
+		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
 		
-		return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler, HttpStatus.OK);
 	}
 	
 	@GetMapping("/userByUsername")
-	public ResponseEntity<UserDTO> getUserInformationByUsername (@RequestParam String username) {
-		var response = userDtoMapper.getByUsername(username);
+	public ResponseEntity<EntityModel<UserDTO>> getUserInformationByUsername (@RequestParam String username) {
+		var user = userDtoMapper.getByUsername(username);
+		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
 		
-		return new ResponseEntity<UserDTO>(response, HttpStatus.OK);
+		
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler, HttpStatus.OK);
 	}
 	
 }

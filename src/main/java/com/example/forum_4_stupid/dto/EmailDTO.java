@@ -9,7 +9,7 @@ public class EmailDTO extends RepresentationModel<EmailDTO>{
 	private Integer id;
 	private String email;
 	private UserDTO user;
-	
+
 	public UserDTO getUser() {
 		return user;
 	}
@@ -37,12 +37,6 @@ public class EmailDTO extends RepresentationModel<EmailDTO>{
 	public EmailDTO() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	
-	public EmailDTO(Integer id, String email) {
-		super();
-		this.id = id;
-		this.email = email;
 	}
 
 }

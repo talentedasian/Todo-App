@@ -1,8 +1,7 @@
 package com.example.forum_4_stupid.controller;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
+import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
 
@@ -25,24 +25,23 @@ public class AuthenticationController {
 	private final JwtProvider jwtProvider;
 	private final AuthService authService;
 	private final UserDtoMapper userMapper;
+	private final UserDTOAssembler userAssembler;
 	
 	public AuthenticationController(JwtProvider jwtProvider, UserDtoMapper userDtoMapper
-			, AuthService authService) {
+			, AuthService authService, UserDTOAssembler userAssembler) {
 		this.jwtProvider = jwtProvider;
 		this.authService = authService;
 		this.userMapper = userDtoMapper;
+		this.userAssembler = userAssembler;
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<Void> signupUser (@ModelAttribute RegisterRequest registerRequest) {
+	public ResponseEntity<EntityModel<UserDTO>> signupUser (@ModelAttribute RegisterRequest registerRequest) {
 		UserDTO savedUser = userMapper.save(registerRequest);
+		EntityModel<UserDTO> assembler = userAssembler.toModel(savedUser);
 		
-		savedUser.add(linkTo(methodOn(UserController.class)
-				.getUserInformationById(savedUser.getId()))
-				.withSelfRel());
-		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
-				}
+		return ResponseEntity.status(HttpStatus.CREATED).body(assembler);
+	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) throws IllegalArgumentException	 {

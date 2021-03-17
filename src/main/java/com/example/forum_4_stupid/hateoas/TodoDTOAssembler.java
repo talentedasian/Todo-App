@@ -14,20 +14,23 @@ import com.example.forum_4_stupid.dto.TodoDTO;
 public class TodoDTOAssembler implements SimpleRepresentationModelAssembler<TodoDTO>{
 
 	@Override
-	public void addLinks(EntityModel<TodoDTO> resource) {
-		resource.add(linkTo(methodOn(TodoController.class)
-				.getTodoById(resource.getContent().getId()))
-				.withSelfRel());
-		
-		resource.add(linkTo(methodOn(TodoController.class)
-				.getTodoByUserId(resource.getContent().getUser().getId()))
+	public void addLinks(EntityModel<TodoDTO> resources) {
+		resources.add(linkTo(methodOn(TodoController.class)
+				.getTodoById(resources.getContent().getId()))
 				.withSelfRel());
 	}
 
 	@Override
 	public void addLinks(CollectionModel<EntityModel<TodoDTO>> resources) {
+		TodoDTO todoDTO = null;
 		
+		for (EntityModel<TodoDTO> entityModel : resources) {
+			todoDTO = entityModel.getContent();
+		}
 		
+		resources.add(linkTo(methodOn(TodoController.class)
+				.getTodoByUserId(todoDTO.getUser().getId()))
+				.withSelfRel());
 	}
 
 }

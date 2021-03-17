@@ -19,6 +19,7 @@ import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
+import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -44,15 +45,21 @@ public class TodoController {
 	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@PathVariable Integer id) {
 		TodoDTO todo = todoDtoMapper.getById(id);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo); 
+		var utilityMethod = new NestedDTOAssembler();
+		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
 		
 		return new ResponseEntity<>(assembler, HttpStatus.OK);
 	}
 	
 	@GetMapping("/todoByOwnerId")
-	public ResponseEntity<CollectionModel<TodoDTO>> getTodoByUserId (@RequestParam Integer id) {
+	public ResponseEntity<CollectionModel<EntityModel<TodoDTO>>> getTodoByUserId (@RequestParam Integer id) {
 		List<TodoDTO> todo = todoDtoMapper.getAllByUserId(id);
+		CollectionModel<EntityModel<TodoDTO>> assembler = todoAssembler.toCollectionModel(todo);
+		var utilityMethod = new NestedDTOAssembler();
+		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
 		
-		return ResponseEntity.ok(CollectionModel.of(todo));	
+		
+		return new ResponseEntity<CollectionModel<EntityModel<TodoDTO>>>(assembler, HttpStatus.OK);	
 	}
 	
 }
