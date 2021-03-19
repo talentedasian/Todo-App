@@ -12,6 +12,7 @@ import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
 import io.jsonwebtoken.Jwts;
+
 @Component
 public class JwtProvider {
 	
@@ -20,7 +21,6 @@ public class JwtProvider {
 	
 	@Autowired
 	public JwtProvider(UsersRepository usersRepository) {
-		super();
 		this.usersRepository = usersRepository;
 	}
 	

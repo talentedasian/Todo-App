@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.dtoMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.RegisterRequest;

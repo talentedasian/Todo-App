@@ -1,20 +1,22 @@
 package com.example.forum_4_stupid.controller;
 
-
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
+import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
+import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
 
@@ -27,29 +29,32 @@ public class AuthenticationController {
 	private final UserDtoMapper userMapper;
 	private final UserDTOAssembler userAssembler;
 	
-	public AuthenticationController(JwtProvider jwtProvider, UserDtoMapper userDtoMapper
-			, AuthService authService, UserDTOAssembler userAssembler) {
+	public AuthenticationController(JwtProvider jwtProvider, AuthService authService
+			, UserDtoMapper userMapper, UserDTOAssembler userAssembler) {
 		this.jwtProvider = jwtProvider;
+		this.userMapper = userMapper;
 		this.authService = authService;
-		this.userMapper = userDtoMapper;
 		this.userAssembler = userAssembler;
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<EntityModel<UserDTO>> signupUser (@ModelAttribute RegisterRequest registerRequest) {
-		UserDTO savedUser = userMapper.save(registerRequest);
-		EntityModel<UserDTO> assembler = userAssembler.toModel(savedUser);
+	public ResponseEntity<EntityModel<UserDTO>> signupUser(@RequestBody RegisterRequest registerRequest) {
+		UserDTO userDTO = userMapper.save(registerRequest);
+		EntityModel<UserDTO> assembler = userAssembler.toModel(userDTO);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(assembler);
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler,headers,HttpStatus.CREATED);
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<String> loginUser (@ModelAttribute LoginRequest loginRequest) throws IllegalArgumentException	 {
+	public ResponseEntity<Void> loginUser(@RequestBody LoginRequest loginRequest) throws IllegalArgumentException	 {
 		authService.login(loginRequest);
-		HttpHeaders headers = new HttpHeaders();
 		String jwt = jwtProvider.jwtLogin(loginRequest);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Authorization",jwt);
 		
-		return new ResponseEntity<String>(jwt, headers, HttpStatus.OK);
+		return ResponseEntity.ok().headers(headers).build();
 	}
 	
 }

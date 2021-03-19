@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
 
