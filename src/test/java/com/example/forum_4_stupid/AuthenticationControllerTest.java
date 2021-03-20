@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +16,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -80,13 +82,18 @@ public class AuthenticationControllerTest {
 		when(mapper.save(registerRequest)).thenReturn(userDTO);
 		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
 		when(assembler.toModel(userDTO)).thenReturn(ass);
+		Link userIdLink = Link.of("/api/user/userById/1");
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")
 				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isCreated())
-		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON));
+		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
+		.andExpect(MockMvcResultMatchers.jsonPath("id", CoreMatchers.is(userDTO.getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("username", CoreMatchers.is(userDTO.getUsername())))
+		.andExpect(MockMvcResultMatchers.jsonPath("totalEmails", CoreMatchers.is(userDTO.getTotalEmails())))
+		.andExpect(MockMvcResultMatchers.jsonPath("totalTodos", CoreMatchers.is(userDTO.getTotalTodos())));
 		
 	}
 	
