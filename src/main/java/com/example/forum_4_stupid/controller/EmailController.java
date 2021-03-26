@@ -33,7 +33,7 @@ public class EmailController {
 	}
 
 	@PostMapping("/add-email")
-	public ResponseEntity<EntityModel<EmailDTO>> addEmail (@RequestBody EmailRequest emailRequest) {		
+	public ResponseEntity<EntityModel<EmailDTO>> addEmail (@Valid @RequestBody EmailRequest emailRequest) {		
 		EmailDTO emailDTO = emailDtoMapper.save(emailRequest);
 		EntityModel<EmailDTO> assembler = emailAssembler.toModel(emailDTO);
 		var utilityMethod = new NestedDTOAssembler();

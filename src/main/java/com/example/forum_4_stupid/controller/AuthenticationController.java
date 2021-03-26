@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,7 +37,7 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/signup")
-	public ResponseEntity<EntityModel<UserDTO>> signupUser(@RequestBody RegisterRequest registerRequest) {
+	public ResponseEntity<EntityModel<UserDTO>> signupUser(@Valid @RequestBody RegisterRequest registerRequest) {
 		UserDTO userDTO = userMapper.save(registerRequest);
 		EntityModel<UserDTO> assembler = userAssembler.toModel(userDTO);
 		HttpHeaders headers = new HttpHeaders();
