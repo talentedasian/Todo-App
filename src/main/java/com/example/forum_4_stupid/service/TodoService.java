@@ -1,9 +1,7 @@
 package com.example.forum_4_stupid.service;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
+import static java.time.LocalDateTime.now;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -43,7 +41,6 @@ public class TodoService {
 			todos.setContent(todoRequest.getContent());
 			todos.setTitle(todoRequest.getTitle());
 			todos.setDeadline(todoRequest.getDeadline());
-			todos.setCreated(LocalDateTime.now());
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
 			
 			todosRepository.save(todos);
@@ -87,13 +84,13 @@ public class TodoService {
 	@Async
 	@Scheduled(fixedRate = 10000L)
 	private void deleteOldTodos() { 
-		Calendar calendar = Calendar.getInstance();
-		System.out.println(calendar);
+		LocalDateTime timeNow = now();
+		System.out.println(timeNow);
 		
 		List<Todos> todo = todosRepository.findAll();
 		
-		todo.stream().filter(filteredTodo -> filteredTodo.getDeadline().after(new Date()))
-		.forEach(deadlinedTodo -> todosRepository.delete(deadlinedTodo));
+		todo.stream().filter(filteredTodo -> filteredTodo.getDeadline().isAfter(timeNow))
+				.forEach(expiredTodo -> todosRepository.deleteById(expiredTodo.getId()));
 	}
 	
 }

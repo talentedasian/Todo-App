@@ -58,20 +58,20 @@ public class Todos {
 		this.title = title;
 	}
 
-	public java.time.LocalDateTime getDeadline() {
+	public LocalDateTime getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(java.time.LocalDateTime deadline) {
+	public void setDeadline(LocalDateTime deadline) {
 		this.deadline = deadline;
 	}
 
-	public java.time.LocalDateTime getCreated() {
+	public LocalDateTime getCreated() {
 		return created;
 	}
 
-	public void setCreated(java.time.LocalDateTime created) {
-		this.created = created;
+	public void setCreated() {
+		this.created = LocalDateTime.now();
 	}
 
 	public Users getUser() {
@@ -157,5 +157,6 @@ public class Todos {
 			return false;
 		return true;
 	}
+
 
 }
