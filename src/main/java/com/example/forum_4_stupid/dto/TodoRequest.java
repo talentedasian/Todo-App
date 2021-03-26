@@ -1,12 +1,12 @@
 package com.example.forum_4_stupid.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TodoRequest {
 
 	private String title;
 	private String content;
-	private Date deadline;
+	private LocalDateTime deadline;
 	private String username;
 	
 	public String getTitle() {
@@ -21,11 +21,11 @@ public class TodoRequest {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getDeadline() {
+	public LocalDateTime getDeadline() {
 		return deadline;
 	}
-	public void setDeadline(Date deadline) {
-		this.deadline = deadline;
+	public void setDeadline(LocalDateTime deadline) {
+		this.deadline = LocalDateTime.of()
 	}
 	public String getUsername() {
 		return username;
@@ -37,7 +37,7 @@ public class TodoRequest {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public TodoRequest(String title, String content, Date deadline, String username) {
+	public TodoRequest(String title, String content, LocalDateTime deadline, String username) {
 		super();
 		this.title = title;
 		this.content = content;

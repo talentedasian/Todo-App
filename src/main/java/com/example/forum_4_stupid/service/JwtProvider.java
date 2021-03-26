@@ -19,6 +19,8 @@ public class JwtProvider {
 	
 	private final UsersRepository usersRepository;
 	
+	
+	
 	@Autowired
 	public JwtProvider(UsersRepository usersRepository) {
 		this.usersRepository = usersRepository;
@@ -26,12 +28,11 @@ public class JwtProvider {
 	
 	public String jwtLogin (LoginRequest loginRequest) {
 		Users user = usersRepository.findByUsername(loginRequest.getUsername()).get();
-		System.out.println(JwtKeys.getSigningKey());
 		
 		String jws = Jwts.builder()
 				.signWith(JwtKeys.getSigningKey())
 				.setSubject(loginRequest.getUsername())
-				.setExpiration(new Date(System.currentTimeMillis() + 43200000))
+				.setExpiration(new Date(System.currentTimeMillis() + 7200000))
 				.setId(user.getId().toString())
 				.compact();
 		

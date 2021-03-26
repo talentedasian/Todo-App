@@ -54,7 +54,7 @@ public class AuthenticationController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization",jwt);
 		
-		return ResponseEntity.ok().headers(headers).build();
+		return ResponseEntity.ok().build();
 	}
 	
 }

@@ -37,7 +37,6 @@ public class TodoController {
 	//add appropriate redirects
 	@PostMapping("/add-todo")
 	public void addTodo (@ModelAttribute TodoRequest todoRequest) {
-		
 		todoDtoMapper.save(todoRequest);
 	}
 	

@@ -1,6 +1,6 @@
 package com.example.forum_4_stupid.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.springframework.hateoas.RepresentationModel;
 
@@ -9,8 +9,8 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 	private Integer id;
 	private String content;
 	private String title;
-	private Date createdAt;
-	private Date deadline;
+	private LocalDateTime createdAt;
+	private LocalDateTime deadline;
 	private UserDTO user;
 	
 	public UserDTO getUser() {
@@ -45,19 +45,19 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 		this.title = title;
 	}
 	
-	public Date getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 	
-	public void setCreatedAt(Date createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 	
-	public Date getDeadline() {
+	public LocalDateTime getDeadline() {
 		return deadline;
 	}
 	
-	public void setDeadline(Date deadline) {
+	public void setDeadline(LocalDateTime deadline) {
 		this.deadline = deadline;
 	}
 	
@@ -66,7 +66,7 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 		// TODO Auto-generated constructor stub
 	}
 
-	public TodoDTO(Integer id, String content, String title, Date createdAt, Date deadline, UserDTO user) {
+	public TodoDTO(Integer id, String content, String title, LocalDateTime createdAt, LocalDateTime deadline, UserDTO user) {
 		super();
 		this.id = id;
 		this.content = content;

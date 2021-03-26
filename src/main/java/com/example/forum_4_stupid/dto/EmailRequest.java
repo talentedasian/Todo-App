@@ -1,11 +1,13 @@
 package com.example.forum_4_stupid.dto;
 
-import org.springframework.stereotype.Component;
+import javax.validation.constraints.NotNull;
 
-@Component
 public class EmailRequest {
 	
+	@NotNull
 	private String email;
+	
+	@NotNull
 	private String username;
 	
 	public String getEmail() {

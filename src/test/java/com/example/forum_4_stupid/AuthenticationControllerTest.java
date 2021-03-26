@@ -5,14 +5,20 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 
 import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.mockito.Spy;
+import org.mockito.stubbing.OngoingStubbing;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
@@ -21,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -59,6 +66,8 @@ public class AuthenticationControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 	
+	private final String expectedSignupBodyResponse = "{\"id\":1,\"username\":\"test\",\"totalEmails\":0,\"totalTodos\":0,\"links\":[],\"links\":[{\"rel\":\"userById\",\"href\":\"/api/user/userById/1\"},{\"rel\":\"userByUsername\",\"href\":\"/api/user/userByUsername?username=test\"}]}";
+	
 	@Before
 	public void setUpMockMvc() {
 		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(AuthenticationController.class))
@@ -68,7 +77,6 @@ public class AuthenticationControllerTest {
 	@Before
 	public void setUpRepo() {
 		Users user = new Users(1, "test", Instant.now(), "testpassword", true,null, null);
-		context.getBean(UsersRepository.class).save(user);
 	}
 	
 	@Test
@@ -82,8 +90,7 @@ public class AuthenticationControllerTest {
 		when(mapper.save(registerRequest)).thenReturn(userDTO);
 		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
 		when(assembler.toModel(userDTO)).thenReturn(ass);
-		Link userIdLink = Link.of("/api/user/userById/1");
-		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
+		ResultActions mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")
 				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -103,14 +110,40 @@ public class AuthenticationControllerTest {
 		headers.add("Accept", "*/*");
 		headers.setConnection("keep-alive");
 		headers.setContentLength(50L);
-		when(provider.jwtLogin(new LoginRequest("test", "testpassword"))).thenReturn("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNjE2MTY2MDk0LCJqdGkiOiIxIn0.lTELmO2V3CZn4KrpTDofqgq65WtrCVlZoFWhnLctWO8");
+		
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
-				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
+				.content("{\n\"username\": \"test1\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON)
 				.headers(headers))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.header().exists("Authorization"));	
+	}
+	
+	@Test
+	public void assertThatWrongLoginCredentialsShouldReturnForbidden() throws URISyntaxException, Exception {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Accept", "*/*");
+		headers.setConnection("keep-alive");
+		headers.setContentLength(50L);
+		var loginRequest = new LoginRequest("test", "wrongpassword");
+		String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNjE2MjcxOTY2LCJqdGkiOiIxIn0.F0dupCMWWtnqcV4Y8Y3Lja8mZ9MqC2bSQ-0oAa6NSKI";
+		
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
+				.characterEncoding("utf-8")
+				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(MockMvcResultMatchers.status().isCreated())
+		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON));
+		
+		when(provider.jwtLogin(loginRequest)).thenReturn(jwt);
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
+				.content("{\n\"username\": \"test\",\n\"password\": \"wrongpassword\"\n}")
+				.contentType(MediaType.APPLICATION_JSON)
+				.headers(headers))
+		.andDo(MockMvcResultHandlers.print())
+		.andExpect(MockMvcResultMatchers.status().isForbidden());
 	}
 	
 }

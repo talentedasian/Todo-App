@@ -1,6 +1,6 @@
 package com.example.forum_4_stupid.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -24,11 +24,11 @@ public class Todos {
 	@Column(nullable = false)
 	private String title;
 	
-	@Column(nullable = false, name = "dateDeadline")
-	private Date deadline;
+	@Column(nullable = false, name = "deadline")
+	private java.time.LocalDateTime deadline;
 	
-	@Column(nullable = false, name = "dateCreated")
-	private Date created;
+	@Column(nullable = false, name = "createdAt")
+	private java.time.LocalDateTime created;
 			
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "users_id")
@@ -58,19 +58,19 @@ public class Todos {
 		this.title = title;
 	}
 
-	public Date getDeadline() {
+	public java.time.LocalDateTime getDeadline() {
 		return deadline;
 	}
 
-	public void setDeadline(Date deadline) {
+	public void setDeadline(java.time.LocalDateTime deadline) {
 		this.deadline = deadline;
 	}
 
-	public Date getCreated() {
+	public java.time.LocalDateTime getCreated() {
 		return created;
 	}
 
-	public void setCreated(Date created) {
+	public void setCreated(java.time.LocalDateTime created) {
 		this.created = created;
 	}
 
@@ -82,12 +82,7 @@ public class Todos {
 		this.user = user;
 	}
 
-	public Todos() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public Todos(Integer id, String content, String title, Date deadline, Date created, Users user) {
+	public Todos(Integer id, String content, String title, LocalDateTime deadline, LocalDateTime created, Users user) {
 		super();
 		this.id = id;
 		this.content = content;
@@ -95,6 +90,72 @@ public class Todos {
 		this.deadline = deadline;
 		this.created = created;
 		this.user = user;
+	}
+
+	public Todos() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "Todos [id=" + id + ", content=" + content + ", title=" + title + ", deadline=" + deadline + ", created="
+				+ created + ", user=" + user + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((content == null) ? 0 : content.hashCode());
+		result = prime * result + ((created == null) ? 0 : created.hashCode());
+		result = prime * result + ((deadline == null) ? 0 : deadline.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Todos other = (Todos) obj;
+		if (content == null) {
+			if (other.content != null)
+				return false;
+		} else if (!content.equals(other.content))
+			return false;
+		if (created == null) {
+			if (other.created != null)
+				return false;
+		} else if (!created.equals(other.created))
+			return false;
+		if (deadline == null) {
+			if (other.deadline != null)
+				return false;
+		} else if (!deadline.equals(other.deadline))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
 	}
 
 }
