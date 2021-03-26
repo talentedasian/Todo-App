@@ -38,9 +38,6 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 
 	@Override
 	public TodoDTO save(TodoRequest request) {
-//		TodoRequest todoRequest = new TodoRequest();
-//		todoRequest.setContent(request.getContent());
-//		todoRequest.setDeadline();
 		Todos todos = todoService.addTodos(request);
 		
 		var todoDTO = new TodoDTO();
