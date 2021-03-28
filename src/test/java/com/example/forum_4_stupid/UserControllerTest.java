@@ -4,8 +4,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 
+import org.checkerframework.checker.units.qual.s;
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -33,7 +35,6 @@ import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
-@AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
 
 	@Autowired
@@ -42,6 +43,8 @@ public class UserControllerTest {
 	private UserDtoMapper mapper;
 	@MockBean
 	private UserDTOAssembler assembler;
+	@MockBean
+	private UsersRepository repo;
 	@Autowired
 	private WebApplicationContext context;
 	@MockBean
@@ -49,7 +52,10 @@ public class UserControllerTest {
 	
 	@Before
 	public void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(UserController.class))
+		mockMvc = MockMvcBuilders
+				.webAppContextSetup(context)
+				.alwaysDo(MockMvcResultHandlers.print())
+				.apply(SecurityMockMvcConfigurers.springSecurity())
 				.build();
 	}
 	
@@ -66,12 +72,11 @@ public class UserControllerTest {
 		userDTO.setUsername("test");
 		userDTO.setTotalEmails(0);
 		userDTO.setTotalTodos(0);
-		when(mapper.getById(1)).thenReturn(userDTO);
-		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
-		when(assembler.toModel(userDTO)).thenReturn(ass);
+//		when(mapper.getById(1)).thenReturn(userDTO);
+//		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
+//		when(assembler.toModel(userDTO)).thenReturn(ass);
 		mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userById/1"))
 				.content("utf-8"))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 }

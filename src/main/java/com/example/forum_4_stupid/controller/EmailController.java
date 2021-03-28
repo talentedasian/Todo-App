@@ -2,6 +2,8 @@ package com.example.forum_4_stupid.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
