@@ -32,12 +32,16 @@ public class JwtAuthFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpServletRequest req = (HttpServletRequest) request; 
 		String[] path = req.getServletPath().split("/");
+		long seconds = 3 * 60;
 		
 		try {
 				//CHECKS IF USER ACCESSED PROTECTED RESOURCE
 			if (req.getRequestURI().subSequence(0, 4).equals("/api")) {
 				try {
-					Claims jwt = Jwts.parserBuilder().setSigningKey(JwtKeys.getSigningKey()).build()
+					Claims jwt = Jwts.parserBuilder()
+							.setSigningKey(JwtKeys.getSigningKey())
+							.setAllowedClockSkewSeconds(seconds)
+							.build()
 							.parseClaimsJws(req.getHeader("Authorization")).getBody();
 					//CHECKS IF USER HAS ACCESSED PROTECTED RESOURCE 
 					if(req.getMethod().equalsIgnoreCase("get")) {

@@ -36,6 +36,7 @@ public class JwtProvider {
 				.setId(user.getId().toString())
 				.compact();
 		
+		
 		return jws;	
 	}
 	
