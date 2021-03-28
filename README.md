@@ -82,39 +82,28 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-There are many great README templates available on GitHub, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should element DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have have contributed to expanding this template!
-
-A list of commonly used resources that I find helpful are listed in the acknowledgements.
+A Todo App made with various Spring Framework Modules. Initially, I thought of letting the users make a decision whether to send email notifications if 
+the deadline of their Todos would soon meet. After some research and trials, I guess I could do it a little later than I had plan.
 
 ### Built With
 
 This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-* [Bootstrap](https://getbootstrap.com)
-* [JQuery](https://jquery.com)
-* [Laravel](https://laravel.com)
+* [Spring](https://spring.io/)
 
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+1. Install your database of choice. Mine was Postgresql.
+2. Find the `application.properties` file inside the `/src/main/resources` directory and change the settings to your appropriate database of choice.
+3. In this step, you could either choose to create keys for JWT Signing via the library or create a keystore. If you wanna create a keystore, you're on your own but if you choose to just create it during application startup, follow through.
+    1. Create a class or just simply pick a class that would be responsible for creating and holding your keys.
+    2. Point the keys needed for the `JwtProvider` class and `JwtAuthFilter` to the class needed for the JWT to work.
 
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
