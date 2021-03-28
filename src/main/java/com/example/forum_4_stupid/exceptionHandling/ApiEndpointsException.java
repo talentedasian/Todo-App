@@ -7,6 +7,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
+import com.example.forum_4_stupid.exceptions.LoginFailedException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
 
@@ -72,6 +74,21 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		errResponse.put("reason", "Todo Already Exist");
 		
 		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.CONFLICT);
+	}
+	
+	@ExceptionHandler(LoginFailedException.class)
+	public ResponseEntity<Map<String, String>> handleLoginFailedException (LoginFailedException ex) { 
+		Map<String, String> errResponse = new HashMap<>();
+		if (ex.getCause() instanceof AccountDoesNotExistException) {
+			errResponse.put("code", "401");
+			errResponse.put("reason", "Login Failed Due to Non-Existent Account");
+			
+			return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+		}
+		errResponse.put("code", "401");
+		errResponse.put("reason", "Login Failed");
+		
+		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
 	}
 	
 }
