@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.controller;
 
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,17 +31,20 @@ public class UserController {
 	public ResponseEntity<EntityModel<UserDTO>> getUserInformationById (@PathVariable Integer id) {
 		var user = userDtoMapper.getById(id);
 		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
-		return new ResponseEntity<EntityModel<UserDTO>>(assembler, HttpStatus.OK);
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler,headers,HttpStatus.OK);
 	}
 	
 	@GetMapping("/userByUsername")
 	public ResponseEntity<EntityModel<UserDTO>> getUserInformationByUsername (@RequestParam String username) {
 		var user = userDtoMapper.getByUsername(username);
 		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
-		
-		return new ResponseEntity<EntityModel<UserDTO>>(assembler, HttpStatus.OK);
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler,headers,HttpStatus.OK);
 	}
 	
 }

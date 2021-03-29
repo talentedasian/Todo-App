@@ -16,10 +16,7 @@ import io.jsonwebtoken.Jwts;
 @Component
 public class JwtProvider {
 	
-	
 	private final UsersRepository usersRepository;
-	
-	
 	
 	@Autowired
 	public JwtProvider(UsersRepository usersRepository) {
@@ -35,6 +32,7 @@ public class JwtProvider {
 				.setExpiration(new Date(System.currentTimeMillis() + 7200000))
 				.setId(user.getId().toString())
 				.compact();
+		
 		
 		return jws;	
 	}
