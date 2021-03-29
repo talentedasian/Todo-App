@@ -64,8 +64,13 @@ the deadline of their Todos would soon meet. After some research and trials, I g
 
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+
 * [Spring](https://spring.io/)
+* [Spring Security](https://spring.io/projects/spring-security)
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Spring Hateoas](https://spring.io/projects/spring-hateoas)
+* [Spring Data Jpa](https://spring.io/projects/spring-data-jpa)
+* [Jjwt](https://github.com/jwtk/jjwt)
 
 
 
