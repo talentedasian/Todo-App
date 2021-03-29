@@ -1,13 +1,10 @@
 package com.example.forum_4_stupid.exceptionHandling;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -15,6 +12,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
+import com.example.forum_4_stupid.exceptions.ExceptionMessageModel;
 import com.example.forum_4_stupid.exceptions.LoginFailedException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
@@ -23,72 +21,86 @@ import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
 public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<Map<String, String>> handleDataIntegrityException () { 
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "409");
-		errResponse.put("reason", "Entity Already Exists");
+	public ResponseEntity<ExceptionMessageModel> handleDataIntegrityException () { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("409");
+		exceptionMessage.setReason("EntityAlreadyExists");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(AccountDoesNotExistException.class)
-	public ResponseEntity<Map<String, String>> handleAccountDoesNotExistException () { 
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "404");
-		errResponse.put("reason", "Account Does Not Exist");
+	public ResponseEntity<ExceptionMessageModel> handleAccountDoesNotExistException () { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("404");
+		exceptionMessage.setReason("Account Does Not Exist");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(EmailNotFoundByUsernameException.class)
-	public ResponseEntity<Map<String, String>> handleEmailDoesNotExistException () { 
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "404");
-		errResponse.put("reason", "Email Does Not Exist");
+	public ResponseEntity<ExceptionMessageModel> handleEmailDoesNotExistException () { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("404");
+		exceptionMessage.setReason("Email Does Not Exist");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.NOT_FOUND);
 	}
 	
 	@ExceptionHandler(EmailLimitHasReachedException.class)
-	public ResponseEntity<Map<String, String>> handleEmailLimitReachedException() {
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "403");
-		errResponse.put("reason", "Email limit per user reached");
+	public ResponseEntity<ExceptionMessageModel> handleEmailLimitReachedException() {
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("403");
+		exceptionMessage.setReason("Email limit per user reached");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.FORBIDDEN);
 	}
 	
 	@ExceptionHandler(TodoNotFoundException.class)
-	public ResponseEntity<Map<String, String>> handleTodoDoesNotExistException () { 
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "404");
-		errResponse.put("reason", "Todo does not exist");
+	public ResponseEntity<ExceptionMessageModel> handleTodoDoesNotExistException () { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("404");
+		exceptionMessage.setReason("Todo does not exist");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.NOT_FOUND);
 	}
 
 	@ExceptionHandler(TodoAlreadyExistException.class)
-	public ResponseEntity<Map<String, String>> handleTodoAlreadyExistException () { 
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "409");
-		errResponse.put("reason", "Todo Already Exist");
+	public ResponseEntity<ExceptionMessageModel> handleTodoAlreadyExistException () {
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("409");
+		exceptionMessage.setReason("Todo Already Exist");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.CONFLICT);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.CONFLICT);
 	}
 	
 	@ExceptionHandler(LoginFailedException.class)
-	public ResponseEntity<Map<String, String>> handleLoginFailedException (LoginFailedException ex) { 
-		Map<String, String> errResponse = new HashMap<>();
+	public ResponseEntity<ExceptionMessageModel> handleLoginFailedException (LoginFailedException ex) { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("401");
+		exceptionMessage.setReason("Login failed");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 		if (ex.getCause() instanceof AccountDoesNotExistException) {
-			errResponse.put("code", "401");
-			errResponse.put("reason", "Login Failed Due to Non-Existent Account");
+			exceptionMessage.setErr("401");
+			exceptionMessage.setReason("Login Failed Due to Non-Existent Account");
 			
-			return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.UNAUTHORIZED);
 		}
-		errResponse.put("code", "401");
-		errResponse.put("reason", "Login Failed");
 		
-		return new ResponseEntity<Map<String, String>>(errResponse, new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.UNAUTHORIZED);
 	}
 	
 }

@@ -15,6 +15,7 @@ import org.apache.logging.log4j.Level;
 
 import com.example.forum_4_stupid.JwtKeys;
 import com.example.forum_4_stupid.LoggerClass;
+import com.example.forum_4_stupid.exceptions.ExceptionMessageModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
@@ -88,47 +89,47 @@ public class JwtAuthFilter implements Filter {
 	
 	private void handleIllegalArgumentException (HttpServletResponse res) throws IOException {
 		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource without proper authorization");
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "401");
-		errResponse.put("err", "No JWT Found on Authorization Header");
-		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("401");
+		exceptionMessage.setReason("No JWT Found on Authorization Header");
+		String json = new ObjectMapper().writeValueAsString(exceptionMessage);
 		res.setContentType("application/json");
 		res.setStatus(401);
-		res.getWriter().write(servletErrResponse);
+		res.getWriter().write(json);
 	}
 	
 	private void handleIllegalAccessOfResourceException (HttpServletResponse res) throws IOException {
 		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed resource from another user");
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "401");
-		errResponse.put("err", "Illegal Access of Resource");
-		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("401");
+		exceptionMessage.setReason("Illegal Access of Resource");
+		String json = new ObjectMapper().writeValueAsString(exceptionMessage);
 		res.setContentType("application/json");
 		res.setStatus(401);
-		res.getWriter().write(servletErrResponse);
+		res.getWriter().write(json);
 	}
 	
 	private void handleExpiredJwtException (HttpServletResponse res) throws IOException {
 		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource with expired JWT");
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "401");
-		errResponse.put("err", "Expired JWT");
-		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("401");
+		exceptionMessage.setReason("Expired JWT");
+		String json = new ObjectMapper().writeValueAsString(exceptionMessage);
 		res.setContentType("application/json");
 		res.setStatus(401);
-		res.getWriter().write(servletErrResponse);
+		res.getWriter().write(json);
 	}
 	
 	private void handleInvalidSignatureJwtException (HttpServletResponse res) throws IOException {
 		LoggerClass.getLogger(JwtAuthFilter.class).log(Level.INFO, "User accessed protected resource with invalid signature of JWT. Server Might have Restarted");
-		Map<String, String> errResponse = new HashMap<>();
-		errResponse.put("code", "401");
-		errResponse.put("err", "Invalid Signature of JWT");
-		errResponse.put("reason", "Server might have restarted or JWT was tampered");
-		String servletErrResponse = new ObjectMapper().writeValueAsString(errResponse);
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("401");
+		exceptionMessage.setReason("Invalid Signature of JWT");
+		exceptionMessage.setOptional("Server might have restarted or JWT was tampered");
+		String json = new ObjectMapper().writeValueAsString(exceptionMessage);
 		res.setContentType("application/json");
 		res.setStatus(401);
-		res.getWriter().write(servletErrResponse);
+		res.getWriter().write(json);
 	}
 }
 

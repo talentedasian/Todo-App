@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.service.UserService;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(controllers = UserController.class)
@@ -54,10 +56,14 @@ public class ProtectedResourceTest {
 	
 	@Test
 	public void assertThatJwtReturnNoJwt() throws URISyntaxException, Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userById/1")))
+		String mockMvcResult = this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userById/1")))
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().is(401))
-		.andExpect(MockMvcResultMatchers.content().json(expectedJwtResponseNotFound));
+		.andExpect(MockMvcResultMatchers.content().json(expectedJwtResponseNotFound))
+		.andReturn()
+		.getResponse()
+		.getContentAsString();
+		
 	}
 	
 }
