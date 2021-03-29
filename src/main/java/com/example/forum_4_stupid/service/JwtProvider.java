@@ -16,10 +16,7 @@ import io.jsonwebtoken.Jwts;
 @Component
 public class JwtProvider {
 	
-	
 	private final UsersRepository usersRepository;
-	
-	
 	
 	@Autowired
 	public JwtProvider(UsersRepository usersRepository) {

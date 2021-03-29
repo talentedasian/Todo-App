@@ -57,7 +57,7 @@ public class AuthenticationController {
 			String jwt = jwtProvider.jwtLogin(loginRequest);
 			
 			HttpHeaders headers = new HttpHeaders();
-			headers.add("Set-Cookie","jwt=" + jwt);
+			headers.add("Set-Cookie","jwt=" + jwt + "; HttpOnly");
 			
 			return ResponseEntity.ok().headers(headers).build();			
 		} catch (InternalAuthenticationServiceException e) {

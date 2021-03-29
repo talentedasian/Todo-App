@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import static org.hamcrest.CoreMatchers.equalTo;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void assertThatUserShouldReturnStatusOk() throws URISyntaxException, Exception {
+	public void shouldReturnStatusOk() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("test");
@@ -78,7 +79,8 @@ public class UserControllerTest {
 	}
 	
 	@Test
-	public void assertThatUserShouldReturnExpectedOutputs() throws URISyntaxException, Exception {
+	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
+	public void shouldReturnExpectedOutputs() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("test");
@@ -86,11 +88,43 @@ public class UserControllerTest {
 		userDTO.setTotalTodos(0);
 		
 		when(mapper.getById(1)).thenReturn(userDTO);
-		
-		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
-		
+		EntityModel<UserDTO> ass = EntityModel.of(userDTO);
+		ass.add(linkTo(methodOn(UserController.class).getUserInformationById(userDTO.getId()))
+				.withRel("userById"));
+		ass.add(linkTo(methodOn(UserController.class).getUserInformationByUsername(userDTO.getUsername()))
+				.withRel("userByUsername"));
 		when(assembler.toModel(userDTO)).thenReturn(ass);
 		mockMvc.perform(get(new URI("/api/user/userById/1")))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
+		.andExpect(MockMvcResultMatchers.jsonPath("id", equalTo(userDTO.getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("username", equalTo(userDTO.getUsername())))
+		.andExpect(MockMvcResultMatchers.jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
+		.andExpect(MockMvcResultMatchers.jsonPath("totalTodos", equalTo(userDTO.getTotalTodos())))
+		.andExpect(MockMvcResultMatchers.jsonPath("links[0].rel", equalTo("userById")))
+		.andExpect(MockMvcResultMatchers.jsonPath("links[1].rel", equalTo("userByUsername")))
+		.andExpect(MockMvcResultMatchers.jsonPath("links[0].href", equalTo("/api/user/userById/1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("links[1].href", equalTo("/api/user/userByUsername?username=test")));
+		
+	}
+	
+	@Test
+	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
+	public void shouldReturnExpectedOutputs2() throws URISyntaxException, Exception {
+		var userDTO = new UserDTO();
+		userDTO.setId(1);
+		userDTO.setUsername("test");
+		userDTO.setTotalEmails(0);
+		userDTO.setTotalTodos(0);
+
+		when(mapper.getByUsername("test")).thenReturn(userDTO);
+		EntityModel<UserDTO> ass = EntityModel.of(userDTO);
+		ass.add(linkTo(methodOn(UserController.class).getUserInformationById(userDTO.getId()))
+				.withRel("userById"));
+		ass.add(linkTo(methodOn(UserController.class).getUserInformationByUsername(userDTO.getUsername()))
+				.withRel("userByUsername"));
+		when(assembler.toModel(userDTO)).thenReturn(ass);
+		mockMvc.perform(get(new URI("/api/user/userByUsername?username=test")))
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
 		.andExpect(MockMvcResultMatchers.jsonPath("id", equalTo(userDTO.getId())))
