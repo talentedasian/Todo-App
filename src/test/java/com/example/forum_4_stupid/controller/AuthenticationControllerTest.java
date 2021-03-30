@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid;
+package com.example.forum_4_stupid.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;

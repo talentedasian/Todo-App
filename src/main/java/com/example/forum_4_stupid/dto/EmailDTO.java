@@ -39,4 +39,10 @@ public class EmailDTO extends RepresentationModel<EmailDTO>{
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public String toString() {
+		return "EmailDTO [id=" + id + ", email=" + email + ", user=" + user + "]";
+	}
+	
+
 }
