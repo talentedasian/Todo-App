@@ -50,11 +50,13 @@ public class AuthService {
 		}
 	}
 	
-	public void login (LoginRequest loginRequest) {
+	public Authentication login (LoginRequest loginRequest) {
 		Authentication auth = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), 
 						loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
+		
+		return auth;
 	}
 	
 }
