@@ -75,5 +75,11 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 		this.deadline = deadline;
 		this.user = user;
 	}
+
+	@Override
+	public String toString() {
+		return "TodoDTO [id=" + id + ", content=" + content + ", title=" + title + ", createdAt=" + createdAt
+				+ ", deadline=" + deadline + ", user=" + user + "]";
+	}
 	
 }

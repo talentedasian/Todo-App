@@ -18,6 +18,9 @@ public class TodoDTOAssembler implements SimpleRepresentationModelAssembler<Todo
 		resources.add(linkTo(methodOn(TodoController.class)
 				.getTodoById(resources.getContent().getId()))
 				.withSelfRel());
+		resources.add(linkTo(methodOn(TodoController.class)
+				.getTodoByUserId(resources.getContent().getUser().getId()))
+				.withRel("inUserTodo"));
 	}
 
 	@Override
