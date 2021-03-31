@@ -24,7 +24,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;

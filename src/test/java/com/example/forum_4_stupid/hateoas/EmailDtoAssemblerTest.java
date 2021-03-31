@@ -3,23 +3,14 @@ package com.example.forum_4_stupid.hateoas;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.RepresentationModel;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,9 +18,7 @@ import com.example.forum_4_stupid.controller.EmailController;
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = EmailDTOAssembler.class)

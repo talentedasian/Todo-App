@@ -2,7 +2,6 @@ package com.example.forum_4_stupid.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -27,13 +26,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.example.forum_4_stupid.controller.AuthenticationController;
-import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
-import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
@@ -67,10 +63,6 @@ public class AuthenticationControllerTest {
 				.build();
 	}
 	
-	@Before
-	public void setUpRepo() {
-		Users user = new Users(1, "test", Instant.now(), "testpassword", true,null, null);
-	}
 	
 	@Test
 	public void assertThatSignUpReturnStatusCreated() throws URISyntaxException, Exception {
@@ -99,44 +91,12 @@ public class AuthenticationControllerTest {
 	
 	@Test
 	public void assertThatLoginShouldReturnJwt() throws URISyntaxException, Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Accept", "*/*");
-		headers.setConnection("keep-alive");
-		headers.setContentLength(50L);
-		
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
 				.content("{\n\"username\": \"test1\",\n\"password\": \"testpassword\"\n}")
-				.contentType(MediaType.APPLICATION_JSON)
-				.headers(headers))
-		.andDo(MockMvcResultHandlers.print())
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.header().exists("Authorization"));	
-	}
-	
-	@Test
-	public void assertThatWrongLoginCredentialsShouldReturnForbidden() throws URISyntaxException, Exception {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("Accept", "*/*");
-		headers.setConnection("keep-alive");
-		headers.setContentLength(50L);
-		var loginRequest = new LoginRequest("test", "wrongpassword");
-		String jwt = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0IiwiZXhwIjoxNjE2MjcxOTY2LCJqdGkiOiIxIn0.F0dupCMWWtnqcV4Y8Y3Lja8mZ9MqC2bSQ-0oAa6NSKI";
-		
-		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
-				.characterEncoding("utf-8")
-				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andDo(MockMvcResultHandlers.print())
-		.andExpect(MockMvcResultMatchers.status().isCreated())
-		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON));
-		
-		when(provider.jwtLogin(loginRequest)).thenReturn(jwt);
-		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
-				.content("{\n\"username\": \"test\",\n\"password\": \"wrongpassword\"\n}")
-				.contentType(MediaType.APPLICATION_JSON)
-				.headers(headers))
-		.andDo(MockMvcResultHandlers.print())
-		.andExpect(MockMvcResultMatchers.status().isForbidden());
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.cookie().httpOnly("jwt", true));	
 	}
 	
 }

@@ -8,18 +8,11 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
-import com.example.forum_4_stupid.exceptions.ExceptionMessageModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
 public class UserDtoAssemblerTest {
