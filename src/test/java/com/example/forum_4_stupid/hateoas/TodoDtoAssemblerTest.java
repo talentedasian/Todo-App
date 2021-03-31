@@ -1,16 +1,21 @@
 package com.example.forum_4_stupid.hateoas;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
@@ -52,4 +57,29 @@ public class TodoDtoAssemblerTest {
 				equalTo(nestedEntityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
 		
 	}
+	
+	@Test
+	public void shouldReturnCollectionModelExpectedLinks() {
+		List<TodoDTO> listTodoDTO = new ArrayList<>();
+		listTodoDTO.add(todoDTO);
+		var nestedDtoAssembler = new NestedDTOAssembler();
+		CollectionModel<EntityModel<TodoDTO>> collectionModel = new TodoDTOAssembler().toCollectionModel(listTodoDTO);
+		nestedDtoAssembler.addUserFromTodoNestedEntityLink(collectionModel);
+		
+		for (EntityModel<TodoDTO> entityModel : collectionModel) {			
+			assertThat("/api/todo/todoById/1", 
+					equalTo(entityModel.getLink("self").get().getHref()));
+			assertThat("/api/todo/todoByOwnerId?id=1", 
+					equalTo(entityModel.getLink("inUserTodo").get().getHref()));
+			assertThat("/api/user/userById/1", 
+					equalTo(entityModel.getContent().getUser().getLink("inUserById").get().getHref()));
+			assertThat("/api/user/userByUsername?username=test", 
+					equalTo(entityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
+			
+		}
+		
+		assertThat("/api/todo/todoByOwnerId?id=1", 
+				equalTo(collectionModel.getLink("self").get().getHref()));
+	}
+	
 }
