@@ -15,7 +15,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
