@@ -1,6 +1,6 @@
 package com.example.forum_4_stupid.model;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ public class Users {
 	private String username;
 	
 	@Column(nullable = false)
-	private Instant dateCreated;
+	private LocalDateTime dateCreated;
 	
 	@JsonIgnore
 	@Column(nullable = false)
@@ -47,7 +47,7 @@ public class Users {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Users(Integer id, String username, Instant dateCreated, String password, boolean enabled, List<Todos> todos,
+	public Users(Integer id, String username, LocalDateTime dateCreated, String password, boolean enabled, List<Todos> todos,
 			List<Email> email) {
 		super();
 		this.id = id;
@@ -75,11 +75,11 @@ public class Users {
 		this.username = username;
 	}
 
-	public Instant getDateCreated() {
+	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(Instant dateCreated) {
+	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -113,6 +113,12 @@ public class Users {
 
 	public void setEmail(List<Email> email) {
 		this.email = email;
+	}
+	
+	@Override
+	public String toString() {
+		return "Users [id=" + id + ", username=" + username + ", dateCreated=" + dateCreated + ", password=" + password
+				+ ", enabled=" + enabled + ", todos=" + todos + ", email=" + email + "]";
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.example.forum_4_stupid.service;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -40,7 +40,7 @@ public class AuthService {
 			var user = new Users();
 			user.setUsername(registerRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-			user.setDateCreated(Instant.now());
+			user.setDateCreated(LocalDateTime.now());
 			user.setEnabled(true);
 			usersRepository.save(user);
 			
