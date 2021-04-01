@@ -18,7 +18,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -55,8 +54,6 @@ public class AuthenticationControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 	
-	private final String expectedSignupBodyResponse = "{\"id\":1,\"username\":\"test\",\"totalEmails\":0,\"totalTodos\":0,\"links\":[],\"links\":[{\"rel\":\"userById\",\"href\":\"/api/user/userById/1\"},{\"rel\":\"userByUsername\",\"href\":\"/api/user/userByUsername?username=test\"}]}";
-	
 	@Before
 	public void setUpMockMvc() {
 		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(AuthenticationController.class))
@@ -75,7 +72,7 @@ public class AuthenticationControllerTest {
 		when(mapper.save(registerRequest)).thenReturn(userDTO);
 		EntityModel<UserDTO> ass = Mockito.spy(UserDTOAssembler.class).toModel(userDTO);
 		when(assembler.toModel(userDTO)).thenReturn(ass);
-		ResultActions mvcResult = this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")
 				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -97,6 +94,15 @@ public class AuthenticationControllerTest {
 		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.cookie().httpOnly("jwt", true));	
+	}
+	
+	@Test
+	public void shouldBeBadRequest() throws URISyntaxException, Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
+				.characterEncoding("utf-8")
+				.content("{\n\"username\": \"test\",\n\"password\": \"test\"\n}")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 	
 }

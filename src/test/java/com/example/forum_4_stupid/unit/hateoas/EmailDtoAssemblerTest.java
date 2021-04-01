@@ -6,9 +6,9 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -30,7 +30,7 @@ public class EmailDtoAssemblerTest {
 	@Autowired
 	private EmailDTOAssembler assembler;
 	
-	@Before
+	@BeforeAll
 	public void setUpEmailDTO() {
 		emailDTO = new EmailDTO();
 		emailDTO.setId(2);
