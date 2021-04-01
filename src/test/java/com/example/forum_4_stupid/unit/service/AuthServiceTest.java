@@ -37,7 +37,7 @@ public class AuthServiceTest {
 	@Test
 	public void verifyUserSignUpServiceSave() {		
 		AuthService service = new AuthService(repo, encoder, manager);
-		service.signup(new RegisterRequest("test", "t"));
+		service.signup(new RegisterRequest("test", "testpassword"));
 		verify(repo, Mockito.times(1)).save(Mockito.any(Users.class));
 	}
 	
