@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
+import com.example.forum_4_stupid.exceptions.BadRequestException;
 import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.ExceptionMessageModel;
@@ -101,6 +102,17 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		}
 		
 		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(BadRequestException.class)
+	public ResponseEntity<ExceptionMessageModel> handleBadRequestLogin (LoginFailedException ex) { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("400");
+		exceptionMessage.setReason("Bad Request");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
 	}
 	
 }

@@ -41,7 +41,7 @@ public class AuthService {
 			if (registerRequest.getPassword().length() < 8 
 					|| registerRequest.getPassword().length() > 255) {
 				throw new BadRequestException("Password must be greater than 8 characters or"
-						+ "less than 255 characters");
+						+ " less than 255 characters");
 			}
 			var user = new Users();
 			user.setUsername(registerRequest.getUsername());
