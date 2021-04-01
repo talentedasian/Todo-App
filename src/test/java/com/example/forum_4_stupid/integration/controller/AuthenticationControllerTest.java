@@ -101,7 +101,7 @@ public class AuthenticationControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")
 				.content("{\n\"username\": \"test\",\n\"password\": \"test\"\n}")
-				.contentType(MediaType.APPLICATION_JSON))w
+				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
 	

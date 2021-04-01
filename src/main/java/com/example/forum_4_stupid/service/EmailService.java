@@ -38,8 +38,8 @@ public class EmailService {
 			List<Email> emailCount = emailRepository.findByUser_Username(emailRequest.getUsername());
 			if (emailCount.size() == 5) {
 				throw new EmailLimitHasReachedException("There can only be 5 emails per user"); 
-			} 
-
+			}
+			
 			var email = new Email();
 			email.setEmail(emailRequest.getEmail());
 			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.exceptions.AccountAlreadyExistsException;
+import com.example.forum_4_stupid.exceptions.BadRequestException;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
@@ -37,6 +38,11 @@ public class AuthService {
 	@Transactional
 	public Users signup (RegisterRequest registerRequest) {
 		try {
+			if (registerRequest.getPassword().length() < 8 
+					|| registerRequest.getPassword().length() > 255) {
+				throw new BadRequestException("Password must be greater than 8 characters or"
+						+ "less than 255 characters");
+			}
 			var user = new Users();
 			user.setUsername(registerRequest.getUsername());
 			user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
