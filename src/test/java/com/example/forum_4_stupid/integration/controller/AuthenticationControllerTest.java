@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.controller;
+package com.example.forum_4_stupid.integration.controller;
 
 import static org.mockito.Mockito.when;
 
@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.example.forum_4_stupid.controller.AuthenticationController;
 import com.example.forum_4_stupid.dto.RegisterRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;

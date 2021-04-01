@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.filter;
+package com.example.forum_4_stupid.integration.filter;
 
 import java.net.URI;
 import java.net.URISyntaxException;

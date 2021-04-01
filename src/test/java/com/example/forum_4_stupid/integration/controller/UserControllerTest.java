@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.controller;
+package com.example.forum_4_stupid.integration.controller;
  
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
@@ -36,7 +37,6 @@ import static org.mockito.Mockito.when;
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
-	@Autowired
 	private MockMvc mockMvc;
 	@MockBean
 	private UserDtoMapper mapper;
@@ -74,6 +74,8 @@ public class UserControllerTest {
 		mockMvc.perform(get(new URI("/api/user/userById/1"))
 				.content("utf-8"))
 		.andExpect(MockMvcResultMatchers.status().isOk());
+		
+		Mockito.verify(assembler, Mockito.times(1)).toModel(userDTO);
 	}
 	
 	@Test
@@ -104,6 +106,7 @@ public class UserControllerTest {
 		.andExpect(MockMvcResultMatchers.jsonPath("links[0].href", equalTo("/api/user/userById/1")))
 		.andExpect(MockMvcResultMatchers.jsonPath("links[1].href", equalTo("/api/user/userByUsername?username=test")));
 		
+		Mockito.verify(assembler, Mockito.times(1)).toModel(userDTO);
 	}
 	
 	@Test
@@ -134,6 +137,7 @@ public class UserControllerTest {
 		.andExpect(MockMvcResultMatchers.jsonPath("links[0].href", equalTo("/api/user/userById/1")))
 		.andExpect(MockMvcResultMatchers.jsonPath("links[1].href", equalTo("/api/user/userByUsername?username=test")));
 		
+		Mockito.verify(assembler, Mockito.times(1)).toModel(userDTO);
 	}
 	
 }
