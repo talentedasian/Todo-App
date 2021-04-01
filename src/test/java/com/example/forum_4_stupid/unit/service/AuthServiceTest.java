@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.services;
+package com.example.forum_4_stupid.unit.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;

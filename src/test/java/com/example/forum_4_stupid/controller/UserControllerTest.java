@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -68,7 +69,6 @@ public class UserControllerTest {
 				.withRel("userById"));
 		userDTO.add(linkTo(methodOn(UserController.class).getUserInformationByUsername(userDTO.getUsername()))
 				.withRel("userByUsername"));
-		
 		EntityModel<UserDTO> ass = EntityModel.of(userDTO);
 		when(assembler.toModel(userDTO)).thenReturn(ass);
 		mockMvc.perform(get(new URI("/api/user/userById/1"))

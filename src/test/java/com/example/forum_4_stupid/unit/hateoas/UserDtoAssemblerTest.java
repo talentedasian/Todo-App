@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.hateoas;
+package com.example.forum_4_stupid.unit.hateoas;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.forum_4_stupid.dto.UserDTO;
+import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RunWith(SpringRunner.class)

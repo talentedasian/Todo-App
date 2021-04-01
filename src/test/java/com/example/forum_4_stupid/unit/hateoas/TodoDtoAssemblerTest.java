@@ -1,4 +1,4 @@
-package com.example.forum_4_stupid.hateoas;
+package com.example.forum_4_stupid.unit.hateoas;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
+import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @RunWith(SpringRunner.class)
