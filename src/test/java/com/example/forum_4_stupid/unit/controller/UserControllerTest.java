@@ -50,6 +50,31 @@ public class UserControllerTest {
 		UserController userController = new UserController(mapper, assembler);
 		var userDTO = new UserDTO(1, "test", 0, 0);
 		
+		when(mapper.getByUsername("test")).thenReturn(userDTO);
+		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
+		entityModel.add(linkTo(methodOn(UserController.class)
+				.getUserInformationById(userDTO.getId()))
+				.withRel("userById"));
+		
+		entityModel.add(linkTo(methodOn(UserController.class)
+				.getUserInformationByUsername(userDTO.getUsername()))
+				.withRel("userByUsername"));
+		when(assembler.toModel(userDTO)).thenReturn(entityModel);
+		ResponseEntity<EntityModel<UserDTO>> user = userController.getUserInformationByUsername("test");
+		
+		verify(assembler, times(1)).toModel(userDTO);
+		
+		assertThat(user.getBody().getContent().getId(),
+				equalTo(userDTO.getId()));
+		assertThat(user.getBody().getContent().getUsername(),
+				equalTo(userDTO.getUsername()));
+	}
+	
+	@Test
+	public void verifyGetByUsernameReturnResponseEntity() {
+		UserController userController = new UserController(mapper, assembler);
+		var userDTO = new UserDTO(1, "test", 0, 0);
+		
 		when(mapper.getById(1)).thenReturn(userDTO);
 		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
 		entityModel.add(linkTo(methodOn(UserController.class)
