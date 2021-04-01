@@ -58,5 +58,10 @@ public class Email {
 		this.email = email;
 		this.user = user;
 	}
+
+	@Override
+	public String toString() {
+		return "Email [id=" + id + ", email=" + email + ", user=" + user + "]";
+	}
 	
 }
