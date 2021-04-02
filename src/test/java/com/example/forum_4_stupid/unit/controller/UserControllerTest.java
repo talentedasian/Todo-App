@@ -8,20 +8,19 @@ import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class UserControllerTest {
 
 	@MockBean
@@ -29,7 +28,7 @@ public class UserControllerTest {
 	@MockBean
 	private UserDTOAssembler assembler;
 
-	@Test
+	@org.junit.jupiter.api.Test
 	public void verifyUserDTOAssemblerCalled() {
 		UserController userController = new UserController(mapper, assembler);
 		var userDTO = new UserDTO(1, "test", 0, 0);
@@ -41,7 +40,7 @@ public class UserControllerTest {
 				"test", 0, 0));
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void verifyGetByIdReturnResponseEntity() {
 		UserController userController = new UserController(mapper, assembler);
 		var userDTO = new UserDTO(1, "test", 0, 0);
@@ -66,7 +65,7 @@ public class UserControllerTest {
 				equalTo(userDTO.getUsername()));
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void verifyGetByUsernameReturnResponseEntity() {
 		UserController userController = new UserController(mapper, assembler);
 		var userDTO = new UserDTO(1, "test", 0, 0);
