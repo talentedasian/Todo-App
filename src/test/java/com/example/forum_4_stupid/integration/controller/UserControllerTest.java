@@ -1,25 +1,23 @@
 package com.example.forum_4_stupid.integration.controller;
  
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -31,9 +29,6 @@ import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
-import static org.mockito.Mockito.when;
-
-@RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
 
@@ -49,14 +44,14 @@ public class UserControllerTest {
 	@MockBean
 	private UserDetailsService service;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(UserController.class))
 				.alwaysDo(MockMvcResultHandlers.print())
 				.build();
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void shouldReturnStatusOk() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
@@ -78,7 +73,7 @@ public class UserControllerTest {
 		Mockito.verify(assembler, Mockito.times(1)).toModel(userDTO);
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
 	public void shouldReturnExpectedOutputs() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
@@ -109,7 +104,7 @@ public class UserControllerTest {
 		Mockito.verify(assembler, Mockito.times(1)).toModel(userDTO);
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
 	public void shouldReturnExpectedOutputs2() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
