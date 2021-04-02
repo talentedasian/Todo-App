@@ -6,14 +6,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
@@ -21,21 +20,21 @@ import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = EmailDTOAssembler.class)
+@ExtendWith(SpringExtension.class)
 public class EmailDtoAssemblerTest {
 
 	private static EmailDTO emailDTO;
 	
-	@Autowired
-	private EmailDTOAssembler assembler;
+	private static EmailDTOAssembler assembler;
 	
-	@BeforeAll
-	public void setUpEmailDTO() {
+	@BeforeEach
+	public void setUp() {
 		emailDTO = new EmailDTO();
 		emailDTO.setId(2);
 		emailDTO.setEmail("testemail@gmail.com");
 		emailDTO.setUser(new UserDTO(1, "test", 1, 0));
+		
+		assembler = new EmailDTOAssembler();
 	}
 	
 	
