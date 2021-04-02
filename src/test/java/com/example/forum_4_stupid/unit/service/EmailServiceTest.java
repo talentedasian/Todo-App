@@ -10,12 +10,12 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.model.Email;
@@ -24,7 +24,7 @@ import com.example.forum_4_stupid.repository.EmailRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.service.EmailService;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class EmailServiceTest {
 
 	@MockBean
@@ -33,12 +33,12 @@ public class EmailServiceTest {
 	private EmailRepository emailRepo;
 	private static EmailService emailService;
 	
-	@Before
+	@BeforeEach
 	public void setUp() {
 		emailService = new EmailService(usersRepo, emailRepo);
 	}
 	
-	@org.junit.Test
+	@Test
 	public void emailServiceShoudCallEmailRepo() {
 		Optional<Users> user = Optional.of(new Users(null, "test",
 				LocalDateTime.now(), "testpassword", true, null, null));
@@ -51,7 +51,7 @@ public class EmailServiceTest {
 		verify(emailRepo, times(1)).findByUser_Username("test");
 	}
 	
-	@org.junit.Test
+	@Test
 	public void emailServiceShouldEqualToActualEmailWhenAddingEmail() {
 		Optional<Users> user = Optional.of(new Users(null, "test",
 				LocalDateTime.now(), "testpassword", true, null, null));
@@ -66,7 +66,7 @@ public class EmailServiceTest {
 		
 	}
 	
-	@org.junit.Test
+	@Test
 	public void emailServiceShouldEqualToActualEmailWhenGettingEmail() {
 		Optional<Users> user = Optional.of(new Users(null, "test",
 				LocalDateTime.now(), "testpassword", true, null, null));
@@ -81,7 +81,7 @@ public class EmailServiceTest {
 		
 	}
 	
-	@org.junit.Test
+	@Test
 	public void emailServiceShouldCallFindByIdRepo() {
 		Optional<Users> user = Optional.of(new Users(1, "test",
 				LocalDateTime.now(), "testpassword",
