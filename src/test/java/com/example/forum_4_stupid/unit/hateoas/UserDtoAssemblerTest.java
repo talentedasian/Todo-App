@@ -3,35 +3,32 @@ package com.example.forum_4_stupid.unit.hateoas;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.hamcrest.MatcherAssert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = UserDTOAssembler.class)
+@ExtendWith(SpringExtension.class)
 public class UserDtoAssemblerTest {
 
-	@Autowired
-	private UserDTOAssembler assembler;
+	private static UserDTOAssembler assembler;
 	private static UserDTO userDTO;
 	
-	@Before
-	public void setUpUserDTO() {
+	@BeforeEach
+	public void setUp() {
 		userDTO = new UserDTO(1,
 				"test",
 				0, 
 				0);
+		
+		assembler = new UserDTOAssembler();
 	}
 
-	@Test
+	@org.junit.jupiter.api.Test
 	public void shouldReturnAppropriateLinks() throws JsonProcessingException {
 		EntityModel<UserDTO> entityModel = assembler.toModel(userDTO);
 		
