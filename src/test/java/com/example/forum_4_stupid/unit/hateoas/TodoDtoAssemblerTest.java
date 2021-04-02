@@ -6,31 +6,27 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = TodoDTOAssembler.class)
+@ExtendWith(SpringExtension.class)
 public class TodoDtoAssemblerTest {
 
 	private static TodoDTO todoDTO;
 	
-	@Autowired
-	private TodoDTOAssembler assembler;
+	private static TodoDTOAssembler assembler;
 
 	
-	@Before
+	@BeforeEach	
 	public void setUp() {
 		todoDTO = new TodoDTO(1, 
 				"test content", 
@@ -39,12 +35,13 @@ public class TodoDtoAssemblerTest {
 				java.time.LocalDateTime.of(2021, 5, 5, 3, 2), 
 				new UserDTO(1, "test", 0, 1));
 		
+		assembler = new TodoDTOAssembler();
 	}
 
-	@Test
+	@org.junit.jupiter.api.Test
 	public void shouldReturnEntityModelExpectedLinks() {
 		var nestedDtoAssembler = new NestedDTOAssembler();
-		EntityModel<TodoDTO> nestedEntityModel = new TodoDTOAssembler().toModel(todoDTO);
+		EntityModel<TodoDTO> nestedEntityModel = assembler.toModel(todoDTO);
 		nestedDtoAssembler.addUserFromTodoNestedEntityLink(nestedEntityModel);
 		
 		assertThat("/api/todo/todoById/1", 
@@ -58,12 +55,12 @@ public class TodoDtoAssemblerTest {
 		
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void shouldReturnCollectionModelExpectedLinks() {
 		List<TodoDTO> listTodoDTO = new ArrayList<>();
 		listTodoDTO.add(todoDTO);
 		var nestedDtoAssembler = new NestedDTOAssembler();
-		CollectionModel<EntityModel<TodoDTO>> collectionModel = new TodoDTOAssembler().toCollectionModel(listTodoDTO);
+		CollectionModel<EntityModel<TodoDTO>> collectionModel = assembler.toCollectionModel(listTodoDTO);
 		nestedDtoAssembler.addUserFromTodoNestedEntityLink(collectionModel);
 		
 		for (EntityModel<TodoDTO> entityModel : collectionModel) {			
