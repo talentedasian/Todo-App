@@ -94,7 +94,7 @@ public class Todos {
 
 	public Todos() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.created = LocalDateTime.now();
 	}
 
 	@Override

@@ -4,22 +4,26 @@ import java.time.LocalDateTime;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Size;
 
 public class TodoRequest {
 
 	@NotNull
+	@Size(max = 20)
 	private String title;
 	
 	@NotNull
+	@Size(max = 255)
 	private String content;
 	
 	@Null
 	private LocalDateTime deadline;
 	
+	@NotNull
 	private String username;
 	
-	@NotNull
-	private int day, month, year, hour, minute; 
+	@Null		
+	private int day, month, year, hour, minute;
 	
 	public int getDay() {
 		return day;
@@ -61,10 +65,6 @@ public class TodoRequest {
 		this.minute = minute;
 	}
 
-	public void setDeadline(LocalDateTime deadline) {
-		this.deadline = deadline;
-	}
-
 	public String getTitle() {
 		return title;
 	}
@@ -101,6 +101,5 @@ public class TodoRequest {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
 }
