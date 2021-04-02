@@ -6,9 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -16,7 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -34,7 +31,6 @@ import com.example.forum_4_stupid.service.AuthService;
 import com.example.forum_4_stupid.service.JwtProvider;
 import com.example.forum_4_stupid.service.UserService;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(controllers = AuthenticationController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 public class AuthenticationControllerTest {
 	@Autowired
@@ -54,14 +50,14 @@ public class AuthenticationControllerTest {
 	@Autowired
 	private WebApplicationContext context;
 	
-	@Before
+	@BeforeEach
 	public void setUpMockMvc() {
 		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(AuthenticationController.class))
 				.build();
 	}
 	
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void assertThatSignUpReturnStatusCreated() throws URISyntaxException, Exception {
 		var registerRequest = new RegisterRequest("test", "testpassword");
 		var userDTO = new UserDTO();
@@ -86,7 +82,7 @@ public class AuthenticationControllerTest {
 		
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void assertThatLoginShouldReturnJwt() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
 				.content("{\n\"username\": \"test1\",\n\"password\": \"testpassword\"\n}")
@@ -96,7 +92,7 @@ public class AuthenticationControllerTest {
 		.andExpect(MockMvcResultMatchers.cookie().httpOnly("jwt", true));	
 	}
 	
-	@Test
+	@org.junit.jupiter.api.Test
 	public void shouldBeBadRequest() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")
