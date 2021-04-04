@@ -3,16 +3,16 @@ package com.example.forum_4_stupid.unit.service;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -108,6 +108,44 @@ public class TodoServiceTest {
 		when(todosRepo.findById(2)).thenReturn(todos);
 		
 		assertThrows(TodoNotFoundException.class, () -> service.findTodosById(1));
+	}
+	
+
+	@Test
+	public void todosShouldEqualToUserPassed() {
+		Optional<Todos> todos = Optional.of(new Todos(null,
+				"test content shit", 
+				"test title",
+				LocalDateTime.of(2021, 4, 21, 8, 22),
+				LocalDateTime.now(), 
+				user));
+		Optional<Todos> todos2 = Optional.of(new Todos(null,
+				"test content shit", 
+				"test title",
+				LocalDateTime.of(2021, 4, 21, 8, 22),
+				LocalDateTime.now(), 
+				user));
+		List<Todos> listOfTodosToReturn = Arrays.asList(todos.get(),todos2.get());
+		when(todosRepo.findByUser_Username("test")).thenReturn(listOfTodosToReturn);
+		
+		assertThat(service.findAllTodosByOwnerUsername("test").get(0).getUser(),
+				equalTo(user));
+		assertThat(service.findAllTodosByOwnerUsername("test").get(1).getUser(),
+				equalTo(user));
+	}
+	
+	@Test
+	public void todosDeadlineShouldEqualToDeadlinePassed() {
+		Optional<Todos> todos = Optional.of(new Todos(null,
+				"test content shit", 
+				"test title",
+				LocalDateTime.of(2021, 4, 21, 8, 22),
+				LocalDateTime.now(), 
+				user));
+		when(todosRepo.findById(1)).thenReturn(todos);
+		
+		assertThat(LocalDateTime.of(2021, 4, 21, 8, 22),
+				equalTo(service.findTodosById(1).getDeadline()));
 	}
 	
 }
