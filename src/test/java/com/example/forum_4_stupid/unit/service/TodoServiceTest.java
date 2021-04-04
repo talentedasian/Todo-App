@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid.unit.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -8,9 +10,12 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -50,7 +55,7 @@ public class TodoServiceTest {
 		todoRequest = new TodoRequest();
 		todoRequest.setTitle("test title");
 		todoRequest.setUsername("test");
-		todoRequest.setContent("test content");
+		todoRequest.setContent("test content shit");
 		todoRequest.setYear(2021);
 		todoRequest.setMonth(4);
 		todoRequest.setDay(21);
@@ -75,17 +80,20 @@ public class TodoServiceTest {
 	@Test
 	public void verifyTodosRepositorySaveCalled() {
 		Optional<Todos> todos = Optional.of(new Todos(null,
-				"test content", 
+				"test content shit", 
 				"test title",
 				LocalDateTime.of(2021, 4, 21, 8, 22),
 				LocalDateTime.now(), 
 				user));
-		
 		when(userRepo.findByUsername("test")).thenReturn(Optional.of(user));
+		ArgumentCaptor<Todos> captor = ArgumentCaptor.forClass(Todos.class);
 		when(todosRepo.save(todos.get())).thenReturn(todos.get());
 		service.addTodos(todoRequest);
-		verify(todosRepo, times(1)).save(any(Todos.class));
+		verify(todosRepo, times(1)).save(captor.capture());
 		verify(userRepo, times(1)).findByUsername("test");
+		
+		assertThat(captor.getValue().getUser(), equalTo(user));
+		
 	}
 	
 }
