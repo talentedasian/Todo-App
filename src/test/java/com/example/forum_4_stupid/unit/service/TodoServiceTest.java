@@ -135,17 +135,20 @@ public class TodoServiceTest {
 	}
 	
 	@Test
-	public void todosDeadlineShouldEqualToDeadlinePassed() {
+	public void todosDatesShouldEqualToDatesPassed() {
+		LocalDateTime timeNow = LocalDateTime.now();
 		Optional<Todos> todos = Optional.of(new Todos(null,
 				"test content shit", 
 				"test title",
 				LocalDateTime.of(2021, 4, 21, 8, 22),
-				LocalDateTime.now(), 
+				timeNow, 
 				user));
 		when(todosRepo.findById(1)).thenReturn(todos);
 		
 		assertThat(LocalDateTime.of(2021, 4, 21, 8, 22),
 				equalTo(service.findTodosById(1).getDeadline()));
+		assertThat(timeNow,
+				equalTo(service.findTodosById(1).getCreated()));
 	}
 	
 }
