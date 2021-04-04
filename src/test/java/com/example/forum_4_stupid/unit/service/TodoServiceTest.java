@@ -2,6 +2,7 @@ package com.example.forum_4_stupid.unit.service;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -20,6 +21,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.TodoRequest;
+import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
 import com.example.forum_4_stupid.model.Todos;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.TodosRepository;
@@ -92,8 +94,20 @@ public class TodoServiceTest {
 		verify(todosRepo, times(1)).save(captor.capture());
 		verify(userRepo, times(1)).findByUsername("test");
 		
-		assertThat(captor.getValue().getUser(), equalTo(user));
+		assertThat(captor.getValue().getUser(), equalTo(user));	
+	}
+	
+	@Test
+	public void shouldThrowTodoNotFoundException() {
+		Optional<Todos> todos = Optional.of(new Todos(null,
+				"test content shit", 
+				"test title",
+				LocalDateTime.of(2021, 4, 21, 8, 22),
+				LocalDateTime.now(), 
+				user));
+		when(todosRepo.findById(2)).thenReturn(todos);
 		
+		assertThrows(TodoNotFoundException.class, () -> service.findTodosById(1));
 	}
 	
 }
