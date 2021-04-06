@@ -9,6 +9,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,7 +34,7 @@ public class UserControllerTest {
 	
 	@BeforeEach
 	public void setUp() {
-		userController = new new UserController(mapper, assembler);
+		userController = new UserController(mapper, assembler);
 		
 		userDTO = new UserDTO(1, "test", 0, 0);
 	}
@@ -96,4 +97,14 @@ public class UserControllerTest {
 				equalTo(userDTO.getUsername()));
 	}
 	
+	@org.junit.jupiter.api.Test
+	@DisplayName("Should Return Hal_Json As Media Type")
+	public void assertThatHal_Json() {
+		ResponseEntity<EntityModel<UserDTO>> user = userController.getUserInformationById(1);
+		
+		assertThat(user.getHeaders().getContentType(),
+				equalTo(org.springframework.hateoas.MediaTypes.HAL_JSON));
+	}
+	
 }
+

@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +42,7 @@ public class EmailController {
 		var utilityMethod = new NestedDTOAssembler();
 		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
 		
-		return new ResponseEntity<EntityModel<EmailDTO>>(assembler,HttpStatus.CREATED);
+		return new ResponseEntity<EntityModel<EmailDTO>>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/emailById")
@@ -51,7 +52,7 @@ public class EmailController {
 		var utilityMethod = new NestedDTOAssembler();
 		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
 		
-		return new ResponseEntity<EntityModel<EmailDTO>>(assembler, HttpStatus.OK);
+		return new ResponseEntity<EntityModel<EmailDTO>>(assembler,getHeaders(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/emailByOwnerId/{owner_id}")
@@ -61,7 +62,14 @@ public class EmailController {
 		var utilityMethod = new NestedDTOAssembler();
 		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
 		
-		return ResponseEntity.ok(emailAssembler.toCollectionModel(email));
+		return new ResponseEntity<CollectionModel<EntityModel<EmailDTO>>>(assembler, getHeaders(), HttpStatus.OK);
+	}
+	
+	private HttpHeaders getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
+		
+		return headers;
 	}
 	
 }
