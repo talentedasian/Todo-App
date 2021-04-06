@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,12 +28,18 @@ public class UserControllerTest {
 	private UserDtoMapper mapper;
 	@MockBean
 	private UserDTOAssembler assembler;
+	private static UserDTO userDTO;
+	private static UserController userController;
+	
+	@BeforeEach
+	public void setUp() {
+		userController = new new UserController(mapper, assembler);
+		
+		userDTO = new UserDTO(1, "test", 0, 0);
+	}
 
 	@org.junit.jupiter.api.Test
 	public void verifyUserDTOAssemblerCalled() {
-		UserController userController = new UserController(mapper, assembler);
-		var userDTO = new UserDTO(1, "test", 0, 0);
-		
 		Mockito.when(mapper.getById(1)).thenReturn(userDTO);
 		userController.getUserInformationById(1);
 		
@@ -42,10 +49,8 @@ public class UserControllerTest {
 	
 	@org.junit.jupiter.api.Test
 	public void verifyGetByIdReturnResponseEntity() {
-		UserController userController = new UserController(mapper, assembler);
-		var userDTO = new UserDTO(1, "test", 0, 0);
-		
 		when(mapper.getByUsername("test")).thenReturn(userDTO);
+		
 		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
 		entityModel.add(linkTo(methodOn(UserController.class)
 				.getUserInformationById(userDTO.getId()))
@@ -55,6 +60,7 @@ public class UserControllerTest {
 				.getUserInformationByUsername(userDTO.getUsername()))
 				.withRel("userByUsername"));
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
+		
 		ResponseEntity<EntityModel<UserDTO>> user = userController.getUserInformationByUsername("test");
 		
 		verify(assembler, times(1)).toModel(userDTO);
@@ -67,10 +73,8 @@ public class UserControllerTest {
 	
 	@org.junit.jupiter.api.Test
 	public void verifyGetByUsernameReturnResponseEntity() {
-		UserController userController = new UserController(mapper, assembler);
-		var userDTO = new UserDTO(1, "test", 0, 0);
-		
 		when(mapper.getById(1)).thenReturn(userDTO);
+		
 		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
 		entityModel.add(linkTo(methodOn(UserController.class)
 				.getUserInformationById(userDTO.getId()))
@@ -79,7 +83,9 @@ public class UserControllerTest {
 		entityModel.add(linkTo(methodOn(UserController.class)
 				.getUserInformationByUsername(userDTO.getUsername()))
 				.withRel("userByUsername"));
+		
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
+		
 		ResponseEntity<EntityModel<UserDTO>> user = userController.getUserInformationById(1);
 		
 		verify(assembler, times(1)).toModel(userDTO);
@@ -89,4 +95,5 @@ public class UserControllerTest {
 		assertThat(user.getBody().getContent().getUsername(),
 				equalTo(userDTO.getUsername()));
 	}
+	
 }

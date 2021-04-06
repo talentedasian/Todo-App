@@ -50,4 +50,13 @@ public class EmailControllerTest {
 		controller.getEmailById(1);
 		verify(assembler).toModel(emailDTO);
 	}
+	
+	@Test
+	public void verifyEmailDTOAssemblerCalled() {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
+		
+		controller.getEmailById(1);
+		verify(assembler).toModel(emailDTO);
+	}
 }
