@@ -31,12 +31,22 @@ public class UserControllerTest {
 	private UserDTOAssembler assembler;
 	private static UserDTO userDTO;
 	private static UserController userController;
+	private static EntityModel<UserDTO> entityModel;
 	
 	@BeforeEach
 	public void setUp() {
 		userController = new UserController(mapper, assembler);
 		
 		userDTO = new UserDTO(1, "test", 0, 0);
+		
+		entityModel = EntityModel.of(userDTO);
+		entityModel.add(linkTo(methodOn(UserController.class)
+				.getUserInformationById(userDTO.getId()))
+				.withRel("userById"));
+		
+		entityModel.add(linkTo(methodOn(UserController.class)
+				.getUserInformationByUsername(userDTO.getUsername()))
+				.withRel("userByUsername"));
 	}
 
 	@org.junit.jupiter.api.Test
@@ -52,14 +62,6 @@ public class UserControllerTest {
 	public void verifyGetByIdReturnResponseEntity() {
 		when(mapper.getByUsername("test")).thenReturn(userDTO);
 		
-		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
-		entityModel.add(linkTo(methodOn(UserController.class)
-				.getUserInformationById(userDTO.getId()))
-				.withRel("userById"));
-		
-		entityModel.add(linkTo(methodOn(UserController.class)
-				.getUserInformationByUsername(userDTO.getUsername()))
-				.withRel("userByUsername"));
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
 		
 		ResponseEntity<EntityModel<UserDTO>> user = userController.getUserInformationByUsername("test");
@@ -75,15 +77,6 @@ public class UserControllerTest {
 	@org.junit.jupiter.api.Test
 	public void verifyGetByUsernameReturnResponseEntity() {
 		when(mapper.getById(1)).thenReturn(userDTO);
-		
-		EntityModel<UserDTO> entityModel = EntityModel.of(userDTO);
-		entityModel.add(linkTo(methodOn(UserController.class)
-				.getUserInformationById(userDTO.getId()))
-				.withRel("userById"));
-		
-		entityModel.add(linkTo(methodOn(UserController.class)
-				.getUserInformationByUsername(userDTO.getUsername()))
-				.withRel("userByUsername"));
 		
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
 		
