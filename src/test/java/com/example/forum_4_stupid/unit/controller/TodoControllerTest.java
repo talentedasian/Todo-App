@@ -58,7 +58,8 @@ public class TodoControllerTest {
 	public void verifyTodoDTOAssemblerCallToModel() {
 		when(mapper.getById(1)).thenReturn(todoDTO);
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
-T		verify(assembler).toModel(todoDTO);
+		controller.getTodoById(1);
+		verify(assembler).toModel(todoDTO);
 	}
 	
 }
