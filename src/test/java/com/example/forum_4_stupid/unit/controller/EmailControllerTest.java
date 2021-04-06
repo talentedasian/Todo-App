@@ -27,7 +27,8 @@ public class EmailControllerTest {
 
 	private static EmailDTO emailDTO;
 	private static EmailController controller;
-	private static NestedDTOAssembler nestedDTOAssembler = new NestedDTOAssembler(); 
+	private static NestedDTOAssembler nestedDTOAssembler = new NestedDTOAssembler();
+	private static EntityModel<EmailDTO> entityModel;
 	
 	@MockBean
 	private EmailDTOAssembler assembler;
@@ -37,6 +38,7 @@ public class EmailControllerTest {
 	@BeforeEach
 	public void setUp() {
 		controller = new EmailController(mapper, assembler);
+		
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("test");
@@ -46,6 +48,17 @@ public class EmailControllerTest {
 		emailDTO.setId(1);
 		emailDTO.setEmail("test@gmail.com");
 		emailDTO.setUser(userDTO);
+		
+		entityModel = EntityModel.of(emailDTO);
+		entityModel.add(linkTo(methodOn(EmailController.class)
+				.getEmailById(emailDTO.getId()))
+			.withSelfRel());
+	
+		entityModel.add(linkTo(methodOn(EmailController.class)
+			.getEmailByOwnerId(emailDTO.getUser().getId()))
+		.withRel("inUserEmail"));
+		
+		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
 	}
 	
 	@Test
@@ -72,19 +85,9 @@ public class EmailControllerTest {
 	public void shouldReturnExpectedLinks() {
 		when(mapper.getById(1)).thenReturn(emailDTO);
 		
-		EntityModel<EmailDTO> entityModel = EntityModel.of(emailDTO);
-		entityModel.add(linkTo(methodOn(EmailController.class)
-				.getEmailById(emailDTO.getId()))
-			.withSelfRel());
-	
-		entityModel.add(linkTo(methodOn(EmailController.class)
-			.getEmailByOwnerId(emailDTO.getUser().getId()))
-		.withRel("inUserEmail"));
-		
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
-		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
 		
 		assertThat("/api/email/emailById?id=1", 
 				equalTo(email.getBody().getLink("self").get().getHref()));
@@ -97,10 +100,7 @@ public class EmailControllerTest {
 	public void shouldReturnNestedUserDTOLinks() {
 		when(mapper.getById(1)).thenReturn(emailDTO);
 		
-		EntityModel<EmailDTO> entityModel = EntityModel.of(emailDTO);
-		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
-		
-		when(assembler.toModel(emailDTO)).thenReturn(entityModel);		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
 		
