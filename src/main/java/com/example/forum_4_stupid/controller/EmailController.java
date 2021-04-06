@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +31,7 @@ public class EmailController {
 	private final EmailDtoMapper emailDtoMapper;
 	private final EmailDTOAssembler emailAssembler;
 	
+	@Autowired
 	public EmailController(EmailDtoMapper emailDtoMapper, EmailDTOAssembler emailAssembler) {
 		this.emailDtoMapper = emailDtoMapper;
 		this.emailAssembler = emailAssembler;

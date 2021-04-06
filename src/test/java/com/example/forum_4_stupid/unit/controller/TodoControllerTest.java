@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.unit.controller;
 
-import static org.mockito.Mockito.verify;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -8,11 +9,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
+import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.controller.TodoController;
@@ -20,17 +26,20 @@ import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
+import com.example.forum_4_stupid.service.TodoService;
 
 @ExtendWith(SpringExtension.class)
 public class TodoControllerTest {
 
 	@MockBean
-	private static TodoDtoMapper mapper; 
+	private static TodoService service;
 	@MockBean
 	private static TodoDTOAssembler assembler;
+	@MockBean
+	private static TodoDtoMapper mapper; 
+	
 	private static TodoDTO todoDTO;
 	private static LocalDateTime timeNow = LocalDateTime.now();
-	private static TodoController controller;
 	private static EntityModel<TodoDTO> entityModel;
 	
 	@BeforeEach
@@ -43,7 +52,6 @@ public class TodoControllerTest {
 				LocalDateTime.of(2021, 5, 22, 12, 21),
 				userDTO);
 		
-		controller = new TodoController(mapper, assembler);
 		
 		entityModel = EntityModel.of(todoDTO);
 		entityModel.add(linkTo(methodOn(TodoController.class)
@@ -54,12 +62,24 @@ public class TodoControllerTest {
 				.withRel("inUserTodo"));
 	}
 	
+
 	@Test
 	public void verifyTodoDTOAssemblerCallToModel() {
+		
+	}
+	
+	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
+	@Test
+	@DisplayName("Should Return Hal_Json As Media Type")
+	public void shouldReturnHal_Json() {
+		TodoController controller = new TodoController(mapper, assembler);
 		when(mapper.getById(1)).thenReturn(todoDTO);
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
-		controller.getTodoById(1);
-		verify(assembler).toModel(todoDTO);
+		ResponseEntity<EntityModel<TodoDTO>> todo = controller.getTodoById(1);
+		
+		assertThat(todo.getHeaders().getContentType(), 
+				equalTo(MediaTypes.HAL_JSON));
 	}
+	
 	
 }
