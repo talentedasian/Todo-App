@@ -14,7 +14,6 @@ import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 
-
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
@@ -34,17 +33,22 @@ public class UserController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
-		return new ResponseEntity<EntityModel<UserDTO>>(assembler,headers,HttpStatus.OK);
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler,getHeaders(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/userByUsername")
 	public ResponseEntity<EntityModel<UserDTO>> getUserInformationByUsername (@RequestParam String username) {
 		var user = userDtoMapper.getByUsername(username);
 		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
+		
+		return new ResponseEntity<EntityModel<UserDTO>>(assembler,getHeaders(),HttpStatus.OK);
+	}
+	
+	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
-		return new ResponseEntity<EntityModel<UserDTO>>(assembler,headers,HttpStatus.OK);
+		return headers;
 	}
 	
 }
