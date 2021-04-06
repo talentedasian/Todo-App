@@ -4,13 +4,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import org.hamcrest.CoreMatchers;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +20,14 @@ import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
+import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @ExtendWith(SpringExtension.class)
 public class EmailControllerTest {
 
 	private static EmailDTO emailDTO;
 	private static EmailController controller;
+	private static NestedDTOAssembler nestedDTOAssembler = new NestedDTOAssembler(); 
 	
 	@MockBean
 	private EmailDTOAssembler assembler;
@@ -62,10 +63,49 @@ public class EmailControllerTest {
 		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
 		
 		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
-		System.out.println(email.getHeaders().getContentType());
-		System.out.println(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		assertThat(email.getHeaders().getContentType(), 
 				equalTo(org.springframework.hateoas.MediaTypes.HAL_JSON));
 		
 	}
+	
+	@Test
+	public void shouldReturnExpectedLinks() {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		
+		EntityModel<EmailDTO> entityModel = EntityModel.of(emailDTO);
+		entityModel.add(linkTo(methodOn(EmailController.class)
+				.getEmailById(emailDTO.getId()))
+			.withSelfRel());
+	
+		entityModel.add(linkTo(methodOn(EmailController.class)
+			.getEmailByOwnerId(emailDTO.getUser().getId()))
+		.withRel("inUserEmail"));
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
+		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
+		
+		assertThat("/api/email/emailById?id=1", 
+				equalTo(email.getBody().getLink("self").get().getHref()));
+		assertThat("/api/email/emailByOwnerId/1", 
+				equalTo(email.getBody().getLink("inUserEmail").get().getHref()));
+		
+	}
+	
+	@Test
+	public void shouldReturnNestedUserDTOLinks() {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		
+		EntityModel<EmailDTO> entityModel = EntityModel.of(emailDTO);
+		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);		
+		
+		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
+		
+		assertThat("/api/user/userById/1", 
+				equalTo(email.getBody().getContent().getUser().getLink("inUserById").get().getHref()));
+	}
+			
 }
