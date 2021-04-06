@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class TodoController {
 		var utilityMethod = new NestedDTOAssembler();
 		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
 		
-		return new ResponseEntity<>(assembler, HttpStatus.OK);
+		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/todoByOwnerId")
@@ -60,8 +61,14 @@ public class TodoController {
 		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
 		
 		
-		return new ResponseEntity<CollectionModel<EntityModel<TodoDTO>>>(assembler, HttpStatus.OK);	
+		return new ResponseEntity<CollectionModel<EntityModel<TodoDTO>>>(assembler,getHeaders(),HttpStatus.OK);	
 	}
 	
+	private HttpHeaders getHeaders() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
+		
+		return headers;
+	}
 	
 }
