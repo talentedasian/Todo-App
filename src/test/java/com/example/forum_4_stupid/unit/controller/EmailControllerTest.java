@@ -1,9 +1,14 @@
 package com.example.forum_4_stupid.unit.controller;
 
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.controller.EmailController;
@@ -25,6 +30,7 @@ public class EmailControllerTest {
 	
 	@BeforeEach
 	public void setUp() {
+		controller = new EmailController(mapper, assembler);
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("test");
@@ -38,6 +44,10 @@ public class EmailControllerTest {
 	
 	@Test
 	public void verifyEmailDTOAssemblerCalled() {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
 		
+		controller.getEmailById(1);
+		verify(assembler).toModel(emailDTO);
 	}
 }
