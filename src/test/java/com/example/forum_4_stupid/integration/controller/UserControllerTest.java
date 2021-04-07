@@ -74,7 +74,7 @@ public class UserControllerTest {
 	}
 	
 	@org.junit.jupiter.api.Test
-	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
+	@DisplayName("Should ReturnExpectedJsonOutput When GetMappingUserByUserId")
 	public void shouldReturnExpectedOutputs() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
@@ -105,7 +105,7 @@ public class UserControllerTest {
 	}
 	
 	@org.junit.jupiter.api.Test
-	@DisplayName("Should_ReturnExpectedJsonOutput_When_GetMappingUserByUserId")
+	@DisplayName("Should ReturnExpectedJsonOutput When GetMappingUserByUserId")
 	public void shouldReturnExpectedOutputs2() throws URISyntaxException, Exception {
 		var userDTO = new UserDTO();
 		userDTO.setId(1);

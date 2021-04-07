@@ -6,19 +6,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.forum_4_stupid.controller.AuthenticationController;
@@ -32,6 +31,7 @@ import com.example.forum_4_stupid.service.JwtProvider;
 import com.example.forum_4_stupid.service.UserService;
 
 @WebMvcTest(controllers = AuthenticationController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
+@AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT)
 public class AuthenticationControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
@@ -47,15 +47,6 @@ public class AuthenticationControllerTest {
 	private AuthService auth;
 	@MockBean
 	private UserService userService;
-	@Autowired
-	private WebApplicationContext context;
-	
-	@BeforeEach
-	public void setUpMockMvc() {
-		mockMvc = MockMvcBuilders.standaloneSetup(context.getBean(AuthenticationController.class))
-				.build();
-	}
-	
 	
 	@org.junit.jupiter.api.Test
 	public void assertThatSignUpReturnStatusCreated() throws URISyntaxException, Exception {
@@ -72,7 +63,6 @@ public class AuthenticationControllerTest {
 				.characterEncoding("utf-8")
 				.content("{\n\"username\": \"test\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isCreated())
 		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
 		.andExpect(MockMvcResultMatchers.jsonPath("id", CoreMatchers.is(userDTO.getId())))
@@ -87,7 +77,6 @@ public class AuthenticationControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
 				.content("{\n\"username\": \"test1\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().isOk())
 		.andExpect(MockMvcResultMatchers.cookie().httpOnly("jwt", true));	
 	}
