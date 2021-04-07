@@ -23,7 +23,6 @@ public class NestedDTOAssembler {
 	}
 	
 	public void addUserFromEmailNestedEntityLink(CollectionModel<EntityModel<EmailDTO>> email) {
-		EmailDTO entityModel = null;
 		for (EntityModel<EmailDTO> entityModels : email) {
 			entityModels.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 					WebMvcLinkBuilder.methodOn(UserController.class)

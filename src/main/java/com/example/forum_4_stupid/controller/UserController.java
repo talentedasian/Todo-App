@@ -30,8 +30,6 @@ public class UserController {
 	public ResponseEntity<EntityModel<UserDTO>> getUserInformationById (@PathVariable Integer id) {
 		var user = userDtoMapper.getById(id);
 		EntityModel<UserDTO> assembler = userAssembler.toModel(user);
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
 		
 		return new ResponseEntity<EntityModel<UserDTO>>(assembler,getHeaders(),HttpStatus.OK);
 	}
