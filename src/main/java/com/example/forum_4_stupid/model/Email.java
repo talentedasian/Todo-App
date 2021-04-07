@@ -15,7 +15,8 @@ public class Email {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "email_id")
 	private Integer id;
-	
+
+	@javax.validation.constraints.Email
 	@Column(nullable = false, unique = true)
 	private String email;
 	
