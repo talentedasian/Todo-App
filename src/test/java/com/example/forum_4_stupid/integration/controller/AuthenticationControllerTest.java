@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,19 +81,26 @@ public class AuthenticationControllerTest {
 	}
 	
 	@Test
-	public void assertThatLoginShouldReturnJwt() throws URISyntaxException, Exception {
+	public void assertThatLoginBadRequestMinNotMetUsername() throws URISyntaxException, Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
 				.content("{\n\"username\": \"test1\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.cookie().httpOnly("jwt", true));	
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());	
 	}
 	
 	@Test
-	public void shouldBeBadRequest() throws URISyntaxException, Exception {
+	public void assertThatLoginBadRequestMinNotMetPassword() throws URISyntaxException, Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/login"))
+				.content("{\n\"username\": \"longusername\",\n\"password\": \"short\"\n}")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(MockMvcResultMatchers.status().isBadRequest());	
+	}
+	
+	@Test
+	public void assertThatLoginBadRequestMaxNotMetUsername() throws URISyntaxException, Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
-				.characterEncoding("utf-8")
-				.content("{\n\"username\": \"test\",\n\"password\": \"test\"\n}")
+				.characterEncoding("utf-8")// just a long username that exceeds 25, the minimum allowed username
+				.content("{\n\"username\": \"123456789098765431378909876\",\n\"password\": \"test\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}

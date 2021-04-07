@@ -51,7 +51,7 @@ public class AuthenticationController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<Void> loginUser(@RequestBody LoginRequest loginRequest) throws IllegalArgumentException {
+	public ResponseEntity<Void> loginUser(@Valid @RequestBody LoginRequest loginRequest) throws IllegalArgumentException {
 		try {
 			authService.login(loginRequest);
 			String jwt = jwtProvider.jwtLogin(loginRequest);

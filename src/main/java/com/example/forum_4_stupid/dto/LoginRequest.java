@@ -1,12 +1,19 @@
 package com.example.forum_4_stupid.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class LoginRequest {
 	
+	@NotNull
+	@Size(min = 8, max = 20)
 	private String username;
 	
+	@NotNull
+	@Size(min = 8, max = 255)
 	private String password;
 
 	public String getUsername() {
