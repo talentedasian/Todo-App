@@ -8,10 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
@@ -19,7 +17,6 @@ import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@ExtendWith(SpringExtension.class)
 public class EmailDtoAssemblerTest {
 
 	private static EmailDTO emailDTO;
@@ -62,7 +59,6 @@ public class EmailDtoAssemblerTest {
 			assertThat("/api/user/userByUsername?username=test", 
 				equalTo(entityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));			
 		}
-				
 		
 	}
 	

@@ -13,8 +13,8 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.EmailRequest;
@@ -27,9 +27,9 @@ import com.example.forum_4_stupid.service.EmailService;
 @ExtendWith(SpringExtension.class)
 public class EmailServiceTest {
 
-	@MockBean
+	@Mock
 	private UsersRepository usersRepo;
-	@MockBean
+	@Mock
 	private EmailRepository emailRepo;
 	private static EmailService emailService;
 	

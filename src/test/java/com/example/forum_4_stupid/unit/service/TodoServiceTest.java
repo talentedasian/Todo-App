@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.TodoRequest;
@@ -33,26 +33,32 @@ public class TodoServiceTest {
 	private static TodoService service;
 	private static Users user;
 	private static TodoRequest todoRequest;
-	@MockBean
+	private static Optional<Todos> todos;
+	private static final LocalDateTime timeNow = LocalDateTime.now();
+	
+	@Mock
 	private TodosRepository todosRepo;
-	@MockBean
+	@Mock
 	private UsersRepository userRepo;
 	
 	@BeforeEach
 	public void setUp() {
-		//entity
 		user = new Users(1, 
 				"test", 
-				LocalDateTime.now(), 
+				timeNow, 
 				"testpassword",
 				true,
 				null, 
 				null);
+		todos = Optional.of(new Todos(null,
+				"test content shit", 
+				"test title",
+				LocalDateTime.of(2021, 4, 21, 8, 22),
+				timeNow, 
+				user));
 		
-		//service
 		service = new TodoService(todosRepo, userRepo);
 		
-		//dto
 		todoRequest = new TodoRequest();
 		todoRequest.setTitle("test title");
 		todoRequest.setUsername("test");
@@ -67,12 +73,6 @@ public class TodoServiceTest {
 	
 	@Test
 	public void verifyTodosRepositoryFindByIdCalled() {
-		Optional<Todos> todos = Optional.of(new Todos(1,
-				"test content", 
-				"test title",
-				LocalDateTime.of(2021, 4, 5, 2, 54),
-				LocalDateTime.now(), 
-				user));
 		when(todosRepo.findById(1)).thenReturn(todos);
 		service.findTodosById(1);
 		verify(todosRepo, times(1)).findById(1);
@@ -98,12 +98,6 @@ public class TodoServiceTest {
 	
 	@Test
 	public void shouldThrowTodoNotFoundException() {
-		Optional<Todos> todos = Optional.of(new Todos(null,
-				"test content shit", 
-				"test title",
-				LocalDateTime.of(2021, 4, 21, 8, 22),
-				LocalDateTime.now(), 
-				user));
 		when(todosRepo.findById(2)).thenReturn(todos);
 		
 		assertThrows(TodoNotFoundException.class, () -> service.findTodosById(1));
@@ -112,12 +106,6 @@ public class TodoServiceTest {
 
 	@Test
 	public void todosShouldEqualToUserPassed() {
-		Optional<Todos> todos = Optional.of(new Todos(null,
-				"test content shit", 
-				"test title",
-				LocalDateTime.of(2021, 4, 21, 8, 22),
-				LocalDateTime.now(), 
-				user));
 		Optional<Todos> todos2 = Optional.of(new Todos(null,
 				"test content shit", 
 				"test title",
@@ -135,13 +123,7 @@ public class TodoServiceTest {
 	
 	@Test
 	public void todosDatesShouldEqualToDatesPassed() {
-		LocalDateTime timeNow = LocalDateTime.now();
-		Optional<Todos> todos = Optional.of(new Todos(null,
-				"test content shit", 
-				"test title",
-				LocalDateTime.of(2021, 4, 21, 8, 22),
-				timeNow, 
-				user));
+		
 		when(todosRepo.findById(1)).thenReturn(todos);
 		
 		assertThat(LocalDateTime.of(2021, 4, 21, 8, 22),

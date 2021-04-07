@@ -10,7 +10,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,9 +30,9 @@ public class EmailControllerTest {
 	private static NestedDTOAssembler nestedDTOAssembler = new NestedDTOAssembler();
 	private static EntityModel<EmailDTO> entityModel;
 	
-	@MockBean
+	@Mock
 	private EmailDTOAssembler assembler;
-	@MockBean
+	@Mock
 	private EmailDtoMapper mapper;
 	
 	@BeforeEach

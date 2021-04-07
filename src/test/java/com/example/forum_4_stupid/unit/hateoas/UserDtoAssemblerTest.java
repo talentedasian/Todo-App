@@ -4,15 +4,12 @@ import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-@ExtendWith(SpringExtension.class)
 public class UserDtoAssemblerTest {
 
 	private static UserDTOAssembler assembler;

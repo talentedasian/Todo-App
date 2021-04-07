@@ -9,8 +9,8 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,11 +28,11 @@ import com.example.forum_4_stupid.service.AuthService;
 public class AuthServiceTest {
 	
 	private static AuthService service;
-	@MockBean
+	@Mock
 	private UsersRepository repo;
-	@MockBean
+	@Mock
 	private PasswordEncoder encoder;
-	@MockBean
+	@Mock
 	private AuthenticationManager manager;
 	
 	@BeforeEach
