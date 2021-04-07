@@ -6,6 +6,7 @@ import javax.validation.constraints.Size;
 public class RegisterRequest {
 	
 	@NotNull
+	@Size(min = 8, max = 20)
 	private String username;
 	
 	@NotNull
