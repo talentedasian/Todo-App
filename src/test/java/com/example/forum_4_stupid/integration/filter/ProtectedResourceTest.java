@@ -7,11 +7,11 @@ import java.net.URISyntaxException;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -21,8 +21,8 @@ import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.service.UserService;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = UserController.class)
+@AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT)
 public class ProtectedResourceTest {
 
 	@Autowired
@@ -40,7 +40,6 @@ public class ProtectedResourceTest {
 	@DisplayName("Should_ReturnNoJWTFoundOnAuthHeader_When_AccessingProtectedResource_UserById")
 	public void shouldReturnForbiddenAndNullAuthHeader() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userById/1")))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().is(401))
 		.andExpect(MockMvcResultMatchers.jsonPath("err", equalTo("401")))
 		.andExpect(MockMvcResultMatchers.jsonPath("reason", equalTo("No JWT Found on Authorization Header")));
@@ -51,7 +50,6 @@ public class ProtectedResourceTest {
 	public void shouldReturnStampedSignatureJwt() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userById/1"))
 				.header("Authorization", jwt))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().is(401))
 		.andExpect(MockMvcResultMatchers.jsonPath("err", equalTo("401")))
 		.andExpect(MockMvcResultMatchers.jsonPath("reason", equalTo("Invalid Signature of JWT")))
@@ -63,7 +61,6 @@ public class ProtectedResourceTest {
 	public void shouldReturnStampedSignatureJwt2() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userByUsername?username=test"))
 				.header("Authorization", jwt))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().is(401))
 		.andExpect(MockMvcResultMatchers.jsonPath("err", equalTo("401")))
 		.andExpect(MockMvcResultMatchers.jsonPath("reason", equalTo("Invalid Signature of JWT")))
@@ -74,7 +71,6 @@ public class ProtectedResourceTest {
 	@DisplayName("Should_ReturnForbiddenAndNullAuthHeader_When_AccessingProtectedResourceWithNoJWT_UserByUsername")
 	public void shouldReturnForbiddenAndNullAuthHeader2() throws URISyntaxException, Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get(new URI("/api/user/userByUsername?username=test")))
-		.andDo(MockMvcResultHandlers.print())
 		.andExpect(MockMvcResultMatchers.status().is(401))
 		.andExpect(MockMvcResultMatchers.jsonPath("err", equalTo("401")))
 		.andExpect(MockMvcResultMatchers.jsonPath("reason", equalTo("No JWT Found on Authorization Header")));
