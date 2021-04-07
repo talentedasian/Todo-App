@@ -1,5 +1,6 @@
 package com.example.forum_4_stupid.integration.controller;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -8,9 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
@@ -30,20 +32,20 @@ import com.example.forum_4_stupid.repository.EmailRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
 @WebMvcTest(controllers = EmailController.class)
-@AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT, addFilters = false)
+@AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT, addFilters = false, printOnlyOnFailure = false)
 public class EmailControllerTest {
 	
 	@Autowired
 	private MockMvc mvc;
 	
 	@MockBean
-	private static EmailRepository emailRepo;
+	private EmailRepository emailRepo;
 	@MockBean
-	private static UsersRepository userRepo;
+	private UsersRepository userRepo;
 	@MockBean
-	private static EmailDTOAssembler assembler;
+	private EmailDTOAssembler assembler;
 	@MockBean
-	private static EmailDtoMapper mapper;
+	private EmailDtoMapper mapper;
 	
 	private static EmailDTO emailDTO;
 	
@@ -64,6 +66,22 @@ public class EmailControllerTest {
 		.andExpect(status().isOk())
 		.andExpect(content().contentType(MediaTypes.HAL_JSON));
 				
+	}
+	
+	@Test
+	@DisplayName("Should ReturnExpectedJsonOutput When GetMappingEmailById")
+	public void shouldExpectedDtoOutputs() throws URISyntaxException, Exception { 
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
+		
+		mvc.perform(get(new URI("/api/email/emailById?id=1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("id", equalTo(emailDTO.getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("email", equalTo(emailDTO.getEmail())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.id", equalTo(emailDTO.getUser().getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.username", equalTo(emailDTO.getUser().getUsername())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.totalEmails", equalTo(1)))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos", equalTo(0)));
 	}
 	
 }

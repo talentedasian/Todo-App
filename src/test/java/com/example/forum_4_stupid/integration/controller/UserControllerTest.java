@@ -120,6 +120,7 @@ public class UserControllerTest {
 		
 		mockMvc.perform(get(new URI("/api/user/userById/1"))
 				.content("utf-8"))
+		.andExpect(status().isOk())
 		.andExpect(content().contentType(MediaTypes.HAL_JSON));
 	}
 	
