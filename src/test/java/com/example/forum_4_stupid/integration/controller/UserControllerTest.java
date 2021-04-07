@@ -54,11 +54,6 @@ public class UserControllerTest {
 		userDTO.setUsername("test");
 		userDTO.setTotalEmails(0);
 		userDTO.setTotalTodos(0);
-
-		userDTO.add(linkTo(methodOn(UserController.class).getUserInformationById(userDTO.getId()))
-				.withRel("userById"));
-		userDTO.add(linkTo(methodOn(UserController.class).getUserInformationByUsername(userDTO.getUsername()))
-				.withRel("userByUsername"));
 		
 		entityModel = EntityModel.of(userDTO);
 
