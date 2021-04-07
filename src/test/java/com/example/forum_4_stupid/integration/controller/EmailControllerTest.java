@@ -19,7 +19,7 @@ public class EmailControllerTest {
 	@MockBean
 	private static UsersRepository userRepo;
 	
-	@Test
-	public void should 
+//	@Test
+//	public void should 
 	
 }

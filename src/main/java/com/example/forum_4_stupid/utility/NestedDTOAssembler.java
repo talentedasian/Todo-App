@@ -25,18 +25,17 @@ public class NestedDTOAssembler {
 	public void addUserFromEmailNestedEntityLink(CollectionModel<EntityModel<EmailDTO>> email) {
 		EmailDTO entityModel = null;
 		for (EntityModel<EmailDTO> entityModels : email) {
-			entityModel = entityModels.getContent();
+			entityModels.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
+					WebMvcLinkBuilder.methodOn(UserController.class)
+					.getUserInformationById(entityModels.getContent().getUser().getId()))
+					.withRel("inUserById"));
+			
+			entityModels.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
+					WebMvcLinkBuilder.methodOn(UserController.class)
+					.getUserInformationByUsername(entityModels.getContent().getUser().getUsername()))
+					.withRel("inUserByUsername"));
 		}
 		
-		entityModel.getUser().add(WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(UserController.class)
-				.getUserInformationById(entityModel.getUser().getId()))
-				.withRel("inUserById"));
-		
-		entityModel.getUser().add(WebMvcLinkBuilder.linkTo(
-				WebMvcLinkBuilder.methodOn(UserController.class)
-				.getUserInformationByUsername(entityModel.getUser().getUsername()))
-				.withRel("inUserByUsername"));
 	}
 	
 	public void addUserFromTodoNestedEntityLink(EntityModel<TodoDTO> todo) {
