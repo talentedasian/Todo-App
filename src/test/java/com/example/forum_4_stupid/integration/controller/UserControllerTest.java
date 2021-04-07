@@ -7,6 +7,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -22,7 +23,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.dto.UserDTO;
@@ -70,7 +70,7 @@ public class UserControllerTest {
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
 		mockMvc.perform(get(new URI("/api/user/userById/1"))
 				.content("utf-8"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+		.andExpect(status().isOk());
 	}
 	
 	@org.junit.jupiter.api.Test
@@ -81,8 +81,8 @@ public class UserControllerTest {
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
 		
 		mockMvc.perform(get(new URI("/api/user/userById/1")))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
+		.andExpect(status().isOk())
+		.andExpect(content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
 		.andExpect(jsonPath("id", equalTo(userDTO.getId())))
 		.andExpect(jsonPath("username", equalTo(userDTO.getUsername())))
 		.andExpect(jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
@@ -101,7 +101,7 @@ public class UserControllerTest {
 		when(assembler.toModel(userDTO)).thenReturn(entityModel);
 		
 		mockMvc.perform(get(new URI("/api/user/userByUsername?username=test")))
-		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("id", equalTo(userDTO.getId())))
 		.andExpect(jsonPath("username", equalTo(userDTO.getUsername())))
 		.andExpect(jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
