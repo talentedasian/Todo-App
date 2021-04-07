@@ -2,6 +2,7 @@ package com.example.forum_4_stupid.unit.controller;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
@@ -31,13 +34,14 @@ import com.example.forum_4_stupid.service.TodoService;
 @ExtendWith(SpringExtension.class)
 public class TodoControllerTest {
 
-	@MockBean
+	@Mock
 	private static TodoService service;
-	@MockBean
+	@Mock
 	private static TodoDTOAssembler assembler;
-	@MockBean
+	@Mock
 	private static TodoDtoMapper mapper; 
 	
+	private static TodoController controller;
 	private static TodoDTO todoDTO;
 	private static LocalDateTime timeNow = LocalDateTime.now();
 	private static EntityModel<TodoDTO> entityModel;
@@ -60,19 +64,24 @@ public class TodoControllerTest {
 		entityModel.add(linkTo(methodOn(TodoController.class)
 				.getTodoByUserId(entityModel.getContent().getUser().getId()))
 				.withRel("inUserTodo"));
+		
+		controller = new TodoController(mapper, assembler);
 	}
 	
 
 	@Test
 	public void verifyTodoDTOAssemblerCallToModel() {
+		when(mapper.getById(1)).thenReturn(todoDTO);
+		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
+		ResponseEntity<EntityModel<TodoDTO>> todo = controller.getTodoById(1);
 		
+		verify(assembler).toModel(todoDTO);
 	}
 	
 	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	@Test
 	@DisplayName("Should Return Hal_Json As Media Type")
 	public void shouldReturnHal_Json() {
-		TodoController controller = new TodoController(mapper, assembler);
 		when(mapper.getById(1)).thenReturn(todoDTO);
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
 		ResponseEntity<EntityModel<TodoDTO>> todo = controller.getTodoById(1);
