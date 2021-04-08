@@ -1,6 +1,8 @@
 package com.example.forum_4_stupid.integration.controller;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -17,6 +19,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
@@ -102,7 +105,7 @@ public class EmailControllerTest {
 		collectionModel = CollectionModel.of(listEntityModel);
 		collectionModel.add(linkTo(methodOn(EmailController.class)
 				.getEmailByOwnerId(emailDTO.getUser().getId()))
-			.withSelfRel());
+			.withSelfRel().withHref("http://localhost:/api/email/emailByOwnerId/1"));
 		
 	}	
 	
@@ -149,7 +152,7 @@ public class EmailControllerTest {
 		
 		mvc.perform(get(new URI("/api/email/emailById?id=1")))
 		.andExpect(MockMvcResultMatchers.jsonPath("_links.self.href", 
-				equalTo("/api/email/emailById?id=1")));
+				endsWith("/api/email/emailById?id=1")));
 	}
 	
 	@Test
@@ -162,9 +165,9 @@ public class EmailControllerTest {
 		mvc.perform(get(new URI("/api/email/emailById"))
 				.param("id", "1"))
 		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserById.href", 
-				equalTo("http://localhost/api/user/userById/1")))
+				endsWith("/api/user/userById/1")))
 		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserByUsername.href", 
-				equalTo("http://localhost/api/user/userByUsername?username=testusername")));
+				endsWith("/api/user/userByUsername?username=testusername")));
 	}
 	
 	@Test
@@ -187,6 +190,22 @@ public class EmailControllerTest {
 				equalTo(emailDTO.getUser().getTotalEmails())))
 		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.totalTodos", 
 				equalTo(emailDTO.getUser().getTotalTodos())));
+	}
+	
+	@Test
+	@DisplayName("Should ReturnExpectedLinkCollection When GetMappingEmailByOwnerId")
+	public void shouldExpectedlinkCollection() throws URISyntaxException, Exception {
+		when(mapper.getAllEmailByUsersId(1)).thenReturn(listEmailDTO);
+		
+		when(assembler.toCollectionModel(listEmailDTO)).thenReturn(collectionModel);
+		
+		mvc.perform(get(new URI("/api/email/emailByOwnerId/1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0]._links.self.href", 
+				endsWith("/api/email/emailById?id=1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[1]._links.self.href", 
+				endsWith("/api/email/emailById?id=2")))
+		.andExpect(MockMvcResultMatchers.jsonPath("_links.self.href", 
+				endsWith("/api/email/emailByOwnerId/1")));
 	}
 	
 }
