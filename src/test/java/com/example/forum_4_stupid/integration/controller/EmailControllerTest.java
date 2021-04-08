@@ -2,6 +2,8 @@ package com.example.forum_4_stupid.integration.controller;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.mockito.Mockito.when;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +50,7 @@ public class EmailControllerTest {
 	private EmailDtoMapper mapper;
 	
 	private static EmailDTO emailDTO;
+	private static EntityModel<EmailDTO> entityModel;
 	
 	@BeforeEach
 	public void setUp() {
@@ -56,6 +59,15 @@ public class EmailControllerTest {
 		emailDTO.setId(1);
 		emailDTO.setEmail("test@gmail.com");
 		emailDTO.setUser(userDTO);
+		
+		entityModel = EntityModel.of(emailDTO);
+		entityModel.add(linkTo(methodOn(EmailController.class)
+				.getEmailById(entityModel.getContent().getId()))
+			.withSelfRel());
+	
+		entityModel.add(linkTo(methodOn(EmailController.class)
+			.getEmailByOwnerId(entityModel.getContent().getUser().getId()))
+		.withRel("inUserEmail"));
 	}	
 	
 	@Test
@@ -81,7 +93,8 @@ public class EmailControllerTest {
 		.andExpect(MockMvcResultMatchers.jsonPath("user.id", equalTo(emailDTO.getUser().getId())))
 		.andExpect(MockMvcResultMatchers.jsonPath("user.username", equalTo(emailDTO.getUser().getUsername())))
 		.andExpect(MockMvcResultMatchers.jsonPath("user.totalEmails", equalTo(1)))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos", equalTo(0)));
+		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos", equalTo(0)))
+		.andExpect(MockMvcResultMatchers.jsonPath("_links.emailById.href", equalTo("/api/emailById?id=1")));
 	}
 	
 }
