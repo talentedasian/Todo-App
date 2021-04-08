@@ -10,6 +10,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,15 +53,24 @@ public class EmailControllerTest {
 	private EmailDtoMapper mapper;
 	
 	private static EmailDTO emailDTO;
+	private static EmailDTO emailDTO2;
 	private static EntityModel<EmailDTO> entityModel;
+	private static EntityModel<EmailDTO> entityModel2;
+	private static CollectionModel<EntityModel<EmailDTO>> collectionModel;
+	private List<EmailDTO> listEmailDTO;
+	private List<EntityModel<EmailDTO>> listEntityModel;
 	
 	@BeforeEach
 	public void setUp() {
-		var userDTO = new UserDTO(1, "testusername", 1, 0);
+		var userDTO = new UserDTO(1, "testusername", 2, 0);
 		emailDTO = new EmailDTO();
 		emailDTO.setId(1);
 		emailDTO.setEmail("test@gmail.com");
 		emailDTO.setUser(userDTO);
+		emailDTO2 = new EmailDTO();
+		emailDTO2.setId(2);
+		emailDTO2.setEmail("test2@gmail.com");
+		emailDTO2.setUser(userDTO);
 		
 		entityModel = EntityModel.of(emailDTO);
 		entityModel.add(linkTo(methodOn(EmailController.class)
@@ -68,12 +80,38 @@ public class EmailControllerTest {
 		entityModel.add(linkTo(methodOn(EmailController.class)
 			.getEmailByOwnerId(entityModel.getContent().getUser().getId()))
 		.withRel("inUserEmail"));
+		entityModel2 = EntityModel.of(emailDTO2);
+		entityModel2.add(linkTo(methodOn(EmailController.class)
+				.getEmailById(entityModel2.getContent().getId()))
+			.withSelfRel());
+	
+		entityModel2.add(linkTo(methodOn(EmailController.class)
+			.getEmailByOwnerId(entityModel2.getContent().getUser().getId()))
+		.withRel("inUserEmail"));
+		
+		listEmailDTO = new ArrayList<>();
+		listEmailDTO.add(emailDTO);
+		listEmailDTO.add(emailDTO2);
+		listEntityModel = new ArrayList<>();
+		
+		for (EmailDTO emailDTO : listEmailDTO) {
+			listEntityModel.add(entityModel);
+			listEntityModel.add(entityModel2);
+		}
+		
+		collectionModel = CollectionModel.of(listEntityModel);
+		collectionModel.add(linkTo(methodOn(EmailController.class)
+				.getEmailByOwnerId(emailDTO.getUser().getId()))
+			.withSelfRel());
+		
 	}	
 	
 	@Test
 	public void shouldReturnHal_JsonContentType() throws URISyntaxException, Exception { 
 		when(mapper.getById(1)).thenReturn(emailDTO);
-		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
 		mvc.perform(get(new URI("/api/email/emailById?id=1")))
 		.andExpect(status().isOk())
 		.andExpect(content().contentType(MediaTypes.HAL_JSON));
@@ -82,19 +120,73 @@ public class EmailControllerTest {
 	
 	@Test
 	@DisplayName("Should ReturnExpectedJsonOutput When GetMappingEmailById")
-	public void shouldExpectedDtoOutputs() throws URISyntaxException, Exception { 
+	public void shouldReturnExpectedDtoOutputs() throws URISyntaxException, Exception { 
 		when(mapper.getById(1)).thenReturn(emailDTO);
 		
-		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		mvc.perform(get(new URI("/api/email/emailById?id=1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("id", equalTo(emailDTO.getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("email", equalTo(emailDTO.getEmail())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.id", equalTo(emailDTO.getUser().getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.username", equalTo(emailDTO.getUser().getUsername())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.totalEmails", equalTo(1)))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos", equalTo(0)))
-		.andExpect(MockMvcResultMatchers.jsonPath("_links.emailById.href", equalTo("/api/emailById?id=1")));
+		.andExpect(MockMvcResultMatchers.jsonPath("id",
+				equalTo(emailDTO.getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("email", 
+				equalTo(emailDTO.getEmail())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.id", 
+				equalTo(emailDTO.getUser().getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.username",
+				equalTo(emailDTO.getUser().getUsername())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.totalEmails",
+				equalTo(emailDTO.getUser().getTotalEmails())))
+		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos",
+				equalTo(emailDTO.getUser().getTotalTodos())));
+	}
+	
+	@Test
+	@DisplayName("Should ReturnExpectedLinkOutput When GetMappingEmailById")
+	public void shouldExpectedLinkOutputs() throws URISyntaxException, Exception {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		mvc.perform(get(new URI("/api/email/emailById?id=1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("_links.self.href", 
+				equalTo("/api/email/emailById?id=1")));
+	}
+	
+	@Test
+	@DisplayName("Should ReturnExpectedNestedUserLinkOutput When GetMappingEmailById")
+	public void shouldExpectedNestedUserLinkOutputs() throws URISyntaxException, Exception {
+		when(mapper.getById(1)).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		mvc.perform(get(new URI("/api/email/emailById"))
+				.param("id", "1"))
+		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserById.href", 
+				equalTo("http://localhost/api/user/userById/1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserByUsername.href", 
+				equalTo("http://localhost/api/user/userByUsername?username=testusername")));
+	}
+	
+	@Test
+	@DisplayName("Should ReturnExpectedDtoOutputCollection When GetMappingEmailByOwnerId")
+	public void shouldExpectedDtoOutputsByCollection() throws URISyntaxException, Exception {
+		when(mapper.getAllEmailByUsersId(1)).thenReturn(listEmailDTO);
+		
+		when(assembler.toCollectionModel(listEmailDTO)).thenReturn(collectionModel);
+		
+		mvc.perform(get(new URI("/api/email/emailByOwnerId/1")))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].id", 
+				equalTo(emailDTO.getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].email", 
+				equalTo(emailDTO.getEmail())))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.id", 
+				equalTo(emailDTO.getUser().getId())))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.username", 
+				equalTo(emailDTO.getUser().getUsername())))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.totalEmails", 
+				equalTo(emailDTO.getUser().getTotalEmails())))
+		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.totalTodos", 
+				equalTo(emailDTO.getUser().getTotalTodos())));
 	}
 	
 }
