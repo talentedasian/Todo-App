@@ -34,7 +34,6 @@ public class NestedDTOAssembler {
 					.getUserInformationByUsername(entityModels.getContent().getUser().getUsername()))
 					.withRel("inUserByUsername"));
 		}
-		
 	}
 	
 	public void addUserFromTodoNestedEntityLink(EntityModel<TodoDTO> todo) {

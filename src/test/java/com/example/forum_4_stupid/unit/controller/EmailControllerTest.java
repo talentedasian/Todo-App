@@ -27,7 +27,6 @@ public class EmailControllerTest {
 
 	private static EmailDTO emailDTO;
 	private static EmailController controller;
-	private static NestedDTOAssembler nestedDTOAssembler = new NestedDTOAssembler();
 	private static EntityModel<EmailDTO> entityModel;
 	
 	@Mock
@@ -58,7 +57,7 @@ public class EmailControllerTest {
 			.getEmailByOwnerId(emailDTO.getUser().getId()))
 		.withRel("inUserEmail"));
 		
-		nestedDTOAssembler.addUserFromEmailNestedEntityLink(entityModel);
+		new NestedDTOAssembler().addUserFromEmailNestedEntityLink(entityModel);
 	}
 	
 	@Test

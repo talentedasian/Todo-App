@@ -61,8 +61,7 @@ public class EmailController {
 	public ResponseEntity<CollectionModel<EntityModel<EmailDTO>>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
 		CollectionModel<EntityModel<EmailDTO>> assembler = emailAssembler.toCollectionModel(email);
-		var utilityMethod = new NestedDTOAssembler();
-		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
+		new NestedDTOAssembler().addUserFromEmailNestedEntityLink(assembler);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<EmailDTO>>>(assembler, getHeaders(), HttpStatus.OK);
 	}
