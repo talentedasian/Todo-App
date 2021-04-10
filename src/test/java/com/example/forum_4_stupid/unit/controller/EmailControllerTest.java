@@ -40,7 +40,7 @@ public class EmailControllerTest {
 		
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
-		userDTO.setUsername("test");
+		userDTO.setUsername("testusername");
 		userDTO.setTotalEmails(0);
 		userDTO.setTotalTodos(0);
 		emailDTO = new EmailDTO();
@@ -57,7 +57,6 @@ public class EmailControllerTest {
 			.getEmailByOwnerId(emailDTO.getUser().getId()))
 		.withRel("inUserEmail"));
 		
-		new NestedDTOAssembler().addUserFromEmailNestedEntityLink(entityModel);
 	}
 	
 	@Test
@@ -105,6 +104,8 @@ public class EmailControllerTest {
 		
 		assertThat("/api/user/userById/1", 
 				equalTo(email.getBody().getContent().getUser().getLink("inUserById").get().getHref()));
+		assertThat("/api/user/userByUsername?username=testusername", 
+				equalTo(email.getBody().getContent().getUser().getLink("inUserByUsername").get().getHref()));
 	}
 			
 }
