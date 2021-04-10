@@ -27,7 +27,6 @@ public class EmailDtoMapper implements EmailDTOMapper<EmailDTO, EmailRequest, Em
 		Email email = emailService.addEmail(request);
 		var emailDTO = new EmailDTO();
 		emailDTO.setId(email.getId());
-		emailDTO.setUser(mapEntityToDTO(email.getUser()));
 		emailDTO.setEmail(email.getEmail());
 		emailDTO.setUser(mapEntityToDTO(email.getUser()));
 		

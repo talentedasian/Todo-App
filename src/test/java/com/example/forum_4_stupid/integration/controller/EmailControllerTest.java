@@ -2,10 +2,13 @@ package com.example.forum_4_stupid.integration.controller;
 
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,6 +20,7 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
@@ -25,14 +29,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.forum_4_stupid.controller.EmailController;
 import com.example.forum_4_stupid.dto.EmailDTO;
+import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
+import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.repository.EmailRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
@@ -102,6 +110,34 @@ public class EmailControllerTest {
 			.withSelfRel().withHref("http://localhost:/api/email/emailByOwnerId/1"));
 		
 	}	
+	
+	@Test
+	public void shouldReturnHal_JsonContentTypeWhenAddingEmail() throws URISyntaxException, Exception {
+		when(mapper.save(Mockito.any(EmailRequest.class))).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		mvc.perform(post(new URI("/api/email/add-email"))
+			.content("{\n\"email\": \"testing@gmail.com\",\n\"username\": \"longusername\"\n}")
+			.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andExpect(content().contentType(MediaTypes.HAL_JSON));
+				
+	}
+	
+	@Test
+	public void shouldReturnExpectedDtoOutputsWhenAddingEmail() throws URISyntaxException, Exception {
+		when(mapper.save(Mockito.any(EmailRequest.class))).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		mvc.perform(post(new URI("/api/email/add-email"))
+			.content("{\n\"email\": \"testing@gmail.com\",\n\"username\": \"longusername\"\n}")
+			.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andExpect(content().contentType(MediaTypes.HAL_JSON));
+				
+	}
 	
 	@Test
 	public void shouldReturnHal_JsonContentType() throws URISyntaxException, Exception { 
@@ -214,8 +250,6 @@ public class EmailControllerTest {
 				endsWith("/api/user/userById/1")))
 		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user._links.inUserByUsername.href", 
 				endsWith("/api/user/userByUsername?username=testusername")));
-		
-		
 	}
 	
 }

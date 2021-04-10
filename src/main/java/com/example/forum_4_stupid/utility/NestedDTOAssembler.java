@@ -10,7 +10,7 @@ import com.example.forum_4_stupid.dto.TodoDTO;
 
 public class NestedDTOAssembler {
 
-	public void addUserFromEmailNestedEntityLink(EntityModel<EmailDTO> email) {
+	public static void addUserFromEmailNestedEntityLink(EntityModel<EmailDTO> email) {
 		email.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(UserController.class)
 				.getUserInformationById(email.getContent().getUser().getId()))
@@ -22,7 +22,7 @@ public class NestedDTOAssembler {
 				.withRel("inUserByUsername"));
 	}
 	
-	public void addUserFromEmailNestedEntityLink(CollectionModel<EntityModel<EmailDTO>> email) {
+	public static void addUserFromEmailNestedEntityLink(CollectionModel<EntityModel<EmailDTO>> email) {
 		for (EntityModel<EmailDTO> entityModels : email) {
 			entityModels.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 					WebMvcLinkBuilder.methodOn(UserController.class)
@@ -36,7 +36,7 @@ public class NestedDTOAssembler {
 		}
 	}
 	
-	public void addUserFromTodoNestedEntityLink(EntityModel<TodoDTO> todo) {
+	public static void addUserFromTodoNestedEntityLink(EntityModel<TodoDTO> todo) {
 		todo.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(UserController.class)
 				.getUserInformationById(todo.getContent().getUser().getId()))
@@ -48,7 +48,7 @@ public class NestedDTOAssembler {
 				.withRel("inUserByUsername"));
 	}
 	
-	public void addUserFromTodoNestedEntityLink(CollectionModel<EntityModel<TodoDTO>> todo) {
+	public static void addUserFromTodoNestedEntityLink(CollectionModel<EntityModel<TodoDTO>> todo) {
 		TodoDTO entityModel = null;
 		for (EntityModel<TodoDTO> entityModels : todo) {
 			entityModel = entityModels.getContent();

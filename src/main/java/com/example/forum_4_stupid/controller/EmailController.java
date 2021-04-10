@@ -41,8 +41,7 @@ public class EmailController {
 	public ResponseEntity<EntityModel<EmailDTO>> addEmail (@Valid @RequestBody EmailRequest emailRequest) {		
 		EmailDTO emailDTO = emailDtoMapper.save(emailRequest);
 		EntityModel<EmailDTO> assembler = emailAssembler.toModel(emailDTO);
-		var utilityMethod = new NestedDTOAssembler();
-		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
+		NestedDTOAssembler.addUserFromEmailNestedEntityLink(assembler);
 		
 		return new ResponseEntity<EntityModel<EmailDTO>>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
@@ -51,8 +50,7 @@ public class EmailController {
 	public ResponseEntity<EntityModel<EmailDTO>> getEmailById(@RequestParam Integer id) {
 		EmailDTO email = emailDtoMapper.getById(id);
 		EntityModel<EmailDTO> assembler = emailAssembler.toModel(email);
-		var utilityMethod = new NestedDTOAssembler();
-		utilityMethod.addUserFromEmailNestedEntityLink(assembler);
+		NestedDTOAssembler.addUserFromEmailNestedEntityLink(assembler);
 		
 		return new ResponseEntity<EntityModel<EmailDTO>>(assembler,getHeaders(),HttpStatus.OK);
 	}
@@ -61,7 +59,7 @@ public class EmailController {
 	public ResponseEntity<CollectionModel<EntityModel<EmailDTO>>> getEmailByOwnerId(@PathVariable Integer owner_id) {
 		List<EmailDTO> email = emailDtoMapper.getAllEmailByUsersId(owner_id);
 		CollectionModel<EntityModel<EmailDTO>> assembler = emailAssembler.toCollectionModel(email);
-		new NestedDTOAssembler().addUserFromEmailNestedEntityLink(assembler);
+		NestedDTOAssembler.addUserFromEmailNestedEntityLink(assembler);
 		
 		return new ResponseEntity<CollectionModel<EntityModel<EmailDTO>>>(assembler, getHeaders(), HttpStatus.OK);
 	}

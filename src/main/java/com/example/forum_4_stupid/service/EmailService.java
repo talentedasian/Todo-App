@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.forum_4_stupid.LoggerClass;
 import com.example.forum_4_stupid.dto.EmailRequest;
+import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.exceptions.EmailAlreadyExistsException;
 import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
@@ -42,7 +43,8 @@ public class EmailService {
 			
 			var email = new Email();
 			email.setEmail(emailRequest.getEmail());
-			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).get());
+			email.setUser(usersRepository.findByUsername(emailRequest.getUsername()).
+					orElseThrow(() -> new AccountDoesNotExistException("Username provided does not Exist")));
 			emailRepository.save(email);
 			
 			return email;
