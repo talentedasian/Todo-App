@@ -2,15 +2,14 @@ package com.example.forum_4_stupid.integration.controller;
 
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,8 +30,6 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.forum_4_stupid.controller.EmailController;
 import com.example.forum_4_stupid.dto.EmailDTO;
@@ -40,7 +37,6 @@ import com.example.forum_4_stupid.dto.EmailRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
-import com.example.forum_4_stupid.model.Email;
 import com.example.forum_4_stupid.repository.EmailRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 
@@ -132,11 +128,20 @@ public class EmailControllerTest {
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		mvc.perform(post(new URI("/api/email/add-email"))
-			.content("{\n\"email\": \"testing@gmail.com\",\n\"username\": \"longusername\"\n}")
+			.content("{\n\"email\": \"test@gmail.com\",\n\"username\": \"testusername\"\n}")
 			.contentType(MediaType.APPLICATION_JSON))
-		.andExpect(status().isCreated())
-		.andExpect(content().contentType(MediaTypes.HAL_JSON));
-				
+		.andExpect(jsonPath("id",
+				equalTo(emailDTO.getId())))
+		.andExpect(jsonPath("email",
+				equalTo(emailDTO.getEmail())))
+		.andExpect(jsonPath("user.id",
+				equalTo(emailDTO.getUser().getId())))
+		.andExpect(jsonPath("user.username",
+				equalTo(emailDTO.getUser().getUsername())))
+		.andExpect(jsonPath("user.totalEmails",
+				equalTo(emailDTO.getUser().getTotalEmails())))
+		.andExpect(jsonPath("user.totalTodos",
+				equalTo(emailDTO.getUser().getTotalTodos())));
 	}
 	
 	@Test
@@ -159,17 +164,17 @@ public class EmailControllerTest {
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		mvc.perform(get(new URI("/api/email/emailById?id=1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("id",
+		.andExpect(jsonPath("id",
 				equalTo(emailDTO.getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("email", 
+		.andExpect(jsonPath("email", 
 				equalTo(emailDTO.getEmail())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.id", 
+		.andExpect(jsonPath("user.id", 
 				equalTo(emailDTO.getUser().getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.username",
+		.andExpect(jsonPath("user.username",
 				equalTo(emailDTO.getUser().getUsername())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.totalEmails",
+		.andExpect(jsonPath("user.totalEmails",
 				equalTo(emailDTO.getUser().getTotalEmails())))
-		.andExpect(MockMvcResultMatchers.jsonPath("user.totalTodos",
+		.andExpect(jsonPath("user.totalTodos",
 				equalTo(emailDTO.getUser().getTotalTodos())));
 	}
 	
@@ -181,7 +186,7 @@ public class EmailControllerTest {
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
 		mvc.perform(get(new URI("/api/email/emailById?id=1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_links.self.href", 
+		.andExpect(jsonPath("_links.self.href", 
 				endsWith("/api/email/emailById?id=1")));
 	}
 	
@@ -194,9 +199,9 @@ public class EmailControllerTest {
 		
 		mvc.perform(get(new URI("/api/email/emailById"))
 				.param("id", "1"))
-		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserById.href", 
+		.andExpect(jsonPath("user._links.inUserById.href", 
 				endsWith("/api/user/userById/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("user._links.inUserByUsername.href", 
+		.andExpect(jsonPath("user._links.inUserByUsername.href", 
 				endsWith("/api/user/userByUsername?username=testusername")));
 	}
 	
@@ -208,17 +213,17 @@ public class EmailControllerTest {
 		when(assembler.toCollectionModel(listEmailDTO)).thenReturn(collectionModel);
 		
 		mvc.perform(get(new URI("/api/email/emailByOwnerId/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].id", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].id", 
 				equalTo(emailDTO.getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].email", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].email", 
 				equalTo(emailDTO.getEmail())))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.id", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user.id", 
 				equalTo(emailDTO.getUser().getId())))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.username", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user.username", 
 				equalTo(emailDTO.getUser().getUsername())))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.totalEmails", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user.totalEmails", 
 				equalTo(emailDTO.getUser().getTotalEmails())))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user.totalTodos", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user.totalTodos", 
 				equalTo(emailDTO.getUser().getTotalTodos())));
 	}
 	
@@ -230,11 +235,11 @@ public class EmailControllerTest {
 		when(assembler.toCollectionModel(listEmailDTO)).thenReturn(collectionModel);
 		
 		mvc.perform(get(new URI("/api/email/emailByOwnerId/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0]._links.self.href", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0]._links.self.href", 
 				endsWith("/api/email/emailById?id=1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0]._links.inUserEmail.href", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0]._links.inUserEmail.href", 
 				endsWith("/api/email/emailByOwnerId/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_links.self.href", 
+		.andExpect(jsonPath("_links.self.href", 
 				endsWith("/api/email/emailByOwnerId/1")));
 	}
 	
@@ -246,9 +251,9 @@ public class EmailControllerTest {
 		when(assembler.toCollectionModel(listEmailDTO)).thenReturn(collectionModel);
 		
 		mvc.perform(get(new URI("/api/email/emailByOwnerId/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user._links.inUserById.href", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user._links.inUserById.href", 
 				endsWith("/api/user/userById/1")))
-		.andExpect(MockMvcResultMatchers.jsonPath("_embedded.emailDTOList[0].user._links.inUserByUsername.href", 
+		.andExpect(jsonPath("_embedded.emailDTOList[0].user._links.inUserByUsername.href", 
 				endsWith("/api/user/userByUsername?username=testusername")));
 	}
 	
