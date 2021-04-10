@@ -18,10 +18,6 @@ jobs:
           POSTGRES_DB: spring-jwt
         ports:
           - 2222
-  build:
-
-    runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 15
