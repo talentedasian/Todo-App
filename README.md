@@ -16,8 +16,7 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-
-
+![example workflow](https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/badge.svg)
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
