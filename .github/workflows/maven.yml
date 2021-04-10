@@ -8,10 +8,20 @@ on:
     branches: [ master ]
     
 jobs:
+  vm-jobs:
+    services:
+      postgres:
+        image: postgres:12.2
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: pass
+          POSTGRES_DB: spring-jwt
+        ports:
+          - 2222
   build:
 
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 15
