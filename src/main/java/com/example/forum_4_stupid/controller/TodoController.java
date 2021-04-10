@@ -40,15 +40,14 @@ public class TodoController {
 	//add appropriate redirects
 	@PostMapping("/add-todo")
 	public void addTodo (@Valid @RequestBody TodoRequest todoRequest) {
-		todoDtoMapper.save(todoRequest);
+		TodoDTO todo = todoDtoMapper.save(todoRequest);
 	}
 	
 	@GetMapping("/todoById/{id}")
 	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@PathVariable Integer id) {
 		TodoDTO todo = todoDtoMapper.getById(id);
-		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo); 
-		var utilityMethod = new NestedDTOAssembler();
-		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
+		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
+		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
 		
 		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.OK);
 	}
@@ -57,8 +56,7 @@ public class TodoController {
 	public ResponseEntity<CollectionModel<EntityModel<TodoDTO>>> getTodoByUserId (@RequestParam Integer id) {
 		List<TodoDTO> todo = todoDtoMapper.getAllByUserId(id);
 		CollectionModel<EntityModel<TodoDTO>> assembler = todoAssembler.toCollectionModel(todo);
-		var utilityMethod = new NestedDTOAssembler();
-		utilityMethod.addUserFromTodoNestedEntityLink(assembler);
+		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
 		
 		
 		return new ResponseEntity<CollectionModel<EntityModel<TodoDTO>>>(assembler,getHeaders(),HttpStatus.OK);	

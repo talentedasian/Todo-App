@@ -22,8 +22,25 @@ public class TodoRequest {
 	@NotNull
 	private String username;
 	
+	@Null	
+	@Size(min = 1, max = 31)
+	private int day; 
+	
 	@Null		
-	private int day, month, year, hour, minute;
+	@Size(min = 1, max = 12)
+	private int month;
+	
+	@Null		
+	@Size(min = 2021, max = 2035)
+	private int year;
+	
+	@Null		
+	@Size(min = 0, max = 23)
+	private int hour;
+	
+	@Null		
+	@Size(min = 0, max = 59)
+	private int minute;
 	
 	public int getDay() {
 		return day;

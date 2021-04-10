@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import static java.time.LocalDateTime.now;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -73,12 +74,9 @@ public class TodoService {
 	
 	@Transactional(readOnly = true)
 	public Todos findTodosById(Integer id) {
-		try {
-			Todos todo = todosRepository.findById(id).get();
-			return todo;			
-		} catch (NoSuchElementException e) {
-			throw new TodoNotFoundException("Todo Does Not Exist");
-		}
+		Todos todo = todosRepository.findById(id)
+				.orElseThrow(() -> new TodoNotFoundException("Todo Does Not Exist"));
+		return todo;
 	}
 	
 	@Async
@@ -87,10 +85,12 @@ public class TodoService {
 		LocalDateTime timeNow = now();
 		System.out.println(timeNow);
 		
-		List<Todos> todo = todosRepository.findAll();
+		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
+				.thenAccept((future) -> future.stream().
+						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow))
+						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
 		
-		todo.stream().filter(filteredTodo -> filteredTodo.getDeadline().isAfter(timeNow))
-				.forEach(expiredTodo -> todosRepository.deleteById(expiredTodo.getId()));
+		
 	}
 	
 }
