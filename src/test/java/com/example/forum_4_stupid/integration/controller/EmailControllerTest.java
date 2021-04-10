@@ -2,6 +2,7 @@ package com.example.forum_4_stupid.integration.controller;
 
 import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -15,7 +16,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -142,6 +146,23 @@ public class EmailControllerTest {
 				equalTo(emailDTO.getUser().getTotalEmails())))
 		.andExpect(jsonPath("user.totalTodos",
 				equalTo(emailDTO.getUser().getTotalTodos())));
+	}
+	
+	@Test
+	public void shouldReturnExpectedNestedUserLinkOutputsWhenAddingEmail() throws URISyntaxException, Exception {
+		when(mapper.save(Mockito.any(EmailRequest.class))).thenReturn(emailDTO);
+		
+		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
+		
+		mvc.perform(post(new URI("/api/email/add-email"))
+			.content("{\n\"email\": \"test@gmail.com\",\n\"username\": \"testusername\"\n}")
+			.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("user._links",
+				isA(Map.class)))
+		.andExpect(jsonPath("user._links.inUserById.href",
+				endsWith("/api/user/userById/1")))
+		.andExpect(jsonPath("user._links.inUserByUsername.href",
+				endsWith("/api/user/userByUsername?username=testusername")));
 	}
 	
 	@Test
