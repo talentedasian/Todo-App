@@ -7,6 +7,8 @@ on: [ push ]
     
 jobs:
   vm-jobs:
+    runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:12.2
