@@ -6,12 +6,12 @@ name: Java CI with Maven
 on: [ push ]
     
 jobs:
-  vm-jobs:
+  runner-job:
     runs-on: ubuntu-latest
 
     services:
       postgres:
-        image: postgres:12.2
+        image: postgres
         env:
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pass
