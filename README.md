@@ -17,8 +17,9 @@
 -->
 
 <a href="https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/">
+  </a>
   <img src="![example workflow](https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/badge.svg)">
-</a>
+
 
 
 
