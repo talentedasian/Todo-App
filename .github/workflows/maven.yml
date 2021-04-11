@@ -6,11 +6,11 @@ name: Java CI with Maven
 on: [ push ]
     
 jobs:
-  container-job:
+  runner-job:
     runs-on: ubuntu-latest
 
     services:
-      postgres_db:
+      postgres:
         image: postgres
         env:
           POSTGRES_USER: user
@@ -18,7 +18,10 @@ jobs:
           POSTGRES_DB: spring-jwt
         ports:
           - 2222:2222
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout             5s --health-retries 5
+        options:
+          --health-cmd pg_isready 
+          --health-interval 10s --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v2
@@ -29,3 +32,6 @@ jobs:
         distribution: 'adopt'
     - name: Build with Maven
       run: mvn --batch-mode --update-snapshots verify
+      env: 
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: 2222
