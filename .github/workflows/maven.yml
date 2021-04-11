@@ -6,19 +6,18 @@ name: Java CI with Maven
 on: [ push ]
     
 jobs:
-  container-job:
+  vm-jobs:
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_HOST: localhost
           POSTGRES_USER: user
           POSTGRES_PASSWORD: pass
           POSTGRES_DB: spring-jwt
         ports:
-          - 2222
+          - 2222:2222
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 15
