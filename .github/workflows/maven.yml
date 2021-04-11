@@ -6,11 +6,11 @@ name: Java CI with Maven
 on: [ push ]
     
 jobs:
-  vm-jobs:
+  container-job:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      postgres_db:
         image: postgres
         env:
           POSTGRES_USER: user
@@ -18,6 +18,8 @@ jobs:
           POSTGRES_DB: spring-jwt
         ports:
           - 2222:2222
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout             5s --health-retries 5
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 15
