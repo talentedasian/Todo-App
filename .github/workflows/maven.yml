@@ -31,8 +31,9 @@ jobs:
         java-version: '15'
         distribution: 'adopt'
     - name: Build with Maven
-      run: mvn --batch-mode --update-snapshots verify
+      run:
+        - mvn --batch-mode --update-snapshots verify
+        - sudo systemctl start postgresql.service
       env: 
         POSTGRES_HOST: localhost
         POSTGRES_PORT: 2222
-      run: sudo systemctl start postgresql.service
