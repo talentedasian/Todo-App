@@ -20,10 +20,6 @@
     <img src="https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/badge.svg">
 </a>
 
-
-
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
