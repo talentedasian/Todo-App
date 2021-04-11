@@ -16,7 +16,9 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-
+<a href="https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/">
+    <img src="https://github.com/talentedasian/Todo-App/actions/workflows/maven.yml/badge.svg">
+</a>
 
 <!-- PROJECT LOGO -->
 <br />
