@@ -11,10 +11,13 @@ jobs:
   build:
     container-job: 
 
+    runs-on: ubuntu-latest
+
       services:
         postgres_db:
           image: postgres
           env:
+
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
             POSTGRES_DB: spring_jwt
@@ -22,9 +25,6 @@ jobs:
            - 5432:5432
          # needed because the postgres container does not provide a healthcheck
           options: --health-cmd pg_isready --health-interval 10s --health-timeou          t 5s --health-retries 5
-  
-      runs-on: ubuntu-latest
-
       steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 15
