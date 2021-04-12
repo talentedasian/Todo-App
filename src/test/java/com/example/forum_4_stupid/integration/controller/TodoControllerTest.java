@@ -53,6 +53,7 @@ public class TodoControllerTest {
 	private final Map<String, String> content = new HashMap<>();
 	private TodoDTO todoDTO;
 	private EntityModel<TodoDTO> entityModel;
+	private static String jsonContent;
 	
 	@BeforeEach
 	public void setUp() throws JsonProcessingException {
@@ -72,19 +73,17 @@ public class TodoControllerTest {
 		content.put("day", "21");
 		content.put("hour", "13");
 		content.put("minute", "22");
-		
+
+		jsonContent = new ObjectMapper().writeValueAsString(content);
 	}
 	
 	@Test
 	public void shouldReturnStatusIsCreated() throws URISyntaxException, Exception {
 		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
-		final String jsonContent = new ObjectMapper().writeValueAsString(content);
 		mockMvc.perform(post(new URI("/api/todo/add-todo"))
 				.content(jsonContent)
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated());
-		
-		
 	}
 }
