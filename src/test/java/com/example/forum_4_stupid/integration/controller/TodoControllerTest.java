@@ -1,6 +1,7 @@
 package com.example.forum_4_stupid.integration.controller;
 
 import static org.mockito.Mockito.when;
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -154,8 +155,8 @@ public class TodoControllerTest {
 	}
 	
 	@Test
-	@DisplayName("shoudl return nested user link outputs when adding email")
-	public void shouldReturnExpectedNestedUserLinkOutputs() throws URISyntaxException, Exception {
+	@DisplayName("shoudl return nested user dto outputs when adding email")
+	public void shouldReturnExpectedNestedUserDtoOutputs() throws URISyntaxException, Exception {
 		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
 		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
@@ -176,8 +177,8 @@ public class TodoControllerTest {
 	}
 	
 	@Test
-	@DisplayName("shoudl return nested user link outputs when GetMapping by ID")
-	public void shouldReturnExpectedNestedUserLinkOutputs2() throws URISyntaxException, Exception {
+	@DisplayName("shoudl return nested user dto outputs when GetMapping by ID")
+	public void shouldReturnExpectedNestedUserDtoOutputs2() throws URISyntaxException, Exception {
 		when(mapper.getById(1)).thenReturn(todoDTO);
 		
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
@@ -194,6 +195,24 @@ public class TodoControllerTest {
 				equalTo(userDTO.getTotalEmails())))
 		.andExpect(jsonPath("user.totalTodos", 
 				equalTo(userDTO.getTotalTodos())));
+	}
+	
+	@Test
+	@DisplayName("should return nested user link outputs when adding email")
+	public void shouldReturnExpectedNestedUserLinkOutputs2() throws URISyntaxException, Exception {
+		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
+		
+		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
+		
+		mockMvc.perform(post(new URI("/api/todo/add-todo"))
+				.content(jsonContent)
+				.characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("user._links.inUserById.href", 
+				endsWith("/api/user/userById/" + userDTO.getId())))
+		.andExpect(jsonPath("user._links.inUserByUsername.href", 
+				endsWith("/api/user/userByUsername?username=" + userDTO.getUsername())));
 	}
 	
 }
