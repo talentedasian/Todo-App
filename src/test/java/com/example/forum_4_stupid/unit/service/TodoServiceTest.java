@@ -68,7 +68,6 @@ public class TodoServiceTest {
 		todoRequest.setDay(21);
 		todoRequest.setHour(8);
 		todoRequest.setMinute(22);
-		todoRequest.setDeadline();
 	}
 	
 	@Test

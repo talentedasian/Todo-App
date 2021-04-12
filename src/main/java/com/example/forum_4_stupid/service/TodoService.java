@@ -38,10 +38,10 @@ public class TodoService {
 	
 	public Todos addTodos (TodoRequest todoRequest) {
 		try {
-			var todos = new Todos();
+			var todos = new Todos(todoRequest.getYear(), todoRequest.getMonth(), todoRequest.getDay()
+					, todoRequest.getHour(), todoRequest.getMinute());
 			todos.setContent(todoRequest.getContent());
 			todos.setTitle(todoRequest.getTitle());
-			todos.setDeadline(todoRequest.getDeadline());
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
 			
 			todosRepository.save(todos);

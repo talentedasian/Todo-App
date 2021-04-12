@@ -83,12 +83,18 @@ public class UserControllerTest {
 		mockMvc.perform(get(new URI("/api/user/userById/1")))
 		.andExpect(status().isOk())
 		.andExpect(content().contentType(org.springframework.hateoas.MediaTypes.HAL_JSON))
-		.andExpect(jsonPath("id", equalTo(userDTO.getId())))
-		.andExpect(jsonPath("username", equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
-		.andExpect(jsonPath("totalTodos", equalTo(userDTO.getTotalTodos())))
-		.andExpect(jsonPath("_links.userById.href", equalTo("/api/user/userById/1")))
-		.andExpect(jsonPath("_links.userByUsername.href", equalTo("/api/user/userByUsername?username=test")))
+		.andExpect(jsonPath("id", 
+				equalTo(userDTO.getId())))
+		.andExpect(jsonPath("username",
+				equalTo(userDTO.getUsername())))
+		.andExpect(jsonPath("totalEmails",
+				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("totalTodos", 
+				equalTo(userDTO.getTotalTodos())))
+		.andExpect(jsonPath("_links.userById.href", 
+				equalTo("/api/user/userById/1")))
+		.andExpect(jsonPath("_links.userByUsername.href",
+				equalTo("/api/user/userByUsername?username=test")))
 		.andExpect(jsonPath("_links.userById").hasJsonPath())
 		.andExpect(jsonPath("_links.userByUsername").hasJsonPath());
 	}
@@ -102,12 +108,18 @@ public class UserControllerTest {
 		
 		mockMvc.perform(get(new URI("/api/user/userByUsername?username=test")))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("id", equalTo(userDTO.getId())))
-		.andExpect(jsonPath("username", equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
-		.andExpect(jsonPath("totalTodos", equalTo(userDTO.getTotalTodos())))
-		.andExpect(jsonPath("_links.userById.href", equalTo("/api/user/userById/1")))
-		.andExpect(jsonPath("_links.userByUsername.href", equalTo("/api/user/userByUsername?username=test")))
+		.andExpect(jsonPath("id", 
+				equalTo(userDTO.getId())))
+		.andExpect(jsonPath("username",
+				equalTo(userDTO.getUsername())))
+		.andExpect(jsonPath("totalEmails", 
+				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("totalTodos", 
+				equalTo(userDTO.getTotalTodos())))
+		.andExpect(jsonPath("_links.userById.href", 
+				equalTo("/api/user/userById/1")))
+		.andExpect(jsonPath("_links.userByUsername.href", 
+				equalTo("/api/user/userByUsername?username=test")))
 		.andExpect(jsonPath("_links.userById").hasJsonPath())
 		.andExpect(jsonPath("_links.userByUsername").hasJsonPath());
 	}

@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -61,16 +62,15 @@ public class TodoControllerTest {
 	private UsersRepository usersRepo;
 	
 	private final Map<String, String> content = new HashMap<>();
-	private final Map<String, String> badContent = new HashMap<>();
 	private static TodoDTO todoDTO;
 	private static EntityModel<TodoDTO> entityModel;
 	private static String jsonContent;
+	private static final LocalDateTime timeNow = LocalDateTime.now();
+	private static final LocalDateTime timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22);
 	
 	@BeforeEach
 	public void setUp() throws JsonProcessingException {
 		var userDTO = new UserDTO(1, "testusername", 0, 1);
-		var timeNow = LocalDateTime.now();
-		var timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22);
 		todoDTO = new TodoDTO(1, "test content long enough", "test title", 
 				timeNow, timeDeadline, userDTO);
 		
@@ -81,7 +81,7 @@ public class TodoControllerTest {
 		content.put("username", "testusername");
 		content.put("year", "2021");
 		content.put("month", "4");
-		content.put("day", "21");
+		content.put("day", "9");
 		content.put("hour", "13");
 		content.put("minute", "22");
 		
@@ -99,9 +99,10 @@ public class TodoControllerTest {
 	}
 
 	@Test
-	@DisplayName("Should Return Hal Json As ContentType When Adding Email")
+	@DisplayName("should return hal json As ContentType when Adding Email")
 	public void shouldReturnHal_Json() throws Exception {
 		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
+		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
 		
 		mockMvc.perform(post(new URI("/api/todo/add-todo"))
@@ -115,6 +116,7 @@ public class TodoControllerTest {
 	@Test
 	public void shouldReturnBadRequestWhenInvalidDate() throws Exception {
 		when(mapper.save(Mockito.any(TodoRequest.class))).thenThrow(new DateTimeException(""));
+		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
 		
 		mockMvc.perform(post(new URI("/api/todo/add-todo"))
@@ -127,6 +129,28 @@ public class TodoControllerTest {
 		.andExpect(jsonPath("optional", equalTo("Invalid Date")));
 	}
 	
+	@Test
+	@DisplayName("should return excpected dto output when GetMapping by ID")
+	public void shouldReturnExpectedDtoOutputs() throws URISyntaxException, Exception {
+		when(mapper.getById(1)).thenReturn(todoDTO);
+		
+		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
+		
+		mockMvc.perform(get(new URI("/api/todo/todoById/1"))
+				.content(jsonContent)
+				.characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(jsonPath("id",
+				equalTo(todoDTO.getId())))
+		.andExpect(jsonPath("content",
+				equalTo(todoDTO.getContent())))
+		.andExpect(jsonPath("title",
+				equalTo(todoDTO.getTitle())))
+		.andExpect(jsonPath("createdAt",
+				equalTo(timeNow.toString())))
+		.andExpect(jsonPath("deadline",
+				equalTo(timeDeadline.plusSeconds(0).toString())));
+	}
 	
 	
 }

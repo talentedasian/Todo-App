@@ -92,9 +92,10 @@ public class Todos {
 		this.user = user;
 	}
 
-	public Todos() {
+	public Todos(int year, int month, int dayOfMonth, int hour, int minute) {
 		super();
 		this.created = LocalDateTime.now();
+		this.deadline = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
 	}
 
 	@Override

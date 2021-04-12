@@ -74,8 +74,8 @@ public class TodoRequest {
 		return deadline;
 	}
 
-	public void setDeadline() {
-		this.deadline = LocalDateTime.of(year, month, day, hour, minute);
+	public void setDeadline(LocalDateTime deadline) {
+		this.deadline = deadline;
 	}
 
 	public int getDay() {
