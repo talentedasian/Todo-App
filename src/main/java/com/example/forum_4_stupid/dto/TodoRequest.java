@@ -2,83 +2,67 @@ package com.example.forum_4_stupid.dto;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Size;
-
 public class TodoRequest {
 
-	@NotNull
-	@Size(max = 20)
+	@javax.validation.constraints.NotNull
+	@javax.validation.constraints.Size(max = 20)
 	private String title;
 	
-	@NotNull
-	@Size(max = 255)
+	@javax.validation.constraints.NotNull
+	@javax.validation.constraints.Size(max = 255)
 	private String content;
 	
-	@Null
-	private LocalDateTime deadline;
-	
-	@NotNull
 	private String username;
 	
-	@Null	
-	@Size(min = 1, max = 31)
-	private int day; 
+	private LocalDateTime deadline;
 	
-	@Null		
-	@Size(min = 1, max = 12)
-	private int month;
+	private String day; 
 	
-	@Null		
-	@Size(min = 2021, max = 2035)
-	private int year;
+	private String month;
 	
-	@Null		
-	@Size(min = 0, max = 23)
-	private int hour;
+	private String year;
 	
-	@Null		
-	@Size(min = 0, max = 59)
-	private int minute;
+	private String hour;
+		
+	private String minute;
 	
-	public int getDay() {
+	public String getDay() {
 		return day;
 	}
 
-	public void setDay(int day) {
+	public void setDay(String day) {
 		this.day = day;
 	}
 
-	public int getMonth() {
+	public String getMonth() {
 		return month;
 	}
 
-	public void setMonth(int month) {
+	public void setMonth(String month) {
 		this.month = month;
 	}
 
-	public int getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(int year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 
-	public int getHour() {
+	public String getHour() {
 		return hour;
 	}
 
-	public void setHour(int hour) {
+	public void setHour(String hour) {
 		this.hour = hour;
 	}
 
-	public int getMinute() {
+	public String getMinute() {
 		return minute;
 	}
 
-	public void setMinute(int minute) {
+	public void setMinute(String minute) {
 		this.minute = minute;
 	}
 
@@ -103,7 +87,8 @@ public class TodoRequest {
 	}
 	
 	public void setDeadline() {
-		this.deadline = LocalDateTime.of(year, month, day, hour, minute);
+		this.deadline = LocalDateTime.of(Integer.parseInt(year), Integer.parseInt(month),
+				Integer.parseInt(day), Integer.parseInt(hour), Integer.parseInt(minute));
 	}
 	
 	public String getUsername() {

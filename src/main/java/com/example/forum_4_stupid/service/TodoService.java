@@ -89,8 +89,6 @@ public class TodoService {
 				.thenAccept((future) -> future.stream().
 						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow))
 						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
-		
-		
 	}
 	
 }

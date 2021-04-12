@@ -20,7 +20,6 @@ import com.example.forum_4_stupid.dto.EmailDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
 import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
-import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @ExtendWith(SpringExtension.class)
 public class EmailControllerTest {

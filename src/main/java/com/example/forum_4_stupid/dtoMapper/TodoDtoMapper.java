@@ -3,7 +3,6 @@ package com.example.forum_4_stupid.dtoMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
@@ -19,8 +18,11 @@ import com.example.forum_4_stupid.service.TodoService;
 public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		,DTOClassMapper<UserDTO, Users>{
 
-	@Autowired
 	private TodoService todoService;
+
+	public TodoDtoMapper(TodoService todoService) {
+		this.todoService = todoService;
+	}
 
 	@Override
 	public TodoDTO getById(Integer id) {

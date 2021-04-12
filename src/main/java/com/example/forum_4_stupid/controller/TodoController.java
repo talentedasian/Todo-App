@@ -37,14 +37,13 @@ public class TodoController {
 		this.todoAssembler = todoAssembler;
 	}
 	
-	//add appropriate redirects
 	@PostMapping("/add-todo")
 	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest) {
 		TodoDTO todo = todoDtoMapper.save(todoRequest);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
 		
-		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.OK);
+		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/todoById/{id}")

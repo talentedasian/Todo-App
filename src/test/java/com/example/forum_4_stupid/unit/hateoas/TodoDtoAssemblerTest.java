@@ -36,9 +36,8 @@ public class TodoDtoAssemblerTest {
 
 	@org.junit.jupiter.api.Test
 	public void shouldReturnEntityModelExpectedLinks() {
-		var nestedDtoAssembler = new NestedDTOAssembler();
 		EntityModel<TodoDTO> nestedEntityModel = assembler.toModel(todoDTO);
-		nestedDtoAssembler.addUserFromTodoNestedEntityLink(nestedEntityModel);
+		NestedDTOAssembler.addUserFromTodoNestedEntityLink(nestedEntityModel);
 		
 		assertThat("/api/todo/todoById/1", 
 				equalTo(nestedEntityModel.getLink("self").get().getHref()));
@@ -55,9 +54,8 @@ public class TodoDtoAssemblerTest {
 	public void shouldReturnCollectionModelExpectedLinks() {
 		List<TodoDTO> listTodoDTO = new ArrayList<>();
 		listTodoDTO.add(todoDTO);
-		var nestedDtoAssembler = new NestedDTOAssembler();
 		CollectionModel<EntityModel<TodoDTO>> collectionModel = assembler.toCollectionModel(listTodoDTO);
-		nestedDtoAssembler.addUserFromTodoNestedEntityLink(collectionModel);
+		NestedDTOAssembler.addUserFromTodoNestedEntityLink(collectionModel);
 		
 		for (EntityModel<TodoDTO> entityModel : collectionModel) {			
 			assertThat("/api/todo/todoById/1", 
