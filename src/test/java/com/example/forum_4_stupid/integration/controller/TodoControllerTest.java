@@ -3,6 +3,7 @@ package com.example.forum_4_stupid.integration.controller;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +22,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.forum_4_stupid.controller.TodoController;
 import com.example.forum_4_stupid.dto.TodoDTO;
@@ -86,4 +90,16 @@ public class TodoControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated());
 	}
+
+	@Test
+	@DisplayName("Should Return Hal Json As ContentType When Adding Email")
+	public void shouldReturnHal_Json() throws Exception{
+		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
+		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
+		mockMvc.perform(post(new URI("/api/todo/add-todo"))
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(content().contentType(MediaTypes.HAL_JSON));
+	}
+	
 }
