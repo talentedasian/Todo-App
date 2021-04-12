@@ -175,4 +175,25 @@ public class TodoControllerTest {
 				equalTo(userDTO.getTotalTodos())));
 	}
 	
+	@Test
+	@DisplayName("shoudl return nested user link outputs when GetMapping by ID")
+	public void shouldReturnExpectedNestedUserLinkOutputs2() throws URISyntaxException, Exception {
+		when(mapper.getById(1)).thenReturn(todoDTO);
+		
+		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
+		
+		mockMvc.perform(get(new URI("/api/todo/todoById//1"))
+				.characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("user.id", 
+				equalTo(userDTO.getId())))
+		.andExpect(jsonPath("user.username", 
+				equalTo(userDTO.getUsername())))
+		.andExpect(jsonPath("user.totalEmails", 
+				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("user.totalTodos", 
+				equalTo(userDTO.getTotalTodos())));
+	}
+	
 }
