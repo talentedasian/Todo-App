@@ -199,7 +199,7 @@ public class TodoControllerTest {
 	
 	@Test
 	@DisplayName("should return nested user link outputs when adding email")
-	public void shouldReturnExpectedNestedUserLinkOutputs2() throws URISyntaxException, Exception {
+	public void shouldReturnExpectedNestedUserLinkOutputs() throws URISyntaxException, Exception {
 		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
 		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
@@ -209,6 +209,23 @@ public class TodoControllerTest {
 				.characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isCreated())
+		.andExpect(jsonPath("user._links.inUserById.href", 
+				endsWith("/api/user/userById/" + userDTO.getId())))
+		.andExpect(jsonPath("user._links.inUserByUsername.href", 
+				endsWith("/api/user/userByUsername?username=" + userDTO.getUsername())));
+	}
+	
+	@Test
+	@DisplayName("should return nested user links outputs when GetMapping by ID")
+	public void shouldReturnExpectedNestedUserLinkOutputs2() throws URISyntaxException, Exception {
+		when(mapper.getById(1)).thenReturn(todoDTO);
+		
+		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
+		
+		mockMvc.perform(get(new URI("/api/todo/todoById//1"))
+				.characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isOk())
 		.andExpect(jsonPath("user._links.inUserById.href", 
 				endsWith("/api/user/userById/" + userDTO.getId())))
 		.andExpect(jsonPath("user._links.inUserByUsername.href", 
