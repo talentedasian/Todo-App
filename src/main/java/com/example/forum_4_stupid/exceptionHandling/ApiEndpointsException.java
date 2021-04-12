@@ -1,5 +1,7 @@
 package com.example.forum_4_stupid.exceptionHandling;
 
+import java.time.DateTimeException;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -109,6 +111,18 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("400");
 		exceptionMessage.setReason("Bad Request");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(DateTimeException.class)
+	public ResponseEntity<ExceptionMessageModel> handleBadRequestDateTime () { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("400");
+		exceptionMessage.setReason("Bad Request");
+		exceptionMessage.setOptional("Invalid Date");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		

@@ -63,11 +63,11 @@ public class TodoServiceTest {
 		todoRequest.setTitle("test title");
 		todoRequest.setUsername("test");
 		todoRequest.setContent("test content shit");
-		todoRequest.setYear("2021");
-		todoRequest.setMonth("4");
-		todoRequest.setDay("21");
-		todoRequest.setHour("8");
-		todoRequest.setMinute("22");
+		todoRequest.setYear(2021);
+		todoRequest.setMonth(4);
+		todoRequest.setDay(21);
+		todoRequest.setHour(8);
+		todoRequest.setMinute(22);
 		todoRequest.setDeadline();
 	}
 	
