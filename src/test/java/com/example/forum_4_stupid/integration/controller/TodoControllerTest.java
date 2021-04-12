@@ -14,6 +14,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,15 +63,15 @@ public class TodoControllerTest {
 	private UsersRepository usersRepo;
 	
 	private final Map<String, String> content = new HashMap<>();
-	private static TodoDTO todoDTO;
-	private static EntityModel<TodoDTO> entityModel;
-	private static String jsonContent;
-	private static final LocalDateTime timeNow = LocalDateTime.now();
-	private static final LocalDateTime timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22);
+	private TodoDTO todoDTO;
+	private final UserDTO userDTO = new UserDTO(1, "testusername", 0, 1);
+	private EntityModel<TodoDTO> entityModel;
+	private String jsonContent;
+	private final LocalDateTime timeNow = LocalDateTime.now();
+	private final LocalDateTime timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22).minusSeconds(0L);
 	
 	@BeforeEach
 	public void setUp() throws JsonProcessingException {
-		var userDTO = new UserDTO(1, "testusername", 0, 1);
 		todoDTO = new TodoDTO(1, "test content long enough", "test title", 
 				timeNow, timeDeadline, userDTO);
 		
@@ -149,8 +150,29 @@ public class TodoControllerTest {
 		.andExpect(jsonPath("createdAt",
 				equalTo(timeNow.toString())))
 		.andExpect(jsonPath("deadline",
-				equalTo(timeDeadline.plusSeconds(0).toString())));
+				equalTo(timeDeadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))));
 	}
 	
+	@Test
+	@DisplayName("shoudl return nested user link outputs when adding email")
+	public void shouldReturnExpectedNestedUserLinkOutputs() throws URISyntaxException, Exception {
+		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
+		
+		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
+		
+		mockMvc.perform(post(new URI("/api/todo/add-todo"))
+				.content(jsonContent)
+				.characterEncoding("utf-8")
+				.contentType(MediaType.APPLICATION_JSON))
+		.andExpect(status().isCreated())
+		.andExpect(jsonPath("user.id", 
+				equalTo(userDTO.getId())))
+		.andExpect(jsonPath("user.username", 
+				equalTo(userDTO.getUsername())))
+		.andExpect(jsonPath("user.totalEmails", 
+				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("user.totalTodos", 
+				equalTo(userDTO.getTotalTodos())));
+	}
 	
 }
