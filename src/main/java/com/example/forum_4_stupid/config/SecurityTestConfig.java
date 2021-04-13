@@ -15,13 +15,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.forum_4_stupid.login.LoginCustomAuthenticationFailureHandler;
 import com.example.forum_4_stupid.filter.JwtAuthFilter;
+import com.example.forum_4_stupid.login.LoginCustomAuthenticationFailureHandler;
 
 @EnableWebSecurity
 @Configuration
-@Profile(value = { "development, production" })
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@Profile("test")
+public class SecurityTestConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -34,9 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 				.httpBasic().disable()
 				.sessionManagement()
-					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+					.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 	}
 
