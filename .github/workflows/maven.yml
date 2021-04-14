@@ -13,11 +13,11 @@ jobs:
         postgres_db:
           image: postgres
           env:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: password
-            POSTGRES_DB: forum_4_stupid
+            POSTGRES_USER: test
+            POSTGRES_PASSWORD: test
+            POSTGRES_DB: test
           ports:
-           - 5432:5432
+           - 5432:222
          # needed because the postgres container does not provide a healthcheck
           options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
