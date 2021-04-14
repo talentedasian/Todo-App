@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.UserDtoMapper;
 import com.example.forum_4_stupid.hateoas.UserDTOAssembler;
-import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 
 @RestController
 @RequestMapping("/api/user")

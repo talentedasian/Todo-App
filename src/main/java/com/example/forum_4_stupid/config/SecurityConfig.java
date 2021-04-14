@@ -2,7 +2,6 @@ package com.example.forum_4_stupid.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,7 +19,7 @@ import com.example.forum_4_stupid.filter.JwtAuthFilter;
 
 @EnableWebSecurity
 @Configuration
-@Profile(value = { "development, production" })
+@Profile("development")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
@@ -40,6 +39,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 	}
 
+//	@Bean
+//	public AuthenticationFailureHandler customAuthenticationFailureHandler () {
+//		return new LoginCustomAuthenticationFailureHandler();
+//	}
+//	
 	@Bean
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder();

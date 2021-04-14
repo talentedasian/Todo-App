@@ -2,7 +2,6 @@ package com.example.forum_4_stupid.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,13 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.forum_4_stupid.filter.JwtAuthFilter;
 import com.example.forum_4_stupid.login.LoginCustomAuthenticationFailureHandler;
+import com.example.forum_4_stupid.filter.JwtAuthFilter;
 
 @EnableWebSecurity
 @Configuration
 @Profile("test")
-public class SecurityTestConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -38,6 +37,11 @@ public class SecurityTestConfig extends WebSecurityConfigurerAdapter {
 		
 	}
 
+//	@Bean
+//	public AuthenticationFailureHandler customAuthenticationFailureHandler () {
+//		return new LoginCustomAuthenticationFailureHandler();
+//	}
+//	
 	@Bean
 	public PasswordEncoder passwordEncoder () {
 		return new BCryptPasswordEncoder();
@@ -68,3 +72,4 @@ public class SecurityTestConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 }
+
