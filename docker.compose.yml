@@ -1,7 +1,0 @@
-version: '3'
-
-service:
-  postgres:
-    image: 'postgres: latest'
-    ports:
-      - "5432:2222:

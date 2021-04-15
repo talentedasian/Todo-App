@@ -65,8 +65,8 @@ public class TodoControllerTest {
 	private final UserDTO userDTO = new UserDTO(1, "testusername", 0, 1);
 	private EntityModel<TodoDTO> entityModel;
 	private String jsonContent;
-	private final LocalDateTime timeNow = LocalDateTime.now();
-	private final LocalDateTime timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22).minusSeconds(0L);
+	private static final LocalDateTime timeNow = LocalDateTime.now();
+	private static final LocalDateTime timeDeadline = LocalDateTime.of(2021, 4, 9, 13, 22);
 	
 	@BeforeEach
 	public void setUp() throws JsonProcessingException {
@@ -146,7 +146,7 @@ public class TodoControllerTest {
 		.andExpect(jsonPath("title",
 				equalTo(todoDTO.getTitle())))
 		.andExpect(jsonPath("createdAt",
-				equalTo(timeNow.toString())))
+				equalTo(timeNow.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))))
 		.andExpect(jsonPath("deadline",
 				equalTo(timeDeadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))));
 	}
