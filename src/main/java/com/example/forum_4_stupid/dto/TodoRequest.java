@@ -25,23 +25,23 @@ public class TodoRequest {
 	@Null
 	private LocalDateTime deadline;
 	
-	@Min(1L)
-	@Max(31L)
+	@Min(1)
+	@Max(31)
 	private int day; 
 	
-	@Min(1L)
-	@Max(12L)
+	@Min(1)
+	@Max(12)
 	private int month;
 	
-	@Min(2021L)
+	@Min(2021)
 	private int year;
 	
-	@Min(0L)
-	@Max(23L)
+	@Min(0)
+	@Max(23)
 	private int hour;
 		
-	@Min(0L)
-	@Max(59L)
+	@Min(0)
+	@Max(59)
 	private int minute;
 
 	

@@ -47,8 +47,7 @@ public class EmailDtoAssemblerTest {
 		List<EmailDTO> listEmailDTO = new ArrayList<>();
 		listEmailDTO.add(emailDTO);
 		CollectionModel<EntityModel<EmailDTO>> collectionModel = assembler.toCollectionModel(listEmailDTO);
-		var nestedDtoAssembler = new NestedDTOAssembler();
-		nestedDtoAssembler.addUserFromEmailNestedEntityLink(collectionModel);
+		NestedDTOAssembler.addUserFromEmailNestedEntityLink(collectionModel);
 		
 		assertThat("/api/email/emailByOwnerId/1", 
 				equalTo(collectionModel.getLink("self").get().getHref()));

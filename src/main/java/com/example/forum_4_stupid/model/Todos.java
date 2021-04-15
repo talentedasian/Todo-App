@@ -24,7 +24,7 @@ public class Todos {
 	@Column(nullable = false)
 	private String title;
 	
-	@Column(nullable = false, name = "deadline")
+	@Column(nullable = true, name = "deadline")
 	private java.time.LocalDateTime deadline;
 	
 	@Column(nullable = false, name = "createdAt")
@@ -95,7 +95,17 @@ public class Todos {
 	public Todos(int year, int month, int dayOfMonth, int hour, int minute) {
 		super();
 		this.created = LocalDateTime.now();
+		if (year == 0) {
+			return;
+		}
 		this.deadline = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
+	}
+	
+	
+
+	public Todos() {
+		super();
+		this.deadline = null;
 	}
 
 	@Override
