@@ -57,7 +57,7 @@ public class AuthenticationControllerTest {
 		userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("longusername");
-		userDTO.setTotalEmails(0);
+		userDTO.setTotalPhoneNumbers(0);
 		userDTO.setTotalTodos(0);
 		
 		registerRequest = new RegisterRequest("longusername", "testpassword");
@@ -100,7 +100,7 @@ public class AuthenticationControllerTest {
 	public void assertThatLoginBadRequestMaxNotMetUsername() throws URISyntaxException, Exception {
 		mockMvc.perform(MockMvcRequestBuilders.post(new URI("/auth/signup"))
 				.characterEncoding("utf-8")// just a long username that exceeds 25, the minimum allowed username
-				.content("{\n\"username\": \"123456789098765431378909876\",\n\"password\": \"test\"\n}")
+				.content("{\n\"username\": \"123456789098765431378909876\",\n\"password\": \"testpassword\"\n}")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.status().isBadRequest());
 	}
@@ -119,7 +119,7 @@ public class AuthenticationControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(MockMvcResultMatchers.jsonPath("id", equalTo(userDTO.getId())))
 		.andExpect(MockMvcResultMatchers.jsonPath("username", equalTo(userDTO.getUsername())))
-		.andExpect(MockMvcResultMatchers.jsonPath("totalEmails", equalTo(userDTO.getTotalEmails())))
+		.andExpect(MockMvcResultMatchers.jsonPath("totalPhoneNumbers", equalTo(userDTO.getTotalPhoneNumbers())))
 		.andExpect(MockMvcResultMatchers.jsonPath("totalTodos", equalTo(userDTO.getTotalTodos())));
 	}
 	

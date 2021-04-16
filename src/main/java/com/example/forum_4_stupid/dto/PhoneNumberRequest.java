@@ -1,23 +1,25 @@
 package com.example.forum_4_stupid.dto;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-public class EmailRequest {
+public class PhoneNumberRequest {
 	
 	@NotNull
-	private String email;
+	@Size(min = 11, max = 20)
+	private String phoneNumber;
 	
 	@NotNull
 	private String username;
-	
-	public String getEmail() {
-		return email;
+
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -26,16 +28,20 @@ public class EmailRequest {
 		this.username = username;
 	}
 
-	public EmailRequest() {
+	public PhoneNumberRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public EmailRequest(String email, String username) {
+	public PhoneNumberRequest(@NotNull String phoneNumber, @NotNull String username) {
 		super();
-		this.email = email;
+		this.phoneNumber = phoneNumber;
 		this.username = username;
 	}
 
+	@Override
+	public String toString() {
+		return "PhoneNumberRequest [phoneNumber=" + phoneNumber + ", username=" + username + "]";
+	}
 	
 }

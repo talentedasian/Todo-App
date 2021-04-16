@@ -29,7 +29,7 @@ public class UserDtoMapper implements UserDTOMapper<UserDTO,RegisterRequest,User
 		var userDTO = new UserDTO();
 		userDTO.setId(users.getId());
 		userDTO.setUsername(users.getUsername());
-		userDTO.setTotalEmails(users.getEmail().size());
+		userDTO.setTotalPhoneNumbers(users.getPhoneNumber().size());
 		userDTO.setTotalTodos(users.getTodos().size());
 		
 		return userDTO;
@@ -57,7 +57,7 @@ public class UserDtoMapper implements UserDTOMapper<UserDTO,RegisterRequest,User
 		Users users = getUserByUsername(username);
 		userDTO.setId(users.getId());
 		userDTO.setUsername(users.getUsername());
-		userDTO.setTotalEmails(users.getEmail().size());
+		userDTO.setTotalPhoneNumbers(users.getPhoneNumber().size());
 		userDTO.setTotalTodos(users.getTodos().size());
 		
 		return userDTO;

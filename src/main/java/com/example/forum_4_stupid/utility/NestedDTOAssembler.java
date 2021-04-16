@@ -5,25 +5,25 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
 import com.example.forum_4_stupid.controller.UserController;
-import com.example.forum_4_stupid.dto.EmailDTO;
+import com.example.forum_4_stupid.dto.PhoneNumberDTO;
 import com.example.forum_4_stupid.dto.TodoDTO;
 
 public class NestedDTOAssembler {
 
-	public static void addUserFromEmailNestedEntityLink(EntityModel<EmailDTO> email) {
-		email.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
+	public static void addUserFromPhoneNumberNestedEntityLink(EntityModel<PhoneNumberDTO> phoneNumber) {
+		phoneNumber.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(UserController.class)
-				.getUserInformationById(email.getContent().getUser().getId()))
+				.getUserInformationById(phoneNumber.getContent().getUser().getId()))
 				.withRel("inUserById"));
 		
-		email.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
+		phoneNumber.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 				WebMvcLinkBuilder.methodOn(UserController.class)
-				.getUserInformationByUsername(email.getContent().getUser().getUsername()))
+				.getUserInformationByUsername(phoneNumber.getContent().getUser().getUsername()))
 				.withRel("inUserByUsername"));
 	}
 	
-	public static void addUserFromEmailNestedEntityLink(CollectionModel<EntityModel<EmailDTO>> email) {
-		for (EntityModel<EmailDTO> entityModels : email) {
+	public static void addUserFromPhoneNumberNestedEntityLink(CollectionModel<EntityModel<PhoneNumberDTO>> phoneNumber) {
+		for (EntityModel<PhoneNumberDTO> entityModels : phoneNumber) {
 			entityModels.getContent().getUser().add(WebMvcLinkBuilder.linkTo(
 					WebMvcLinkBuilder.methodOn(UserController.class)
 					.getUserInformationById(entityModels.getContent().getUser().getId()))

@@ -9,21 +9,20 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Email {
+public class PhoneNumber {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "email_id")
+	@Column(name = "phoneNumber_id")
 	private Integer id;
 
-	@javax.validation.constraints.Email
 	@Column(nullable = false, unique = true)
-	private String email;
+	private String phoneNumber;
 	
 	@ManyToOne
 	@JoinColumn(nullable = false, name = "userKey")
 	private Users user;
-	
+
 	public Integer getId() {
 		return id;
 	}
@@ -32,12 +31,12 @@ public class Email {
 		this.id = id;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Users getUser() {
@@ -48,21 +47,21 @@ public class Email {
 		this.user = user;
 	}
 
-	public Email() {
+	public PhoneNumber(Integer id, String phoneNumber, Users user) {
+		super();
+		this.id = id;
+		this.phoneNumber = phoneNumber;
+		this.user = user;
+	}
+
+	public PhoneNumber() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Email(Integer id, String email, Users user) {
-		super();
-		this.id = id;
-		this.email = email;
-		this.user = user;
-	}
-
 	@Override
 	public String toString() {
-		return "Email [id=" + id + ", email=" + email + ", user=" + user + "]";
+		return "phoneNumber [id=" + id + ", phoneNumber=" + phoneNumber + ", user=" + user + "]";
 	}
 	
 }

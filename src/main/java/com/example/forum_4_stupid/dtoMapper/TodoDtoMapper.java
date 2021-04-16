@@ -81,7 +81,7 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		var userDTO = new UserDTO();
 		userDTO.setId(entity.getId());
 		userDTO.setUsername(entity.getUsername());
-		userDTO.setTotalEmails(entity.getEmail().size());
+		userDTO.setTotalPhoneNumbers(entity.getPhoneNumber().size());
 		userDTO.setTotalTodos(entity.getTodos().size());
 		return userDTO;
 	}

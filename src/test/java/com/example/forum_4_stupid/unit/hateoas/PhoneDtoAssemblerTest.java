@@ -11,48 +11,48 @@ import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 
-import com.example.forum_4_stupid.dto.EmailDTO;
+import com.example.forum_4_stupid.dto.PhoneNumberDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
+import com.example.forum_4_stupid.hateoas.PhoneNumberDTOAssembler;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class EmailDtoAssemblerTest {
+public class PhoneDtoAssemblerTest {
 
-	private static EmailDTO emailDTO;
+	private static PhoneNumberDTO phoneNumberDTO;
 	
-	private static EmailDTOAssembler assembler;
+	private static PhoneNumberDTOAssembler assembler;
 	
 	@BeforeEach
 	public void setUp() {
-		emailDTO = new EmailDTO();
-		emailDTO.setId(2);
-		emailDTO.setEmail("testemail@gmail.com");
-		emailDTO.setUser(new UserDTO(1, "test", 1, 0));
+		phoneNumberDTO = new PhoneNumberDTO();
+		phoneNumberDTO.setId(2);
+		phoneNumberDTO.setPhoneNumber("+6393212221321");
+		phoneNumberDTO.setUser(new UserDTO(1, "test", 1, 0));
 		
-		assembler = new EmailDTOAssembler();
+		assembler = new PhoneNumberDTOAssembler();
 	}
 	
 	
 	@Test
 	public void shouldReturnEntityModelExpectedLinks() throws JsonProcessingException {
-		EntityModel<EmailDTO> entityModel = assembler.toModel(emailDTO);
-		assertThat("/api/email/emailById?id=2", 
+		EntityModel<PhoneNumberDTO> entityModel = assembler.toModel(phoneNumberDTO);
+		assertThat("/api/phone/phoneNumberById?id=2", 
 				equalTo(entityModel.getLink("self").get().getHref()));
 		
 	}	
 	
 	@Test
 	public void shouldReturnCollcetionModelExpectedLinks() {
-		List<EmailDTO> listEmailDTO = new ArrayList<>();
-		listEmailDTO.add(emailDTO);
-		CollectionModel<EntityModel<EmailDTO>> collectionModel = assembler.toCollectionModel(listEmailDTO);
-		NestedDTOAssembler.addUserFromEmailNestedEntityLink(collectionModel);
+		List<PhoneNumberDTO> listEmailDTO = new ArrayList<>();
+		listEmailDTO.add(phoneNumberDTO);
+		CollectionModel<EntityModel<PhoneNumberDTO>> collectionModel = assembler.toCollectionModel(listEmailDTO);
+		NestedDTOAssembler.addUserFromPhoneNumberNestedEntityLink(collectionModel);
 		
-		assertThat("/api/email/emailByOwnerId/1", 
+		assertThat("/api/phone/phoneNumberByOwnerId/1", 
 				equalTo(collectionModel.getLink("self").get().getHref()));
 		
-		for (EntityModel<EmailDTO> entityModel : collectionModel) {
+		for (EntityModel<PhoneNumberDTO> entityModel : collectionModel) {
 			assertThat("/api/user/userById/1", 
 				equalTo(entityModel.getContent().getUser().getLink("inUserById").get().getHref()));
 			assertThat("/api/user/userByUsername?username=test", 

@@ -52,7 +52,7 @@ public class UserControllerTest {
 	public void setUp() {
 		userDTO.setId(1);
 		userDTO.setUsername("test");
-		userDTO.setTotalEmails(0);
+		userDTO.setTotalPhoneNumbers(0);;
 		userDTO.setTotalTodos(0);
 		
 		entityModel = EntityModel.of(userDTO);
@@ -87,8 +87,8 @@ public class UserControllerTest {
 				equalTo(userDTO.getId())))
 		.andExpect(jsonPath("username",
 				equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("totalEmails",
-				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("totalPhoneNumbers",
+				equalTo(userDTO.getTotalPhoneNumbers())))
 		.andExpect(jsonPath("totalTodos", 
 				equalTo(userDTO.getTotalTodos())))
 		.andExpect(jsonPath("_links.userById.href", 
@@ -112,8 +112,8 @@ public class UserControllerTest {
 				equalTo(userDTO.getId())))
 		.andExpect(jsonPath("username",
 				equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("totalEmails", 
-				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("totalPhoneNumbers", 
+				equalTo(userDTO.getTotalPhoneNumbers())))
 		.andExpect(jsonPath("totalTodos", 
 				equalTo(userDTO.getTotalTodos())))
 		.andExpect(jsonPath("_links.userById.href", 

@@ -6,7 +6,7 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 	
 	private Integer id;
 	private String username;
-	private int totalEmails, totalTodos;
+	private int totalPhoneNumbers, totalTodos;
 	
 	public Integer getId() {
 		return id;
@@ -20,11 +20,11 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public int getTotalEmails() {
-		return totalEmails;
+	public int getTotalPhoneNumbers() {
+		return totalPhoneNumbers;
 	}
-	public void setTotalEmails(int totalEmails) {
-		this.totalEmails = totalEmails;
+	public void setTotalPhoneNumbers(int totalPhoneNumbers) {
+		this.totalPhoneNumbers = totalPhoneNumbers;
 	}
 	public int getTotalTodos() {
 		return totalTodos;
@@ -33,11 +33,11 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 		this.totalTodos = totalTodos;
 	}
 	
-	public UserDTO(Integer id, String username, int totalEmails, int totalTodos) {
+	public UserDTO(Integer id, String username, int totalPhoneNumbers, int totalTodos) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.totalEmails = totalEmails;
+		this.totalPhoneNumbers = totalPhoneNumbers;
 		this.totalTodos = totalTodos;
 	}
 	
@@ -51,7 +51,7 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + totalEmails;
+		result = prime * result + totalPhoneNumbers;
 		result = prime * result + totalTodos;
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -71,7 +71,7 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (totalEmails != other.totalEmails)
+		if (totalPhoneNumbers != other.totalPhoneNumbers)
 			return false;
 		if (totalTodos != other.totalTodos)
 			return false;
@@ -84,7 +84,7 @@ public class UserDTO extends RepresentationModel<UserDTO>{
 	}
 	@Override
 	public String toString() {
-		return "UserDTO [id=" + id + ", username=" + username + ", totalEmails=" + totalEmails + ", totalTodos="
+		return "UserDTO [id=" + id + ", username=" + username + ", totalPhoneNumbers=" + totalPhoneNumbers + ", totalTodos="
 				+ totalTodos + "]";
 	}
 	

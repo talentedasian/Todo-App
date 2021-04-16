@@ -167,8 +167,8 @@ public class TodoControllerTest {
 				equalTo(userDTO.getId())))
 		.andExpect(jsonPath("user.username", 
 				equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("user.totalEmails", 
-				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("user.totalPhoneNumbers", 
+				equalTo(userDTO.getTotalPhoneNumbers())))
 		.andExpect(jsonPath("user.totalTodos", 
 				equalTo(userDTO.getTotalTodos())));
 	}
@@ -188,8 +188,8 @@ public class TodoControllerTest {
 				equalTo(userDTO.getId())))
 		.andExpect(jsonPath("user.username", 
 				equalTo(userDTO.getUsername())))
-		.andExpect(jsonPath("user.totalEmails", 
-				equalTo(userDTO.getTotalEmails())))
+		.andExpect(jsonPath("user.totalPhoneNumbers", 
+				equalTo(userDTO.getTotalPhoneNumbers())))
 		.andExpect(jsonPath("user.totalTodos", 
 				equalTo(userDTO.getTotalTodos())));
 	}

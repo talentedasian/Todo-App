@@ -40,7 +40,7 @@ public class Users {
 	private List<Todos> todos;
 
 	@OneToMany(mappedBy = "user")
-	private List<Email> email;
+	private List<PhoneNumber> phoneNumber;
 
 	public Users() {
 		super();
@@ -48,7 +48,7 @@ public class Users {
 	}
 
 	public Users(Integer id, String username, LocalDateTime dateCreated, String password, boolean enabled, List<Todos> todos,
-			List<Email> email) {
+			List<PhoneNumber> phoneNumber) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -56,7 +56,7 @@ public class Users {
 		this.password = password;
 		this.enabled = enabled;
 		this.todos = todos;
-		this.email = email;
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Integer getId() {
@@ -107,18 +107,19 @@ public class Users {
 		this.todos = todos;
 	}
 
-	public List<Email> getEmail() {
-		return email;
+	public List<PhoneNumber> getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setEmail(List<Email> email) {
-		this.email = email;
+	public void setPhoneNumber(List<PhoneNumber> phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
+
 	
 	@Override
 	public String toString() {
 		return "Users [id=" + id + ", username=" + username + ", dateCreated=" + dateCreated + ", password=" + password
-				+ ", enabled=" + enabled + ", todos=" + todos + ", email=" + email + "]";
+				+ ", enabled=" + enabled + ", todos=" + todos + ", phoneNumber=" + phoneNumber + "]";
 	}
 
 	@Override
@@ -126,7 +127,7 @@ public class Users {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dateCreated == null) ? 0 : dateCreated.hashCode());
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result + (enabled ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
@@ -149,10 +150,10 @@ public class Users {
 				return false;
 		} else if (!dateCreated.equals(other.dateCreated))
 			return false;
-		if (email == null) {
-			if (other.email != null)
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
 				return false;
-		} else if (!email.equals(other.email))
+		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
 		if (enabled != other.enabled)
 			return false;

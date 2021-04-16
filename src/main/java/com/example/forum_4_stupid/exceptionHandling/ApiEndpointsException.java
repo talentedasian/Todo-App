@@ -13,10 +13,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
 import com.example.forum_4_stupid.exceptions.BadRequestException;
-import com.example.forum_4_stupid.exceptions.EmailLimitHasReachedException;
-import com.example.forum_4_stupid.exceptions.EmailNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.ExceptionMessageModel;
 import com.example.forum_4_stupid.exceptions.LoginFailedException;
+import com.example.forum_4_stupid.exceptions.PhoneNumberLimitHasReachedException;
+import com.example.forum_4_stupid.exceptions.PhoneNumberNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
 
@@ -45,22 +45,22 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(EmailNotFoundByUsernameException.class)
-	public ResponseEntity<ExceptionMessageModel> handleEmailDoesNotExistException () { 
+	@ExceptionHandler(PhoneNumberNotFoundByUsernameException.class)
+	public ResponseEntity<ExceptionMessageModel> handlePhoneNumberDoesNotExistException () { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("404");
-		exceptionMessage.setReason("Email Does Not Exist");
+		exceptionMessage.setReason("PhoneNumber Does Not Exist");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(EmailLimitHasReachedException.class)
-	public ResponseEntity<ExceptionMessageModel> handleEmailLimitReachedException() {
+	@ExceptionHandler(PhoneNumberLimitHasReachedException.class)
+	public ResponseEntity<ExceptionMessageModel> handlePhoneNumberLimitReachedException() {
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("403");
-		exceptionMessage.setReason("Email limit per user reached");
+		exceptionMessage.setReason("PhoneNumber limit per user reached");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		

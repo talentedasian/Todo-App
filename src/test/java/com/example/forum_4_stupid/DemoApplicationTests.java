@@ -26,10 +26,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.forum_4_stupid.model.Email;
+import com.example.forum_4_stupid.model.PhoneNumber;
 import com.example.forum_4_stupid.model.Todos;
 import com.example.forum_4_stupid.model.Users;
-import com.example.forum_4_stupid.repository.EmailRepository;
+import com.example.forum_4_stupid.repository.PhoneRepository;
 import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -52,7 +52,7 @@ class DemoApplicationTests {
 	@Autowired
 	private UsersRepository userRepo;
 	@Autowired
-	private EmailRepository emailRepo;
+	private PhoneRepository phoneRepo;
 	@Autowired
 	private TodosRepository todoRepo;
 	
@@ -81,24 +81,25 @@ class DemoApplicationTests {
 	}
 
 	@Test
-	@DisplayName("should return expectded nested user link outsputs when GetMapping Email By OwnerID")
+	@DisplayName("should return expectded nested user link outsputs when GetMapping PhoneNumber By OwnerID")
 	public void testAddEmailNestedUserLinkOutputs() throws RestClientException, URISyntaxException {
-		var email1 =  new Email(2, "talentedasian@gmail.com", user);
-		var email2 =  new Email(3, "talentedasian2@gmail.com", user);
+		var phoneNumber1 =  new PhoneNumber(2, "+63932132121", user);
+		var phoneNumber2 =  new PhoneNumber(3, "+63932112143", user);
 		userRepo.save(user);
-		emailRepo.save(email1);
-		emailRepo.save(email2);
+		phoneRepo.save(phoneNumber1);
+		phoneRepo.save(phoneNumber2);
 		
 		
-		Traverson traverson = new Traverson(URI.create("http://localhost:" + port + "/api/email/emailByOwnerId/1"),
+		Traverson traverson = new Traverson(URI.create("http://localhost:" + port + "/api/phone/"
+				+ "phoneNumberByOwnerId/1"),
 				MediaTypes.HAL_JSON);
 		
 		String linkNestedUserById = traverson
 				.follow("self")
-				.toObject("$._embedded.emailDTOList[0].user._links.inUserById.href");
+				.toObject("$._embedded.phoneNumberDTOList[0].user._links.inUserById.href");
 		String linkNestedUserByUsername = traverson
 				.follow("self")
-				.toObject("$._embedded.emailDTOList[0].user._links.inUserByUsername.href");
+				.toObject("$._embedded.phoneNumberDTOList[0].user._links.inUserByUsername.href");
 		
 		assertThat(linkNestedUserById, 
 				endsWith(expectedNestedUserLinkById));

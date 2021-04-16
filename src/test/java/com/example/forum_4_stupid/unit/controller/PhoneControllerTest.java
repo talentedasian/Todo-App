@@ -15,55 +15,55 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.example.forum_4_stupid.controller.EmailController;
-import com.example.forum_4_stupid.dto.EmailDTO;
+import com.example.forum_4_stupid.controller.PhoneController;
+import com.example.forum_4_stupid.dto.PhoneNumberDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
-import com.example.forum_4_stupid.dtoMapper.EmailDtoMapper;
-import com.example.forum_4_stupid.hateoas.EmailDTOAssembler;
+import com.example.forum_4_stupid.dtoMapper.PhoneNumberDtoMapper;
+import com.example.forum_4_stupid.hateoas.PhoneNumberDTOAssembler;
 
 @ExtendWith(SpringExtension.class)
-public class EmailControllerTest {
+public class PhoneControllerTest {
 
-	private static EmailDTO emailDTO;
-	private static EmailController controller;
-	private static EntityModel<EmailDTO> entityModel;
+	private static PhoneNumberDTO emailDTO;
+	private static PhoneController controller;
+	private static EntityModel<PhoneNumberDTO> entityModel;
 	
 	@Mock
-	private EmailDTOAssembler assembler;
+	private PhoneNumberDTOAssembler assembler;
 	@Mock
-	private EmailDtoMapper mapper;
+	private PhoneNumberDtoMapper mapper;
 	
 	@BeforeEach
 	public void setUp() {
-		controller = new EmailController(mapper, assembler);
+		controller = new PhoneController(mapper, assembler);
 		
 		var userDTO = new UserDTO();
 		userDTO.setId(1);
 		userDTO.setUsername("testusername");
-		userDTO.setTotalEmails(0);
+		userDTO.setTotalPhoneNumbers(1);
 		userDTO.setTotalTodos(0);
-		emailDTO = new EmailDTO();
+		emailDTO = new PhoneNumberDTO();
 		emailDTO.setId(1);
-		emailDTO.setEmail("test@gmail.com");
+		emailDTO.setPhoneNumber("+639321372312");
 		emailDTO.setUser(userDTO);
 		
 		entityModel = EntityModel.of(emailDTO);
-		entityModel.add(linkTo(methodOn(EmailController.class)
-				.getEmailById(emailDTO.getId()))
+		entityModel.add(linkTo(methodOn(PhoneController.class)
+				.getPhoneNumberById(emailDTO.getId()))
 			.withSelfRel());
 	
-		entityModel.add(linkTo(methodOn(EmailController.class)
-			.getEmailByOwnerId(emailDTO.getUser().getId()))
-		.withRel("inUserEmail"));
+		entityModel.add(linkTo(methodOn(PhoneController.class)
+			.getPhoneNumberByOwnerId(emailDTO.getUser().getId()))
+		.withRel("inUserPhone"));
 		
 	}
 	
 	@Test
-	public void verifyEmailDTOAssemblerCalled() {
+	public void verifyPhoneNumberDTOAssemblerCalled() {
 		when(mapper.getById(1)).thenReturn(emailDTO);
 		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
 		
-		controller.getEmailById(1);
+		controller.getPhoneNumberById(1);
 		verify(assembler).toModel(emailDTO);
 	}
 	
@@ -72,7 +72,7 @@ public class EmailControllerTest {
 		when(mapper.getById(1)).thenReturn(emailDTO);
 		when(assembler.toModel(emailDTO)).thenReturn(EntityModel.of(emailDTO));
 		
-		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
+		ResponseEntity<EntityModel<PhoneNumberDTO>> email = controller.getPhoneNumberById(1);
 		assertThat(email.getHeaders().getContentType(), 
 				equalTo(org.springframework.hateoas.MediaTypes.HAL_JSON));
 		
@@ -84,12 +84,12 @@ public class EmailControllerTest {
 		
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
-		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
+		ResponseEntity<EntityModel<PhoneNumberDTO>> email = controller.getPhoneNumberById(1);
 		
-		assertThat("/api/email/emailById?id=1", 
+		assertThat("/api/phone/phoneNumberById?id=1", 
 				equalTo(email.getBody().getLink("self").get().getHref()));
-		assertThat("/api/email/emailByOwnerId/1", 
-				equalTo(email.getBody().getLink("inUserEmail").get().getHref()));
+		assertThat("/api/phone/phoneNumberByOwnerId/1", 
+				equalTo(email.getBody().getLink("inUserPhone").get().getHref()));
 		
 	}
 	
@@ -99,7 +99,7 @@ public class EmailControllerTest {
 		
 		when(assembler.toModel(emailDTO)).thenReturn(entityModel);
 		
-		ResponseEntity<EntityModel<EmailDTO>> email = controller.getEmailById(1);
+		ResponseEntity<EntityModel<PhoneNumberDTO>> email = controller.getPhoneNumberById(1);
 		
 		assertThat("/api/user/userById/1", 
 				equalTo(email.getBody().getContent().getUser().getLink("inUserById").get().getHref()));
