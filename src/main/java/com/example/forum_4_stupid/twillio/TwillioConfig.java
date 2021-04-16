@@ -13,29 +13,20 @@ import com.twilio.type.PhoneNumber;
 @Configuration
 public class TwillioConfig {
 	
+	private static final String TWILLIO_AUTH_TOKEN = "b49fd7c02f4dc2b7c76f62c36566cdc2";
+	private static final String TWILLIO_ACCOUNT_SID = "AC7aaeb5f341d85832a64127ec9ac815c1";
 
 	@Bean
-	public String phoneNumber(){
+	public String twillioPhoneNumber(){
 		return "+19412144325";
 	}
 	
 	@PostConstruct
 	public void sendMessage() {
-		System.setProperty("TWILLIO_PHONE_NUMBER", "+639153506169");
-		System.setProperty("TWILLIO_AUTH_TOKEN", "b49fd7c02f4dc2b7c76f62c36566cdc2");
-		System.setProperty("TWILLIO_AUTH_SID", "AC7aaeb5f341d85832a64127ec9ac815c1");
 		String ACCOUNT_SID = "AC7aaeb5f341d85832a64127ec9ac815c1";
 		String AUTH_TOKEN = "b49fd7c02f4dc2b7c76f62c36566cdc2";
-		String myNumber = System.getProperty("TWILLIO_PHONE_NUMBER");
 		Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-		System.out.println(myNumber);
-		
-		Message message = Message.creator(new PhoneNumber(myNumber),
-		        new PhoneNumber(phoneNumber()), 
-		        "talino ng kapatid mo tinext ka gamit programming ganito IT di nagstostop").create();
-		System.out.println(message.getTo());
-		System.out.println(message.getBody());
-		System.out.println("tanginamo");
+
 	}
 	
 }

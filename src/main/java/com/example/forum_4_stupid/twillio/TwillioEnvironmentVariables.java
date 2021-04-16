@@ -1,14 +1,20 @@
 package com.example.forum_4_stupid.twillio;
 
-import javax.annotation.PostConstruct;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
 
 public class TwillioEnvironmentVariables {
 
-	@PostConstruct
-	public void setUpTwillio() {
-		System.setProperty("TWILLIO_PHONE_NUMBER", "+639153506169");
-		System.setProperty("TWILLIO_AUTH_TOKEN", "+639153506169");
-		System.setProperty("TWILLIO_AUTH_SID", "b49fd7c02f4dc2b7c76f62c36566cdc2");
 		
+	public static MessageCreator createSmsMessage(PhoneNumber to, PhoneNumber from, String message) {
+		MessageCreator messageToBeSent = new MessageCreator(to, from, message);
+		
+		
+		return messageToBeSent;
 	}
+	
+	public static void sendSmsMessage(MessageCreator messageToBeSent) {
+		messageToBeSent.createAsync();
+	}
+	
 }
