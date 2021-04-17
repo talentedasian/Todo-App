@@ -13,6 +13,7 @@ import com.example.forum_4_stupid.dtoMapper.interfaces.TodoDTOMapper;
 import com.example.forum_4_stupid.model.Todos;
 import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.service.TodoService;
+import com.example.forum_4_stupid.todoTwillioMessager.interfaces.TwillioMessager;
 
 @Component
 public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
@@ -100,6 +101,11 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		}
 		
 		return todoDTOResponse;
+	}
+
+	@Override
+	public void sendMessage(TodoRequest todoRequest) {
+		
 	}
 	
 }

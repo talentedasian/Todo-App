@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
+import com.example.forum_4_stupid.dtoMapper.TodoTwillioMessager;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
+import com.example.forum_4_stupid.todoSmsSend.SendTodoMessages;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
+import com.twilio.rest.api.v2010.account.MessageCreator;
 
 @RestController
 @RequestMapping("/api/todo")
@@ -30,11 +33,13 @@ public class TodoController {
 
 	private final TodoDtoMapper todoDtoMapper;
 	private final TodoDTOAssembler todoAssembler;
+	private final TodoTwillioMessager messager;
 	
 	@Autowired
-	public TodoController (TodoDtoMapper todoDtoMapper, TodoDTOAssembler todoAssembler) {
+	public TodoController (TodoDtoMapper todoDtoMapper, TodoDTOAssembler todoAssembler, TodoTwillioMessager messager) {
 		this.todoDtoMapper = todoDtoMapper;
 		this.todoAssembler = todoAssembler;
+		this.messager = messager;
 	}
 	
 	@PostMapping("/add-todo")
@@ -42,6 +47,10 @@ public class TodoController {
 		TodoDTO todo = todoDtoMapper.save(todoRequest);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
+		
+		if(todoRequest.isSendable()) {
+			messager.sendMessage(todoRequest);			
+		}
 		
 		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);
 	}

@@ -89,7 +89,6 @@ class DemoApplicationTests {
 		phoneRepo.save(phoneNumber1);
 		phoneRepo.save(phoneNumber2);
 		
-		
 		Traverson traverson = new Traverson(URI.create("http://localhost:" + port + "/api/phone/"
 				+ "phoneNumberByOwnerId/1"),
 				MediaTypes.HAL_JSON);
@@ -105,7 +104,6 @@ class DemoApplicationTests {
 				endsWith(expectedNestedUserLinkById));
 		assertThat(linkNestedUserByUsername, 
 				endsWith(expectedNestedUserLinkByUsername));
-		
 	}
 	
 	@Test
@@ -127,7 +125,6 @@ class DemoApplicationTests {
 		String linkNestedUserByUsername = traverson
 				.follow("self")
 				.toObject("$._embedded.todoDTOList[0].user._links.inUserByUsername.href");
-		
 		
 		assertThat(linkNestedUserById, 
 				endsWith(expectedNestedUserLinkById));

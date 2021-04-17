@@ -1,7 +1,12 @@
 package com.example.forum_4_stupid.service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import static java.time.LocalDateTime.now;
+
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.concurrent.CompletableFuture;
@@ -18,9 +23,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
+import com.example.forum_4_stupid.exceptions.TodoNotSendableDueToYearException;
+import com.example.forum_4_stupid.exceptions.TodoNotSendableNoPhoneNumberAssociatedOnUser;
 import com.example.forum_4_stupid.model.Todos;
+import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
+import com.example.forum_4_stupid.todoSmsSend.SendTodoMessages;
+import com.example.forum_4_stupid.twillio.TwillioEnvironmentVariables;
+import com.twilio.rest.api.v2010.account.MessageCreator;
+import com.twilio.type.PhoneNumber;
 
 @Service
 @EnableTransactionManagement
@@ -29,11 +41,13 @@ public class TodoService {
 
 	private final TodosRepository todosRepository;
 	private final UsersRepository usersRepository;
+	private final PhoneNumber numberFrom;
 
 	@Autowired
-	public TodoService(TodosRepository todosRepository, UsersRepository usersRepository) {
+	public TodoService(TodosRepository todosRepository, UsersRepository usersRepository, PhoneNumber numberFrom) {
 		this.todosRepository = todosRepository;
 		this.usersRepository = usersRepository;
+		this.numberFrom = numberFrom;
 	}
 	
 	public Todos addTodos (TodoRequest todoRequest) {
@@ -87,8 +101,40 @@ public class TodoService {
 		
 		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
 				.thenAccept((future) -> future.stream().
-						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow))
+						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
+								filteredTodo.getDeadline().isEqual(timeNow))
 						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
+		
+		todosRepository.findAll().stream()
+			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
+	}
+	
+	@Async
+	public void sendMessagesByByDeadlineTodos(TodoRequest todoRequest) {
+		Users user = usersRepository.findByUsername(todoRequest.getUsername()).get();
+		
+		String messageToBeSentPrefix = "Hoy pukinginamo gawin mo na ung ";
+		
+		if(todoRequest.isSendable()) {
+			if(todoRequest.getYear() <= 2020) {
+				throw new TodoNotSendableDueToYearException("Todo has year before 2021");
+			} else if(user.getPhoneNumber().size() == 0) {
+				throw new TodoNotSendableNoPhoneNumberAssociatedOnUser("User has no available phone numbers to send sms messages to"); 
+			}
+		}
+		
+		MessageCreator message = new MessageCreator(new PhoneNumber(user.getPhoneNumber().get(0).getPhoneNumber()),
+				numberFrom, 
+				messageToBeSentPrefix + todoRequest.getTitle() + " sa " + todoRequest.getDeadline().toLocalDate() + " na yan");
+
+		SendTodoMessages.sendMessages(message, 
+				Date.from(LocalDateTime.of(
+						todoRequest.getYear(), 
+						todoRequest.getMonth(), 
+						todoRequest.getDay() - 1,
+						todoRequest.getHour(), 
+						todoRequest.getMinute())
+					.atZone(ZoneId.systemDefault()).toInstant()));
 	}
 	
 }

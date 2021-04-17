@@ -44,8 +44,17 @@ public class TodoRequest {
 	@Max(59)
 	private int minute;
 
+	@NotNull
+	private boolean sendable;
 	
-	
+	public boolean isSendable() {
+		return sendable;
+	}
+
+	public void setSendable(boolean sendable) {
+		this.sendable = sendable;
+	}
+
 	public String getTitle() {
 		return title;
 	}

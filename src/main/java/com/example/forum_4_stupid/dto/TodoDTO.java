@@ -9,10 +9,19 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 	private Integer id;
 	private String content;
 	private String title;
+	private boolean isSendable;
 	private LocalDateTime createdAt;
 	private LocalDateTime deadline;
 	private UserDTO user;
 	
+	public boolean isSendable() {
+		return isSendable;
+	}
+
+	public void setSendable(boolean isSendable) {
+		this.isSendable = isSendable;
+	}
+
 	public UserDTO getUser() {
 		return user;
 	}
