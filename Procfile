@@ -1,1 +1,1 @@
-web: mvn test
+web: mvn clean test
