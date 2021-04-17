@@ -102,10 +102,5 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		
 		return todoDTOResponse;
 	}
-
-	@Override
-	public void sendMessage(TodoRequest todoRequest) {
-		
-	}
 	
 }

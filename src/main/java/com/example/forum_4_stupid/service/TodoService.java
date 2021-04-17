@@ -30,7 +30,6 @@ import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.todoSmsSend.SendTodoMessages;
-import com.example.forum_4_stupid.twillio.TwillioEnvironmentVariables;
 import com.twilio.rest.api.v2010.account.MessageCreator;
 import com.twilio.type.PhoneNumber;
 
