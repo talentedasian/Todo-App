@@ -1,1 +1,1 @@
-web: mvn clean test
+web: mvn spring:boot-run
