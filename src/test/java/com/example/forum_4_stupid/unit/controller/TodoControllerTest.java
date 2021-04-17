@@ -25,8 +25,10 @@ import com.example.forum_4_stupid.controller.TodoController;
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
+import com.example.forum_4_stupid.dtoMapper.TodoTwillioMessager;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
 import com.example.forum_4_stupid.service.TodoService;
+import com.twilio.type.PhoneNumber;
 
 @ExtendWith(SpringExtension.class)
 public class TodoControllerTest {
@@ -36,7 +38,9 @@ public class TodoControllerTest {
 	@Mock
 	private static TodoDTOAssembler assembler;
 	@Mock
-	private static TodoDtoMapper mapper; 
+	private static TodoDtoMapper mapper;
+	@Mock
+	private TodoTwillioMessager messager;
 	
 	private static TodoController controller;
 	private static TodoDTO todoDTO;
@@ -62,7 +66,7 @@ public class TodoControllerTest {
 				.getTodoByUserId(entityModel.getContent().getUser().getId()))
 				.withRel("inUserTodo"));
 		
-		controller = new TodoController(mapper, assembler);
+		controller = new TodoController(mapper, assembler, messager);
 	}
 	
 

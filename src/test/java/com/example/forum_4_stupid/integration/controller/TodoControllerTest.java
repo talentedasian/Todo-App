@@ -37,12 +37,14 @@ import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
+import com.example.forum_4_stupid.dtoMapper.TodoTwillioMessager;
 import com.example.forum_4_stupid.exceptionHandling.ApiEndpointsException;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
 import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twilio.type.PhoneNumber;
 
 @WebMvcTest(controllers = { TodoController.class, ApiEndpointsException.class })
 @AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT, addFilters = false, printOnlyOnFailure = false)
@@ -59,6 +61,8 @@ public class TodoControllerTest {
 	private TodosRepository todoRepo;
 	@MockBean
 	private UsersRepository usersRepo;
+	@MockBean
+	private TodoTwillioMessager messager;
 	
 	private final Map<String, String> content = new HashMap<>();
 	private TodoDTO todoDTO;

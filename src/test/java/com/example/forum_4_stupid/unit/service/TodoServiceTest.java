@@ -26,6 +26,7 @@ import com.example.forum_4_stupid.model.Users;
 import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.example.forum_4_stupid.service.TodoService;
+import com.twilio.type.PhoneNumber;
 
 @ExtendWith(SpringExtension.class)
 public class TodoServiceTest {
@@ -40,6 +41,8 @@ public class TodoServiceTest {
 	private TodosRepository todosRepo;
 	@Mock
 	private UsersRepository userRepo;
+	@Mock
+	private PhoneNumber phoneNumber;
 	
 	@BeforeEach
 	public void setUp() {
@@ -57,7 +60,7 @@ public class TodoServiceTest {
 				timeNow, 
 				user));
 		
-		service = new TodoService(todosRepo, userRepo);
+		service = new TodoService(todosRepo, userRepo, phoneNumber);
 		
 		todoRequest = new TodoRequest();
 		todoRequest.setTitle("test title");
