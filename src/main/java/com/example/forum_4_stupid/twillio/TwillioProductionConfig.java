@@ -14,13 +14,13 @@ import com.twilio.type.PhoneNumber;
 @Profile(value = {"development","production"})
 public class TwillioProductionConfig {
 	
-	@Value("${twillio.phone.number: #{null}}")
+	@Value("${twillio.phone.number}")
 	private String phoneNumber;
 	
-	@Value("${twillio.account.sid: #{null}}")
+	@Value("${twillio.account.sid}")
 	private String TWILLIO_ACCOUNT_SID;
 	
-	@Value("${twillio.account.token: #{null}}")
+	@Value("${twillio.account.token}")
 	private String TWILLIO_ACCOUNT_TOKEN;
 	
 	@Bean
