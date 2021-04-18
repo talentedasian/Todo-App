@@ -19,8 +19,12 @@ import com.example.forum_4_stupid.service.PhoneService;
 public class PhoneNumberDtoMapper implements PhoneNumberDTOMapper<PhoneNumberDTO, PhoneNumberRequest, PhoneNumber>
 		, DTOClassMapper<UserDTO,Users>{
 	
-	@Autowired
 	private PhoneService phoneNumberService;
+	
+	public PhoneNumberDtoMapper(PhoneService phoneNumberService) {
+		super();
+		this.phoneNumberService = phoneNumberService;
+	}
 
 	@Override
 	public PhoneNumberDTO save(PhoneNumberRequest request) {

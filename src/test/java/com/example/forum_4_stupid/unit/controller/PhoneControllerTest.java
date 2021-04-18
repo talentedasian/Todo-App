@@ -29,9 +29,9 @@ public class PhoneControllerTest {
 	private static EntityModel<PhoneNumberDTO> entityModel;
 	
 	@Mock
-	private PhoneNumberDTOAssembler assembler;
-	@Mock
 	private PhoneNumberDtoMapper mapper;
+	@Mock
+	private PhoneNumberDTOAssembler assembler;
 	
 	@BeforeEach
 	public void setUp() {
