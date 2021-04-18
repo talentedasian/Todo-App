@@ -32,7 +32,7 @@ jobs:
         env: 
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
-          "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN
+          "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Build with Maven
         run: mvn verify
         
