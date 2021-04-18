@@ -92,21 +92,21 @@ public class TodoService {
 		return todo;
 	}
 	
-	@Async
-	@Scheduled(fixedRate = 10000L)
-	protected void deleteOldTodos() { 
-		LocalDateTime timeNow = now();
-		System.out.println(timeNow);
-		
-		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
-				.thenAccept((future) -> future.stream().
-						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
-								filteredTodo.getDeadline().isEqual(timeNow))
-						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
-		
-		todosRepository.findAll().stream()
-			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
-	}
+//	@Async
+//	@Scheduled(fixedRate = 10000L)
+//	protected void deleteOldTodos() { 
+//		LocalDateTime timeNow = now();
+//		System.out.println(timeNow);
+//		
+//		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
+//				.thenAccept((future) -> future.stream().
+//						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
+//								filteredTodo.getDeadline().isEqual(timeNow))
+//						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
+//		
+//		todosRepository.findAll().stream()
+//			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
+//	}
 	
 	@Async
 	public void sendMessagesByByDeadlineTodos(TodoRequest todoRequest) {
