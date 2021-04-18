@@ -11,7 +11,7 @@ import com.twilio.Twilio;
 import com.twilio.type.PhoneNumber;
 
 @Configuration
-@Profile("production")
+@Profile(value = {"development","production"})
 public class TwillioProductionConfig {
 	
 	@Value("${twillio.phone.number: #{null}}")
