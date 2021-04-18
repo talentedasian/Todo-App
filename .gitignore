@@ -36,7 +36,7 @@ build/
 mvnw
 mvnw.cmd
 
-src/main/java/com/example/forum_4_stupid/twillio/TwillioConfig.java
+src/main/java/com/example/forum_4_stupid/twillio/TwillioLocalDevelopmentConfig.java
 
 
 

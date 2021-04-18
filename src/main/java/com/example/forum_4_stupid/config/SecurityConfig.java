@@ -20,7 +20,7 @@ import com.example.forum_4_stupid.filter.JwtAuthFilter;
 
 @EnableWebSecurity
 @Configuration
-@Profile("development")
+@Profile({"development, production"})
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override

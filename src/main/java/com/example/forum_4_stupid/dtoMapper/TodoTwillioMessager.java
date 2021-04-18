@@ -1,17 +1,12 @@
 package com.example.forum_4_stupid.dtoMapper;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.service.TodoService;
 import com.example.forum_4_stupid.todoTwillioMessager.interfaces.TwillioMessager;
-import com.twilio.type.PhoneNumber;
 
 @Component
-@Configuration
 public class TodoTwillioMessager implements TwillioMessager{
 
 	private final TodoService todoService;
@@ -20,8 +15,6 @@ public class TodoTwillioMessager implements TwillioMessager{
 		super();
 		this.todoService = todoService;
 	}
-
-
 
 	@Override
 	public void sendMessage(TodoRequest todoRequest) {
