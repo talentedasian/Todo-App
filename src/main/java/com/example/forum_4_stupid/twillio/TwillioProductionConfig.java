@@ -12,13 +12,13 @@ import com.twilio.Twilio;
 @Profile("production")
 public class TwillioProductionConfig {
 	
-	@Value("${twillio.phone.number}")
+	@Value("${twillio.phone.number: #{null}}")
 	private String phoneNumber;
 	
-	@Value("${twillio.account.sid}")
+	@Value("${twillio.account.sid: #{null}}")
 	private String TWILLIO_ACCOUNT_SID;
 	
-	@Value("${twillio.account.token}")
+	@Value("${twillio.account.token: #{null}}")
 	private String TWILLIO_ACCOUNT_TOKEN;
 
 	@PostConstruct
