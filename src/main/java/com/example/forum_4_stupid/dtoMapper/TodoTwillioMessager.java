@@ -14,14 +14,6 @@ import com.twilio.type.PhoneNumber;
 @Configuration
 public class TodoTwillioMessager implements TwillioMessager{
 
-	@Value("${twillio.phone.number}")
-	private String phoneNumber;
-	
-	@Bean
-	public PhoneNumber number() {
-		return new PhoneNumber(phoneNumber);
-	}
-	
 	private final TodoService todoService;
 	
 	public TodoTwillioMessager(TodoService todoService) {
