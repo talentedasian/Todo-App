@@ -36,9 +36,6 @@ jobs:
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
-
-      - name: Add heroku remote
-        run: heroku git:remote -a todo-app-spring-malaysian
       - name: Deploy To Docker
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
