@@ -43,5 +43,5 @@ jobs:
           heroku_email: "lucenaalmirjames123@gmail.com"
           heroku_app_name: "todo-app-spring-malaysian"
           justlogin: true  
-        run: git push heroku master
+      - run: git push heroku master
         
