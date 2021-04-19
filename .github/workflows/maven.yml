@@ -45,5 +45,5 @@ jobs:
           justlogin: true  
       - run: |
           heroku git:remote -a todo-app-spring-malaysian
-          git push heroku master
+          heroku auth:whoami
         
