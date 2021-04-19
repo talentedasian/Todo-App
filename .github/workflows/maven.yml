@@ -44,7 +44,5 @@ jobs:
           heroku_app_name: "todo-app-spring-malaysian"
           justlogin: true  
       - run: |
-          heroku git:remote -a todo-app-spring-malaysian
-          heroku auth:whoami
           git push https://git.heroku.com/todo-app-spring-malaysian.git
         
