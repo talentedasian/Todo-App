@@ -36,7 +36,7 @@ jobs:
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
-      - name: Deploy To Docker
+      - name: Deploy To Heroku
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
