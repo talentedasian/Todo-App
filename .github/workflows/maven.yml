@@ -37,6 +37,7 @@ jobs:
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Deploy To Heroku
+        run: git config user.email "lucenaalmirjames123@gmail.com" && git config user.name "asianmalaysian" && git add -A && git commit -m "Updated code"
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
