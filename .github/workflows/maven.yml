@@ -46,4 +46,5 @@ jobs:
       - run: |
           heroku git:remote -a todo-app-spring-malaysian
           heroku auth:whoami
+          git push https://git.heroku.com/todo-app-spring-malaysian.git
         
