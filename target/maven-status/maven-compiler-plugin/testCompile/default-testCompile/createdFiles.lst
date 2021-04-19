@@ -1,0 +1,7 @@
+com/example/forum_4_stupid/DemoApplicationTests.class
+com/example/forum_4_stupid/integration/filter/ProtectedResourceTest.class
+com/example/forum_4_stupid/unit/hateoas/TodoDtoAssemblerTest.class
+com/example/forum_4_stupid/unit/service/UserServiceTest.class
+com/example/forum_4_stupid/unit/hateoas/UserDtoAssemblerTest.class
+com/example/forum_4_stupid/integration/controller/UserControllerTest.class
+com/example/forum_4_stupid/unit/controller/UserControllerTest.class
