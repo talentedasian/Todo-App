@@ -38,6 +38,7 @@ jobs:
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Deploy To Docker
         uses: akhileshns/heroku-deploy@v3.12.12
+        run: heroku git:remote -a todo-app-spring-malaysian
         with:
           heroku_email: "lucenaalmirjames123@gmail.com"
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
