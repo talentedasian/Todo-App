@@ -1,11 +1,9 @@
 package com.example.forum_4_stupid.service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-
 import static java.time.LocalDateTime.now;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -55,7 +53,9 @@ public class TodoService {
 					, todoRequest.getHour(), todoRequest.getMinute());
 			todos.setContent(todoRequest.getContent());
 			todos.setTitle(todoRequest.getTitle());
+			todos.setSendable(true);
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
+			System.out.println(todoRequest.isSendable() + " tanginamo");
 			
 			todosRepository.save(todos);
 			
@@ -92,24 +92,24 @@ public class TodoService {
 		return todo;
 	}
 	
-//	@Async
-//	@Scheduled(fixedRate = 10000L)
-//	protected void deleteOldTodos() { 
-//		LocalDateTime timeNow = now();
-//		System.out.println(timeNow);
-//		
-//		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
-//				.thenAccept((future) -> future.stream().
-//						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
-//								filteredTodo.getDeadline().isEqual(timeNow))
-//						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
-//		
-//		todosRepository.findAll().stream()
-//			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
-//	}
+	@Async
+	@Scheduled(fixedRate = 10000L)
+	protected void deleteOldTodos() { 
+		LocalDateTime timeNow = now();
+		System.out.println(timeNow);
+		
+		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
+				.thenAccept((future) -> future.stream().
+						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
+								filteredTodo.getDeadline().isEqual(timeNow))
+						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
+		
+		todosRepository.findAll().stream()
+			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
+	}
 	
 	@Async
-	public void sendMessagesByByDeadlineTodos(TodoRequest todoRequest) {
+	public void sendMessagesByDeadlineTodos(TodoRequest todoRequest) {
 		Users user = usersRepository.findByUsername(todoRequest.getUsername()).get();
 		
 		String messageToBeSentPrefix = "Hoy pukinginamo gawin mo na ung ";
@@ -122,16 +122,33 @@ public class TodoService {
 			}
 		}
 		
+		todoRequest.setDeadline(LocalDateTime.of(
+				todoRequest.getYear(), 
+				todoRequest.getMonth(), 
+				todoRequest.getDay(),
+				todoRequest.getHour(), 
+				todoRequest.getMinute()));
 		MessageCreator message = new MessageCreator(new PhoneNumber(user.getPhoneNumber().get(0).getPhoneNumber()),
 				numberFrom, 
-				messageToBeSentPrefix + todoRequest.getTitle() + " sa " + todoRequest.getDeadline().toLocalDate() + " na yan");
-
+				messageToBeSentPrefix + todoRequest.getTitle() + " sa " + 
+				todoRequest.getDeadline().toLocalDate() + " na yan");
+		
+		Date date = Date.from(LocalDateTime.of(
+				todoRequest.getYear(), 
+				todoRequest.getMonth(), 
+				todoRequest.getDay(),
+				todoRequest.getHour() - 1, 
+				todoRequest.getMinute())
+			.atZone(ZoneId.systemDefault()).toInstant());
+		
+		System.out.println(date + " tite");
+		
 		SendTodoMessages.sendMessages(message, 
 				Date.from(LocalDateTime.of(
 						todoRequest.getYear(), 
 						todoRequest.getMonth(), 
-						todoRequest.getDay() - 1,
-						todoRequest.getHour(), 
+						todoRequest.getDay(),
+						todoRequest.getHour() - 1, 
 						todoRequest.getMinute())
 					.atZone(ZoneId.systemDefault()).toInstant()));
 	}

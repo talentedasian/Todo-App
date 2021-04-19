@@ -23,9 +23,7 @@ import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
 import com.example.forum_4_stupid.dtoMapper.TodoTwillioMessager;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
-import com.example.forum_4_stupid.todoSmsSend.SendTodoMessages;
 import com.example.forum_4_stupid.utility.NestedDTOAssembler;
-import com.twilio.rest.api.v2010.account.MessageCreator;
 
 @RestController
 @RequestMapping("/api/todo")

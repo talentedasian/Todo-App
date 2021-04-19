@@ -18,9 +18,8 @@ public class TodoTwillioMessager implements TwillioMessager{
 
 	@Override
 	public void sendMessage(TodoRequest todoRequest) {
-		todoService.sendMessagesByByDeadlineTodos(todoRequest);
+		todoService.sendMessagesByDeadlineTodos(todoRequest);
 		
 	}
-
 	
 }

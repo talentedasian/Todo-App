@@ -47,6 +47,7 @@ public class TodoRequest {
 	@NotNull
 	private boolean sendable;
 	
+	
 	public boolean isSendable() {
 		return sendable;
 	}
