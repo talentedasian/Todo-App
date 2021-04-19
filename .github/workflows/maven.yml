@@ -47,6 +47,6 @@ jobs:
           heroku_app_name: "todo-app-spring-malaysian"
           justlogin: true
       - run: |
-          heroku contanier:login
+          heroku container:login
           git push heroku master
         
