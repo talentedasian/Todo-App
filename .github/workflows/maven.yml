@@ -45,6 +45,8 @@ jobs:
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_email: "lucenaalmirjames123@gmail.com"
           heroku_app_name: "todo-app-spring-malaysian"
-          branch: "master"
-          dontuseforce: 1
+          justlogin: true
+      - run: |
+          heroku contanier:login
+          git push heroku master
         
