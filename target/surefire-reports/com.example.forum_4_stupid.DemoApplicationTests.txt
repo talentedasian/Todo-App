@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.forum_4_stupid.DemoApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 19.902 s - in com.example.forum_4_stupid.DemoApplicationTests
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.72 s - in com.example.forum_4_stupid.DemoApplicationTests
