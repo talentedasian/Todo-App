@@ -30,9 +30,17 @@ jobs:
           java-version: '15'
           distribution: 'adopt'
       - name: Build with Maven
+        id: Maven Verify
         run: mvn verify
         env:
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
+      - uses: CDNievas/heroku-action@v1.0
+      - name: Deploy To Heroku
+        if: steps.Maven \Verify.outcome = 'success'
+        with:
+          heroku_email: "lucenaalmirjames123@gmail.com"
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "todo-app-spring-malaysian"
         
