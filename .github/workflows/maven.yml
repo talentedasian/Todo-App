@@ -46,5 +46,5 @@ jobs:
           heroku_email: "lucenaalmirjames123@gmail.com"
           heroku_app_name: "todo-app-spring-malaysian"
           branch: "master"
-          dontuseforce: "true"
+          dontuseforce: 1
         
