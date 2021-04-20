@@ -51,5 +51,5 @@ jobs:
       - name: Add Heroku remote
         run: heroku git:remote --app todo-app-spring-malaysian
       - name: Deploy To Heroku
-        run: git push heroku main
+        run: git push https://git.heroku.com/todo-app-spring-malaysian.git
         
