@@ -46,6 +46,7 @@ jobs:
               login lucenaalmirjames123@gmail.com
               password $HEROKU_API_KEY
           EOF
+          cat ~/.netrc
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Add Heroku remote
@@ -54,4 +55,3 @@ jobs:
         run: git push https://git.heroku.com/todo-app-spring-malaysian.git
       - name: Print ~/.netrc
         run: cat ~/.netrc
-        
