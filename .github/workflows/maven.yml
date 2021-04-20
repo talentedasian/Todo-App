@@ -47,11 +47,9 @@ jobs:
               password $HEROKU_API_KEY
           EOF
           cat ~/.netrc
+          heroku git:remote -a todo-app-spring-malaysian
+          git push heroku main
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Add Heroku remote
         run: heroku git:remote --app todo-app-spring-malaysian
-      - name: Deploy To Heroku
-        run: git push https://git.heroku.com/todo-app-spring-malaysian.git
-      - name: Print ~/.netrc
-        run: cat ~/.netrc
