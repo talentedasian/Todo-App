@@ -39,7 +39,6 @@ jobs:
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - uses: actions/heroku-deploy@v3.12.12
-      - name: Login To Heroku
         with: 
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
           heroku_app_name: "todo-app-spring-malaysian"
