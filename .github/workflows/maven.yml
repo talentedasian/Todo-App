@@ -38,11 +38,16 @@ jobs:
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with: 
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_email: "lucenaalmirjames123@gmail.com"
-          justlogin: true
-      - run: |
-            cat ~/.netrc
-            heroku auth:whoami
+  
+    heroku-job:
+        runs-on: ubuntu-latest
+        
+        steps:
+        - uses: akhileshns/heroku-deploy@v3.12.12
+          with: 
+             heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+             heroku_email: "lucenaalmirjames123@gmail.com"
+             justlogin: true
+        - run: |
+             cat ~/.netrc
+             heroku auth:whoami
