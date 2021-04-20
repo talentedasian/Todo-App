@@ -46,4 +46,4 @@ jobs:
           justlogin: true
       - run: |
             cat ~/.netrc
-            heroku auth:token
+            heroku auth:whoami
