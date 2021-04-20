@@ -38,14 +38,14 @@ jobs:
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Login To Heroku
         run: |
-          cat > ~/.netrc <<'EOF'
+          cat > ~/.netrc <<EOF
             machine api.heroku.com
               login lucenaalmirjames123@gmail.com
               password $HEROKU_API_KEY
             machine git.heroku.com
               login lucenaalmirjames123@gmail.com
               password $HEROKU_API_KEY
-            'EOF'
+          EOF
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       - name: Add Heroku remote
