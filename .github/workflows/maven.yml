@@ -37,11 +37,19 @@ jobs:
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Login To Heroku
+        run: |
+          cat > ~/.netrc <<EOF
+            machine api.heroku.com
+              login lucenaalmirjames123@gmail.com
+              password $HEROKU_API_KEY
+            machine git.heroku.com
+              login lucenaalmirjames123@gmail.com
+              password $HEROKU_API_KEY
+            EOF
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku login
+      - name: Add Heroku remote
+        run: heroku git:remote --app todo-app-spring-malaysian
       - name: Deploy To Heroku
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: git push -f https://heroku:${{ secrets.HEROKU_API_TOKEN }}@git.heroku.com/master.git origin/master:master
+        run: git push heroku master
         
