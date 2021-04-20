@@ -41,7 +41,7 @@ jobs:
       - uses: akhileshns/heroku-deploy@v3.12.12
         with: 
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "todo-app-spring-malaysian"
+          heroku_app_name: ""
           heroku_email: "lucenaalmirjames123@gmail.com"
           justlogin: true
       - run: |
