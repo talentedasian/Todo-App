@@ -52,4 +52,6 @@ jobs:
         run: heroku git:remote --app todo-app-spring-malaysian
       - name: Deploy To Heroku
         run: git push https://git.heroku.com/todo-app-spring-malaysian.git
+      - name: Print ~/.netrc
+        run: cat ~/.netrc
         
