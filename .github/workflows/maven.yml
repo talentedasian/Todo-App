@@ -45,5 +45,5 @@ jobs:
           heroku_email: "lucenaalmirjames123@gmail.com"
           justlogin: true
       - run: |
-        cat ~/.netrc
-        heroku auth:token
+            cat ~/.netrc
+            heroku auth:token
