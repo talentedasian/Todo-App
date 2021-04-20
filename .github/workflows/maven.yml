@@ -48,7 +48,6 @@ jobs:
               login lucenaalmirjames123@gmail.com
               password $HEROKU_API_KEY
           EOF
-          cat ~/.netrc
           heroku git:remote -a todo-app-spring-malaysian
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/todo-app-spring-malaysian.git
           git push heroku HEAD:master -f
