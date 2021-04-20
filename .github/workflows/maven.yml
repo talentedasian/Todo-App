@@ -52,6 +52,7 @@ jobs:
           heroku git:remote -a todo-app-spring-malaysian
           git remote -v
           git remote add heroku https://git.heroku.com/todo-app-spring-malaysian.git
+          git remote -v
           git push heroku master
         env:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
