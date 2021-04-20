@@ -46,7 +46,7 @@ jobs:
               password $HEROKU_API_KEY
             machine git.heroku.com
               login lucenaalmirjames123@gmail.com
-              password $HEROKU_API_KEY
+              password b51f4577-430a-4975-a97b-14f1713e6467
           EOF
           heroku git:remote -a todo-app-spring-malaysian
           git remote add heroku https://heroku:${{ secrets.HEROKU_API_KEY }}@git.heroku.com/todo-app-spring-malaysian.git
