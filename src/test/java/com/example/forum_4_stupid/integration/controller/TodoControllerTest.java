@@ -139,7 +139,7 @@ public class TodoControllerTest {
 		
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
 		
-		mockMvc.perform(get(new URI("/api/todo/todoById/1"))
+		mockMvc.perform(get(new URI("/api/todo/todoById?id=1"))
 				.content(jsonContent)
 				.characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -184,7 +184,7 @@ public class TodoControllerTest {
 		
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
 		
-		mockMvc.perform(get(new URI("/api/todo/todoById//1"))
+		mockMvc.perform(get(new URI("/api/todo/todoById?id=1"))
 				.characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
@@ -223,7 +223,7 @@ public class TodoControllerTest {
 		
 		when(assembler.toModel(todoDTO)).thenReturn(entityModel);
 		
-		mockMvc.perform(get(new URI("/api/todo/todoById//1"))
+		mockMvc.perform(get(new URI("/api/todo/todoById?id=1"))
 				.characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isOk())
