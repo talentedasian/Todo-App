@@ -44,6 +44,14 @@ jobs:
       
       needs: [container-job]
       steps:
+       - uses: actions/checkout@v2
+         with:
+           fetch-depth: 0
+       - name: Set up JDK 15
+         uses: actions/setup-java@v2
+         with:
+           java-version: '15'
+           distribution: 'adopt'
        - uses: akhileshns/heroku-deploy@v3.12.12
          with: 
           heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
