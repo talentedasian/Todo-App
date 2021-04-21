@@ -39,8 +39,8 @@ jobs:
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
       - name: Deploy To Heroku
-        if: steps.Maven.outcome = 'success'
       - uses: akhileshns/heroku-deploy@v3.12.12
+        if: steps.Maven.outcome = 'success'
         with: 
          heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
          heroku_app_name: "todo-app-spring-malaysian"
