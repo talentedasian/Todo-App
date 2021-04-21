@@ -38,10 +38,17 @@ jobs:
           "TWILLIO_PHONE_NUMBER": ${{ secrets.TWILLIO_PHONE_NUMBER }}
           "TWILLIO_ACCOUNT_SID": ${{ secrets.TWILLIO_ACCOUNT_SID }}
           "TWILLIO_ACCOUNT_TOKEN": ${{ secrets.TWILLIO_ACCOUNT_TOKEN }}
-      - name: Deploy To Heroku
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        if: steps.Maven.outcome = 'success'
-        with: 
-         heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
-         heroku_app_name: "todo-app-spring-malaysian"
-         heroku_email: "lucenaalmirjames123@gmail.com"
+          
+    heroku-job:
+      runs-on: ubuntu-latest
+      
+      needs: [container-job]
+      steps:
+       - name: Deploy To Heroku
+       - uses: akhileshns/heroku-deploy@v3.12.12
+         with: 
+          heroku_api_key: ${{secrets.HEROKU_API_TOKEN}}
+          heroku_app_name: "todo-app-spring-malaysian"
+          heroku_email: "lucenaalmirjames123@gmail.com"
+
+    
