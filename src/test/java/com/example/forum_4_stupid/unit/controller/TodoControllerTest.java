@@ -28,7 +28,6 @@ import com.example.forum_4_stupid.dtoMapper.TodoDtoMapper;
 import com.example.forum_4_stupid.dtoMapper.TodoTwillioMessager;
 import com.example.forum_4_stupid.hateoas.TodoDTOAssembler;
 import com.example.forum_4_stupid.service.TodoService;
-import com.twilio.type.PhoneNumber;
 
 @ExtendWith(SpringExtension.class)
 public class TodoControllerTest {

@@ -1,11 +1,13 @@
 package com.example.forum_4_stupid.unit.hateoas;
 
+import static org.hamcrest.CoreMatchers.endsWith;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -21,10 +23,10 @@ public class TodoDtoAssemblerTest {
 	
 	private static TodoDTOAssembler assembler;
 
-	
 	@BeforeEach	
 	public void setUp() {
-		todoDTO = new TodoDTO(1, 
+		todoDTO = new TodoDTO(
+				1, 
 				"test content", 
 				"test title", 
 				java.time.LocalDateTime.now(),
@@ -38,15 +40,16 @@ public class TodoDtoAssemblerTest {
 	public void shouldReturnEntityModelExpectedLinks() {
 		EntityModel<TodoDTO> nestedEntityModel = assembler.toModel(todoDTO);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(nestedEntityModel);
+		System.out.println(nestedEntityModel.getLink("self").get());
 		
 		assertThat("/api/todo/todoById/1", 
-				equalTo(nestedEntityModel.getLink("self").get().getHref()));
-		assertThat("/api/todo/todoByOwnerId?id=1", 
-				equalTo(nestedEntityModel.getLink("inUserTodo").get().getHref()));
+				endsWith(nestedEntityModel.getLink("self").get().getHref()));
+		assertThat("/api/todo/todoByOwnerId/1", 
+				endsWith(nestedEntityModel.getLink("inUserTodo").get().getHref()));
 		assertThat("/api/user/userById/1", 
-				equalTo(nestedEntityModel.getContent().getUser().getLink("inUserById").get().getHref()));
+				endsWith(nestedEntityModel.getContent().getUser().getLink("inUserById").get().getHref()));
 		assertThat("/api/user/userByUsername?username=test", 
-				equalTo(nestedEntityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
+				endsWith(nestedEntityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
 		
 	}
 	
@@ -59,17 +62,17 @@ public class TodoDtoAssemblerTest {
 		
 		for (EntityModel<TodoDTO> entityModel : collectionModel) {			
 			assertThat("/api/todo/todoById/1", 
-					equalTo(entityModel.getLink("self").get().getHref()));
-			assertThat("/api/todo/todoByOwnerId?id=1", 
-					equalTo(entityModel.getLink("inUserTodo").get().getHref()));
+					endsWith(entityModel.getLink("self").get().getHref()));
+			assertThat("/api/todo/todoByOwnerId/1", 
+					endsWith(entityModel.getLink("inUserTodo").get().getHref()));
 			assertThat("/api/user/userById/1", 
-					equalTo(entityModel.getContent().getUser().getLink("inUserById").get().getHref()));
+					endsWith(entityModel.getContent().getUser().getLink("inUserById").get().getHref()));
 			assertThat("/api/user/userByUsername?username=test", 
-					equalTo(entityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
+					endsWith(entityModel.getContent().getUser().getLink("inUserByUsername").get().getHref()));
 			
 		}
 		
-		assertThat("/api/todo/todoByOwnerId?id=1", 
+		assertThat("/api/todo/todoByOwnerId/1", 
 				equalTo(collectionModel.getLink("self").get().getHref()));
 	}
 	

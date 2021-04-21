@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
@@ -53,8 +52,8 @@ public class TodoController {
 		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/todoById")
-	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@RequestParam Integer id) {
+	@GetMapping("/todoById/{id}")
+	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@PathVariable Integer id) {
 		TodoDTO todo = todoDtoMapper.getById(id);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);

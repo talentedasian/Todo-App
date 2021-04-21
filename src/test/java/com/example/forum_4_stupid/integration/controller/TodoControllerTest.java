@@ -44,7 +44,6 @@ import com.example.forum_4_stupid.repository.TodosRepository;
 import com.example.forum_4_stupid.repository.UsersRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.twilio.type.PhoneNumber;
 
 @WebMvcTest(controllers = { TodoController.class, ApiEndpointsException.class })
 @AutoConfigureMockMvc(print = MockMvcPrint.DEFAULT, addFilters = false, printOnlyOnFailure = false)

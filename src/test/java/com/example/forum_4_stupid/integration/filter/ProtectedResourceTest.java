@@ -1,20 +1,11 @@
 package com.example.forum_4_stupid.integration.filter;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-
-import org.hamcrest.CoreMatchers;
-import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrint;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.example.forum_4_stupid.controller.UserController;
 import com.example.forum_4_stupid.repository.UsersRepository;
