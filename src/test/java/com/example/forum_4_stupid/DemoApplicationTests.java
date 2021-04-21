@@ -116,7 +116,7 @@ class DemoApplicationTests {
 		todos.setUser(user);
 		todoRepo.save(todos);
 		
-		Traverson traverson = new Traverson(new URI("http://localhost:" + port + "/api/todo/todoByOwnerId?id=1"),
+		Traverson traverson = new Traverson(new URI("http://localhost:" + port + "/api/todo/todoByOwnerId/1"),
 				MediaTypes.HAL_JSON);
 		
 		String linkNestedUserById = traverson
