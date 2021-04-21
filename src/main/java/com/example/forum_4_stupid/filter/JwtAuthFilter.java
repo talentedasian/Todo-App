@@ -56,15 +56,27 @@ public class JwtAuthFilter implements Filter {
 									return;
 								}
 							}
-						} else if(path[2].equalsIgnoreCase("email")) {
+						} else if(path[2].equalsIgnoreCase("phone")) {
 							if (req.getParameter("id") != null) {
-																	
+								handleIllegalAccessOfResourceException(res);
+								return;						
 								} else {
 									if (!path[4].equals(jwt.getId())) {
 										handleIllegalAccessOfResourceException(res);
 										return;
 									}
 							}
+						} else if(path[2].equalsIgnoreCase("todo")) {
+							if (req.getParameter("id") != null) {
+								handleIllegalAccessOfResourceException(res);
+								return;	
+							} else {
+								if (!path[4].equals(jwt.getId())) {
+									handleIllegalAccessOfResourceException(res);
+									return;
+								}
+							}
+							
 						}
 					}
 				} catch (IllegalArgumentException e) {

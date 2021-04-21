@@ -53,8 +53,8 @@ public class TodoController {
 		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
 	
-	@GetMapping("/todoById/{id}")
-	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@PathVariable Integer id) {
+	@GetMapping("/todoById")
+	public ResponseEntity<EntityModel<TodoDTO>> getTodoById(@RequestParam Integer id) {
 		TodoDTO todo = todoDtoMapper.getById(id);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
@@ -62,8 +62,8 @@ public class TodoController {
 		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.OK);
 	}
 	
-	@GetMapping("/todoByOwnerId")
-	public ResponseEntity<CollectionModel<EntityModel<TodoDTO>>> getTodoByUserId (@RequestParam Integer id) {
+	@GetMapping("/todoByOwnerId/{id}")
+	public ResponseEntity<CollectionModel<EntityModel<TodoDTO>>> getTodoByUserId (@PathVariable Integer id) {
 		List<TodoDTO> todo = todoDtoMapper.getAllByUserId(id);
 		CollectionModel<EntityModel<TodoDTO>> assembler = todoAssembler.toCollectionModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
