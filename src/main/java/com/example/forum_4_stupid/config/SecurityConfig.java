@@ -36,7 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
+				.addFilterAfter(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+			.requiresChannel()
+				.requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+				.requiresSecure();
 		
 	}
 
