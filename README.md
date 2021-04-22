@@ -74,11 +74,11 @@ the deadline of their Todos would soon meet. After some research and trials, I g
 1. Install your database of choice. Mine was Postgresql.
 2. Find the `application.properties` file inside the `/src/main/resources` directory and change the settings to your appropriate database of choice.
 3. In this step, you could either choose to create keys for JWT Signing via the library or create a keystore. If you wanna create a keystore, you're on your own but if you choose to just create it during application startup, follow through.
-    a. Create a class or just simply pick a class that would be responsible for creating and holding your keys.
-    b. Point the keys needed for the `JwtProvider` class and `JwtAuthFilter` to the class needed for the JWT to work.
+    1. Create a class or just simply pick a class that would be responsible for creating and holding your keys.
+    2. Point the keys needed for the `JwtProvider` class and `JwtAuthFilter` to the class needed for the JWT to work.
 4. Navigate through `/src/main/resources` and you will find different application specific properties. These are properties that are appropriate for different environments such as `application-test.properties` for github actions testing and for local environment testing, `application-development.properties`for local development properties, and `application-production.properties`
-    a. The `application-test.properties` points to a docker container running a postgres image. You can use any means of running a postgresql database and just   put the apppropriate spring datasource properties into the properties file.
-    b. If you navigate through the `application-production.properties` file, there is no spring datasource properties like `spring.datasource.url` or `spring.datasrouce.password`. This is because the app is hosted on heroku and has a postgresql plugin. Heroku takes care of the mapping of the spring datasource properties thus the empty spring datasource property file.
+    1. The `application-test.properties` points to a docker container running a postgres image. You can use any means of running a postgresql database and just   put the apppropriate spring datasource properties into the properties file.
+    2. If you navigate through the `application-production.properties` file, there is no spring datasource properties like `spring.datasource.url` or `spring.datasrouce.password`. This is because the app is hosted on heroku and has a postgresql plugin. Heroku takes care of the mapping of the spring datasource properties thus the empty spring datasource property file.
 
 ### Prerequisites
 
@@ -92,6 +92,8 @@ the deadline of their Todos would soon meet. After some research and trials, I g
 2. Protected Resource Test Cases
 3. Create a keystore for signed JWTs.
 4. Host a postgresql database on the cloud to achieve duplicates of backend
+5. For now, the app uses Twillio's sms api. With this, the app can only send to limited phone numbers which are also verified by your Twillio account.
+6. Give a warning if `todo` is set to sendable but there are no phone numbers registered for the user.
 
 
 <!-- CONTRIBUTING -->
