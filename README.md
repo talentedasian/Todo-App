@@ -21,11 +21,6 @@
 </a>
 
 <!-- PROJECT LOGO -->
-<br />
-<p align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
 
 
@@ -49,7 +44,6 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
@@ -58,8 +52,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
 A Todo App made with various Spring Framework Modules. Initially, I thought of letting the users make a decision whether to send email notifications if 
 the deadline of their Todos would soon meet. After some research and trials, I guess I could do it a little later than I had plan.
@@ -82,19 +74,24 @@ the deadline of their Todos would soon meet. After some research and trials, I g
 1. Install your database of choice. Mine was Postgresql.
 2. Find the `application.properties` file inside the `/src/main/resources` directory and change the settings to your appropriate database of choice.
 3. In this step, you could either choose to create keys for JWT Signing via the library or create a keystore. If you wanna create a keystore, you're on your own but if you choose to just create it during application startup, follow through.
-    1. Create a class or just simply pick a class that would be responsible for creating and holding your keys.
-    2. Point the keys needed for the `JwtProvider` class and `JwtAuthFilter` to the class needed for the JWT to work.
+    a. Create a class or just simply pick a class that would be responsible for creating and holding your keys.
+    b. Point the keys needed for the `JwtProvider` class and `JwtAuthFilter` to the class needed for the JWT to work.
+4. Navigate through `/src/main/resources` and you will find different application specific properties. These are properties that are appropriate for different environments such as `application-test.properties` for github actions testing and for local environment testing, `application-development.properties`for local development properties, and `application-production.properties`
+    a. The `application-test.properties` points to a docker container running a postgres image. You can use any means of running a postgresql database and just   put the apppropriate spring datasource properties into the properties file.
+    b. If you navigate through the `application-production.properties` file, there is no spring datasource properties like `spring.datasource.url` or `spring.datasrouce.password`. This is because the app is hosted on heroku and has a postgresql plugin. Heroku takes care of the mapping of the spring datasource properties thus the empty spring datasource property file.
 
 ### Prerequisites
 
 ## Usage
-1. This backend currently requires a JWT to be present in an authorization header. Since this backend generates keys on application startup and does not provide a keystore when the backend generates a JWT, that JWT is invalid when the application starts up or restarts.
+1. This backend currently requires a signed JWT to be present in an authorization header. Since this backend generates keys on application startup and does not provide a keystore when the backend generates a JWT, that JWT is invalid when the application starts up or restarts.
 
 <!-- ROADMAP -->
 ## Roadmap
 
 1. Email API Service to send email notifications for nearing deadline Todos
-2. Test Cases
+2. Protected Resource Test Cases
+3. Create a keystore for signed JWTs.
+4. Host a postgresql database on the cloud to achieve duplicates of backend
 
 
 <!-- CONTRIBUTING -->
