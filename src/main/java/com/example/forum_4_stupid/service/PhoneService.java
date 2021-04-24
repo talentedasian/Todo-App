@@ -74,7 +74,7 @@ public class PhoneService {
 	}
 	
 	@Transactional(readOnly = true)
-	public List<PhoneNumber> getAllPhoneFromUserByUsername(String username) {
+	public List<PhoneNumber> getAllPhoneNumberFromUserByUsername(String username) {
 		try {	
 			List<PhoneNumber> email = phoneRepository.findByUser_Username(username);
 			return email;

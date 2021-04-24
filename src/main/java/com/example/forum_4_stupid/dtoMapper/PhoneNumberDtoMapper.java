@@ -55,7 +55,7 @@ public class PhoneNumberDtoMapper implements PhoneNumberDTOMapper<PhoneNumberDTO
 	@Override
 	public List<PhoneNumberDTO> getAllPhoneNumbersByUsersUsername(String username) {
 		List<PhoneNumberDTO> responseDTO = new ArrayList<>();
-		List<PhoneNumber> phoneNumber = phoneNumberService.getAllEmaiLFromUserByUsername(username);
+		List<PhoneNumber> phoneNumber = phoneNumberService.getAllPhoneNumberFromUserByUsername(username);
 		
 		for (PhoneNumber phoneNumbers : phoneNumber) {
 			var phoneNumberDTO = new PhoneNumberDTO();
