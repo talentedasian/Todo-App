@@ -107,7 +107,7 @@ public class Todos {
 		super();
 		this.created = LocalDateTime.now();
 		if (year == 0) {
-			return;
+			this.deadline = null;
 		}
 		this.deadline = LocalDateTime.of(year, month, dayOfMonth, hour, minute);
 	}

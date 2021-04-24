@@ -41,20 +41,15 @@ public class TodoController {
 	
 	@PostMapping("/add-todo")
 	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest) {
-		try {
-			TodoDTO todo = todoDtoMapper.save(todoRequest);
-			EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
-			NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
-			
-			if(todoRequest.isSendable()) {
-				messager.sendMessage(todoRequest);			
-			}
-			
-			return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);			
-		} catch (Exception e) {
-			e.printStackTrace();
+		TodoDTO todo = todoDtoMapper.save(todoRequest);
+		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
+		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
+		
+		if(todoRequest.isSendable()) {
+			messager.sendMessage(todoRequest);			
 		}
-		return null;
+		
+		return new ResponseEntity<>(assembler,getHeaders(),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/todoById/{id}")

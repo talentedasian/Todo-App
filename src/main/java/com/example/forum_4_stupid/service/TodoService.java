@@ -53,7 +53,7 @@ public class TodoService {
 					, todoRequest.getHour(), todoRequest.getMinute());
 			todos.setContent(todoRequest.getContent());
 			todos.setTitle(todoRequest.getTitle());
-			todos.setSendable(true);
+			todos.setSendable(todoRequest.isSendable());
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
 			System.out.println(todoRequest.isSendable() + " tanginamo");
 			
@@ -105,7 +105,8 @@ public class TodoService {
 						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
 		
 		todosRepository.findAll().stream()
-			.filter(todos -> todos.getDeadline().compareTo(timeNow) < timeNow.getHour());
+			.filter(todos -> todos.getDeadline().compareTo(timeNow) < -1)
+			.forEach(filteredTodos -> todosRepository.deleteById(filteredTodos.getId()));
 	}
 	
 	@Async
@@ -132,16 +133,6 @@ public class TodoService {
 				numberFrom, 
 				messageToBeSentPrefix + todoRequest.getTitle() + " sa " + 
 				todoRequest.getDeadline().toLocalDate() + " na yan");
-		
-		Date date = Date.from(LocalDateTime.of(
-				todoRequest.getYear(), 
-				todoRequest.getMonth(), 
-				todoRequest.getDay(),
-				todoRequest.getHour() - 1, 
-				todoRequest.getMinute())
-			.atZone(ZoneId.systemDefault()).toInstant());
-		
-		System.out.println(date + " tite");
 		
 		SendTodoMessages.sendMessages(message, 
 				Date.from(LocalDateTime.of(

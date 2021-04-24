@@ -7,7 +7,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;

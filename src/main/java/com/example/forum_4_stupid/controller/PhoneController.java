@@ -64,6 +64,15 @@ public class PhoneController {
 		return new ResponseEntity<CollectionModel<EntityModel<PhoneNumberDTO>>>(assembler, getHeaders(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/phoneNumberByOwnerUsername")
+	public ResponseEntity<CollectionModel<EntityModel<PhoneNumberDTO>>> getPhoneNumberByOwnerId(@RequestParam String username) {
+		List<PhoneNumberDTO> email = phoneDtoMapper.getAllPhoneNumbersByUsersUsername(username);
+		CollectionModel<EntityModel<PhoneNumberDTO>> assembler = phoneAssembler.toCollectionModel(email);
+		NestedDTOAssembler.addUserFromPhoneNumberNestedEntityLink(assembler);
+		
+		return new ResponseEntity<CollectionModel<EntityModel<PhoneNumberDTO>>>(assembler, getHeaders(), HttpStatus.OK);
+	}
+	
 	private HttpHeaders getHeaders() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(org.springframework.hateoas.MediaTypes.HAL_JSON);
