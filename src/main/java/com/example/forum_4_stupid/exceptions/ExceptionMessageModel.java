@@ -3,7 +3,7 @@ package com.example.forum_4_stupid.exceptions;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
-@JsonInclude(Include.NON_NULL	)
+@JsonInclude(Include.NON_NULL)
 public class ExceptionMessageModel {
 	
 	private String err, reason, optional;

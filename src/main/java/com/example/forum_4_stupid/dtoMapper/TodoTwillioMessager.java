@@ -33,7 +33,6 @@ public class TodoTwillioMessager implements TwillioMessager{
 		}
 		
 		todoService.sendMessagesByDeadlineTodos(todoRequest);
-		
 	}
 	
 }

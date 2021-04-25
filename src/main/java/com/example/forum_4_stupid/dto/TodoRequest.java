@@ -45,8 +45,7 @@ public class TodoRequest {
 	private int minute;
 
 	@NotNull
-	private boolean sendable;
-	
+	private boolean sendable;	
 	
 	public boolean isSendable() {
 		return sendable;

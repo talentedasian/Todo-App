@@ -20,7 +20,6 @@ public class SendTodoMessages {
 		ScheduledExecutorService scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
 		ConcurrentTaskScheduler scheduler = new ConcurrentTaskScheduler(scheduledExecutor);
 		
-		System.out.println("tanginamo");
 		scheduler.schedule(() -> messageToBeSent.create() 
 				, dateToBeSent);
 		}

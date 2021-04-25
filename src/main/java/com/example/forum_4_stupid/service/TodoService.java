@@ -129,6 +129,7 @@ public class TodoService {
 				todoRequest.getDay(),
 				todoRequest.getHour(), 
 				todoRequest.getMinute()));
+		
 		MessageCreator message = new MessageCreator(new PhoneNumber(user.getPhoneNumber().get(0).getPhoneNumber()),
 				numberFrom, 
 				messageToBeSentPrefix + todoRequest.getTitle() + " sa " + 

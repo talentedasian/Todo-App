@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.TodoDTO;
 import com.example.forum_4_stupid.dto.TodoRequest;
+import com.example.forum_4_stupid.dto.TodoSendStatusDTO;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.dtoMapper.interfaces.DTOClassMapper;
 import com.example.forum_4_stupid.dtoMapper.interfaces.TodoDTOMapper;
@@ -35,6 +36,7 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		todoDTO.setTitle(todos.getTitle());
 		todoDTO.setUser(mapEntityToDTO(todos.getUser()));
 		todoDTO.setSendable(todos.isSendable());
+		todoDTO.setTodoSendStatus(createTodoSendStatusDTOWhenGettingTodos(todos));
 		
 		return todoDTO;
 	}
@@ -51,6 +53,7 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		todoDTO.setTitle(todos.getTitle());
 		todoDTO.setUser(mapEntityToDTO(todos.getUser()));
 		todoDTO.setSendable(todos.isSendable());
+		todoDTO.setTodoSendStatus(createTodoSendStatusDTOWhenAddingTodo(request, todos));
 		
 		return todoDTO;
 	}
@@ -73,7 +76,6 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		List<Todos> todos = todoService.findAllTodosByOwnerUsername(username);
 		List<TodoDTO> todoDTOResponse = returnListTodoDTO(todos);
 		
-		
 		return todoDTOResponse;
 		
 	}
@@ -85,6 +87,7 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		userDTO.setUsername(entity.getUsername());
 		userDTO.setTotalPhoneNumbers(entity.getPhoneNumber().size());
 		userDTO.setTotalTodos(entity.getTodos().size());
+		
 		return userDTO;
 	}
 	
@@ -97,6 +100,8 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 			todoDTO.setContent(todo.getContent());
 			todoDTO.setCreatedAt(todo.getCreated());
 			todoDTO.setUser(mapEntityToDTO(todo.getUser()));
+			todoDTO.setSendable(todo.isSendable());
+			todoDTO.setTodoSendStatus(createTodoSendStatusDTOWhenGettingTodos(todo));
 			
 			todoDTOResponse.add(todoDTO);
 		}
@@ -104,4 +109,45 @@ public class TodoDtoMapper implements TodoDTOMapper<TodoDTO,TodoRequest,Todos>
 		return todoDTOResponse;
 	}
 	
+	private TodoSendStatusDTO createTodoSendStatusDTOWhenAddingTodo(TodoRequest todoRequest, Todos todo) {
+		var todoSendStatusDTO = new TodoSendStatusDTO();
+		if (todoRequest.isSendable()) {
+			if(todo.getUser().getPhoneNumber().size() < 1) {
+				todoSendStatusDTO.setGoingToBeSentOnDeadline(false);
+				todoSendStatusDTO.setReason("No phone number to send to");
+				
+				return todoSendStatusDTO;
+			} else {
+				todoSendStatusDTO.setGoingToBeSentOnDeadline(true);
+				
+				return todoSendStatusDTO;
+			}
+		} else {
+			todoSendStatusDTO.setGoingToBeSentOnDeadline(false);
+			todoSendStatusDTO.setReason("Todo is not sendable");
+			
+			return todoSendStatusDTO;
+		}
+	}
+	
+	private TodoSendStatusDTO createTodoSendStatusDTOWhenGettingTodos(Todos todo) {
+		var todoSendStatusDTO = new TodoSendStatusDTO();
+		if (todo.isSendable()) {
+			if(todo.getUser().getPhoneNumber().size() < 1) {
+				todoSendStatusDTO.setGoingToBeSentOnDeadline(false);
+				todoSendStatusDTO.setReason("No phone number to send to");
+				
+				return todoSendStatusDTO;
+			} else {
+				todoSendStatusDTO.setGoingToBeSentOnDeadline(true);
+				
+				return todoSendStatusDTO;
+			}
+		} else {
+			todoSendStatusDTO.setGoingToBeSentOnDeadline(false);
+			todoSendStatusDTO.setReason("Todo is not sendable");
+			
+			return todoSendStatusDTO;
+		}		
+	}
 }

@@ -13,7 +13,16 @@ public class TodoDTO extends RepresentationModel<TodoDTO>{
 	private LocalDateTime createdAt;
 	private LocalDateTime deadline;
 	private UserDTO user;
+	private TodoSendStatusDTO todoSendStatus;
 	
+	public TodoSendStatusDTO getTodoSendStatus() {
+		return todoSendStatus;
+	}
+
+	public void setTodoSendStatus(TodoSendStatusDTO todoSendStatus) {
+		this.todoSendStatus = todoSendStatus;
+	}
+
 	public boolean isSendable() {
 		return isSendable;
 	}

@@ -19,12 +19,13 @@ import com.example.forum_4_stupid.exceptions.PhoneNumberLimitHasReachedException
 import com.example.forum_4_stupid.exceptions.PhoneNumberNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
+import com.example.forum_4_stupid.exceptions.TodoNotSendableNoPhoneNumberAssociatedOnUser;
 
 @RestControllerAdvice
 public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<ExceptionMessageModel> handleDataIntegrityException () { 
+	public ResponseEntity<ExceptionMessageModel> handleDataIntegrityException() { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("409");
 		exceptionMessage.setReason("EntityAlreadyExists");
@@ -35,7 +36,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(AccountDoesNotExistException.class)
-	public ResponseEntity<ExceptionMessageModel> handleAccountDoesNotExistException () { 
+	public ResponseEntity<ExceptionMessageModel> handleAccountDoesNotExistException() { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("404");
 		exceptionMessage.setReason("Account Does Not Exist");
@@ -46,7 +47,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(PhoneNumberNotFoundByUsernameException.class)
-	public ResponseEntity<ExceptionMessageModel> handlePhoneNumberDoesNotExistException () { 
+	public ResponseEntity<ExceptionMessageModel> handlePhoneNumberDoesNotExistException() { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("404");
 		exceptionMessage.setReason("PhoneNumber Does Not Exist");
@@ -68,7 +69,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(TodoNotFoundException.class)
-	public ResponseEntity<ExceptionMessageModel> handleTodoDoesNotExistException () { 
+	public ResponseEntity<ExceptionMessageModel> handleTodoDoesNotExistException() { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("404");
 		exceptionMessage.setReason("Todo does not exist");
@@ -79,7 +80,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 
 	@ExceptionHandler(TodoAlreadyExistException.class)
-	public ResponseEntity<ExceptionMessageModel> handleTodoAlreadyExistException () {
+	public ResponseEntity<ExceptionMessageModel> handleTodoAlreadyExistException() {
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("409");
 		exceptionMessage.setReason("Todo Already Exist");
@@ -90,7 +91,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(LoginFailedException.class)
-	public ResponseEntity<ExceptionMessageModel> handleLoginFailedException (LoginFailedException ex) { 
+	public ResponseEntity<ExceptionMessageModel> handleLoginFailedException(LoginFailedException ex) { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("401");
 		exceptionMessage.setReason("Login failed");
@@ -107,7 +108,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(BadRequestException.class)
-	public ResponseEntity<ExceptionMessageModel> handleBadRequestLogin (LoginFailedException ex) { 
+	public ResponseEntity<ExceptionMessageModel> handleBadRequestLogin(LoginFailedException ex) { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("400");
 		exceptionMessage.setReason("Bad Request");
@@ -118,7 +119,19 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(DateTimeException.class)
-	public ResponseEntity<ExceptionMessageModel> handleBadRequestDateTime () { 
+	public ResponseEntity<ExceptionMessageModel> handleBadRequestDateTime() { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("400");
+		exceptionMessage.setReason("Bad Request");
+		exceptionMessage.setOptional("Invalid Date");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
+	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() { 
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("400");
 		exceptionMessage.setReason("Bad Request");
