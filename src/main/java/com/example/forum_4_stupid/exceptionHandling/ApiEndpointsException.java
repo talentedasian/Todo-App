@@ -119,7 +119,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(DateTimeException.class)
-	public ResponseEntity<ExceptionMessageModel> handleBadRequestDateTime() { 
+	public ResponseEntity<ExceptionMessageModel> handleBadRequestDateTime(Exception ex) {
 		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 		exceptionMessage.setErr("400");
 		exceptionMessage.setReason("Bad Request");
@@ -130,16 +130,16 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
-	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() { 
-		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
-		exceptionMessage.setErr("400");
-		exceptionMessage.setReason("Bad Request");
-		exceptionMessage.setOptional("Invalid Date");
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		
-		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
-	}
+//	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
+//	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() { 
+//		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+//		exceptionMessage.setErr("400");
+//		exceptionMessage.setReason("Bad Request");
+//		exceptionMessage.setOptional("Invalid Date");
+//		HttpHeaders headers = new HttpHeaders();
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//		
+//		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
+//	}
 	
 }

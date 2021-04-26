@@ -55,7 +55,6 @@ public class TodoService {
 			todos.setTitle(todoRequest.getTitle());
 			todos.setSendable(todoRequest.isSendable());
 			todos.setUser(usersRepository.findByUsername(todoRequest.getUsername()).get());
-			System.out.println(todoRequest.isSendable() + " tanginamo");
 			
 			todosRepository.save(todos);
 			

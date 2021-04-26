@@ -10,6 +10,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +41,8 @@ public class TodoController {
 	}
 	
 	@PostMapping("/add-todo")
-	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest) {
+	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest, BindingResult result) {
+		System.out.println(result.getFieldErrors() + " tanginamo");
 		TodoDTO todo = todoDtoMapper.save(todoRequest);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
