@@ -29,7 +29,7 @@ public class TodoTwillioMessager implements TwillioMessager{
 	public void sendMessage(TodoRequest todoRequest) {
 		List<PhoneNumber> phoneOfUsers = phoneService.getAllPhoneNumberFromUserByUsername(todoRequest.getUsername());
 		if(phoneOfUsers.size() == 0) {
-			throw new TodoNotSendableNoPhoneNumberAssociatedOnUser("No phone Number Associated on User");
+			
 		}
 		
 		todoService.sendMessagesByDeadlineTodos(todoRequest);

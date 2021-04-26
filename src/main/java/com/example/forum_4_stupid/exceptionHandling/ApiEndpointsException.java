@@ -131,16 +131,14 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
 	}
 	
-//	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
-//	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() throws IllegalArgumentException, IllegalAccessException { 
-//		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
-//		exceptionMessage.setErr("400");
-//		exceptionMessage.setReason("Bad Request");
-//		exceptionMessage.setOptional("Invalid Date");
-//		HttpHeaders headers = new HttpHeaders();
-//		headers.setContentType(MediaType.APPLICATION_JSON);
-//		
-//		return new ResponseEntity<ExceptionMessageModel>(exceptionMessage, headers, HttpStatus.BAD_REQUEST);
-//	}
+	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
+	public void handleNoPhoneNumberToSendTo() throws IllegalArgumentException, IllegalAccessException { 
+		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
+		exceptionMessage.setErr("400");
+		exceptionMessage.setReason("No Phone Number associated on user");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+	}
 	
 }
