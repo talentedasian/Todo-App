@@ -1,5 +1,6 @@
 package com.example.forum_4_stupid.exceptionHandling;
 
+import java.lang.reflect.Field;
 import java.time.DateTimeException;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -131,7 +132,7 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	}
 	
 //	@ExceptionHandler(TodoNotSendableNoPhoneNumberAssociatedOnUser.class)
-//	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() { 
+//	public ResponseEntity<ExceptionMessageModel> handleNoPhoneNumberToSendTo() throws IllegalArgumentException, IllegalAccessException { 
 //		ExceptionMessageModel exceptionMessage = new ExceptionMessageModel();
 //		exceptionMessage.setErr("400");
 //		exceptionMessage.setReason("Bad Request");
