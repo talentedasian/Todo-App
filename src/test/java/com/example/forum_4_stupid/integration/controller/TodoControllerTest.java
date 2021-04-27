@@ -12,12 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -86,6 +87,7 @@ public class TodoControllerTest {
 		content.put("day", "9");
 		content.put("hour", "13");
 		content.put("minute", "22");
+		content.put("sendable", "true");
 		
 		jsonContent = new ObjectMapper().writeValueAsString(content);
 	}
@@ -117,18 +119,21 @@ public class TodoControllerTest {
 	
 	@Test
 	public void shouldReturnBadRequestWhenInvalidDate() throws Exception {
-		when(mapper.save(Mockito.any(TodoRequest.class))).thenThrow(new DateTimeException(""));
+		content.put("day", "32");
+		jsonContent = new ObjectMapper().writeValueAsString(content);
+		when(mapper.save(Mockito.any(TodoRequest.class))).thenReturn(todoDTO);
 		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
 		
+		List<String> operand = List.of("Error on field day. Value cannot be greater than 31");
 		mockMvc.perform(post(new URI("/api/todo/add-todo"))
 				.content(jsonContent)
 				.characterEncoding("utf-8")
 				.contentType(MediaType.APPLICATION_JSON))
 		.andExpect(status().isBadRequest())
 		.andExpect(jsonPath("err", equalTo("400")))
-		.andExpect(jsonPath("reason", equalTo("Bad Request")))
-		.andExpect(jsonPath("optional", equalTo("Invalid Date")));
+		.andExpect(jsonPath("reason", equalTo("Bad Request on one of the fields")))
+		.andExpect(jsonPath("body_errors", CoreMatchers.equalTo(operand)));
 	}
 	
 	@Test
@@ -157,7 +162,17 @@ public class TodoControllerTest {
 	@Test
 	@DisplayName("shoudl return nested user dto outputs when adding email")
 	public void shouldReturnExpectedNestedUserDtoOutputs() throws URISyntaxException, Exception {
-		when(mapper.save(any(TodoRequest.class))).thenReturn(todoDTO);
+		TodoRequest todoRequest = new TodoRequest();
+		todoRequest.setTitle("test title");
+		todoRequest.setContent("test content");
+		todoRequest.setUsername("tesstusername");
+		todoRequest.setYear(0);
+		todoRequest.setDay(1);
+		todoRequest.setDeadline(null);
+		todoRequest.setMinute(2);
+		todoRequest.setMonth(2);
+		todoRequest.setSendable(true);
+		when(mapper.save(todoRequest)).thenReturn(todoDTO);
 		
 		when(assembler.toModel(Mockito.any())).thenReturn(entityModel);
 		

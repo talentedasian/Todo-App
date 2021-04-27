@@ -56,7 +56,7 @@ public class ProtectedResourceTest {
 		.andExpect(status().is(401))
 		.andExpect(jsonPath("err", equalTo("401")))
 		.andExpect(jsonPath("reason", equalTo("Invalid Signature of JWT")))
-		.andExpect(jsonPath("optional", CoreMatchers.notNullValue()));
+		.andExpect(jsonPath("additional_information", CoreMatchers.notNullValue()));
 	}
 	
 	@org.junit.jupiter.api.Test
@@ -67,7 +67,7 @@ public class ProtectedResourceTest {
 		.andExpect(status().is(401))
 		.andExpect(jsonPath("err", equalTo("401")))
 		.andExpect(jsonPath("reason", equalTo("Invalid Signature of JWT")))
-		.andExpect(jsonPath("optional", CoreMatchers.notNullValue()));		
+		.andExpect(jsonPath("additional_information", CoreMatchers.notNullValue()));		
 	}
 	
 	@org.junit.jupiter.api.Test
