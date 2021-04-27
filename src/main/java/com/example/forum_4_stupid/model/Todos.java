@@ -25,7 +25,7 @@ public class Todos {
 	private String title;
 	
 	@Column(nullable = false)
-	private boolean isSendable;
+	private Boolean isSendable;
 	
 	@Column(nullable = true, name = "deadline")
 	private java.time.LocalDateTime deadline;

@@ -1,6 +1,5 @@
 package com.example.forum_4_stupid.exceptionHandling;
 
-import java.lang.reflect.Field;
 import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,21 +157,21 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		BadRequestExceptionModel exceptionModel = new BadRequestExceptionModel();
-		List<FieldError> listFieldErrors = new ArrayList<>();
-		exceptionModel.setErr("400");
-		exceptionModel.setReason("Bad Request on one of the fields");
+		BadRequestExceptionModel exceptionMessage = new BadRequestExceptionModel();
+		List<String> listOfReasonsOfErrors = new ArrayList<>();
 		
-		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-			listFieldErrors.add(fieldError);
+		exceptionMessage.setErr("400");
+		exceptionMessage.setReason("Bad Request on one of the fields");
+		
+		for (FieldError fieldError: ex.getBindingResult().getFieldErrors()) {
+			listOfReasonsOfErrors.add("Error on field " + fieldError.getField() + ".\s" + fieldError.getDefaultMessage());
 		}
 		
-		exceptionModel.setFieldErrors(fieldErrors);
-		
+		exceptionMessage.setReasonsOfErrors(listOfReasonsOfErrors);
 		
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		
 		return handleExceptionInternal(ex, exceptionMessage, headers, HttpStatus.BAD_REQUEST, request);
 	}
-	
 	
 }

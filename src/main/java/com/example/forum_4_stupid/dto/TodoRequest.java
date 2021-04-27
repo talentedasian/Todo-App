@@ -10,41 +10,41 @@ import javax.validation.constraints.Size;
 
 public class TodoRequest {
 
-	@javax.validation.constraints.NotNull
+	@NotNull(message = "Cannot be null")
 	@javax.validation.constraints.Size(max = 20)
 	private String title;
 	
-	@javax.validation.constraints.NotNull
+	@NotNull(message = "Cannot be null")
 	@javax.validation.constraints.Size(max = 255)
 	private String content;
 	
-	@javax.validation.constraints.NotNull
+	@NotNull(message = "Cannot be null")
 	@javax.validation.constraints.Size(min = 8, max = 20)
 	private String username;
 	
-	@Null
+	@Null(message = "Should be null")
 	private LocalDateTime deadline;
 	
-	@Min(value = 1, message = "Value cannot be lower than 1 ")
-	@Max(value = 31, message = "Value cannot be greater than 31 "))
+	@Min(value = 1, message = "Value cannot be lower than 1")
+	@Max(value = 31, message = "Value cannot be greater than 31")
 	private int day; 
 	
-	@Min(1)
-	@Max(12)
+	@Min(value = 1, message = "Value cannot be lower than 1")
+	@Max(value = 12, message =  "Value cannot be greater than 32")
 	private int month;
 	
 	private int year;
 	
-	@Min(0)
-	@Max(23)
+	@Min(value = 0, message = "Value cannot be lower than 0")
+	@Max(value = 23, message = "Value cannot be greater than 23")
 	private int hour;
 		
-	@Min(0)
-	@Max(59)
+	@Min(value = 0, message = "Value cannot be lower than 0")
+	@Max(value = 59, message = "Value cannot be greater than 59")
 	private int minute;
 
-	@NotNull
-	private boolean sendable;	
+	@NotNull(message = "Cannot be null")
+	private Boolean sendable;	
 	
 	public boolean isSendable() {
 		return sendable;
