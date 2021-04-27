@@ -10,6 +10,7 @@ public class PhoneNumberRequest {
 	private String phoneNumber;
 	
 	@NotNull
+	@Size(min = 8, max = 20)
 	private String username;
 
 	public String getPhoneNumber() {

@@ -131,8 +131,16 @@ public class TodoRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	public TodoRequest(@NotNull @Size(max = 20) String title, @NotNull @Size(max = 255) String content, String username,
-			LocalDateTime deadline, int day, int month, int year, int hour, int minute) {
+	public TodoRequest(@NotNull(message = "Cannot be null") @Size(max = 20) String title,
+			@NotNull(message = "Cannot be null") @Size(max = 255) String content,
+			@NotNull(message = "Cannot be null") @Size(min = 8, max = 20) String username,
+			@Null(message = "Should be null") LocalDateTime deadline,
+			@Min(value = 1, message = "Value cannot be lower than 1") @Max(value = 31, message = "Value cannot be greater than 31") int day,
+			@Min(value = 1, message = "Value cannot be lower than 1") @Max(value = 12, message = "Value cannot be greater than 32") int month,
+			int year,
+			@Min(value = 0, message = "Value cannot be lower than 0") @Max(value = 23, message = "Value cannot be greater than 23") int hour,
+			@Min(value = 0, message = "Value cannot be lower than 0") @Max(value = 59, message = "Value cannot be greater than 59") int minute,
+			@NotNull(message = "Cannot be null") Boolean sendable) {
 		super();
 		this.title = title;
 		this.content = content;
@@ -143,6 +151,7 @@ public class TodoRequest {
 		this.year = year;
 		this.hour = hour;
 		this.minute = minute;
+		this.sendable = sendable;
 	}
 
 	@Override

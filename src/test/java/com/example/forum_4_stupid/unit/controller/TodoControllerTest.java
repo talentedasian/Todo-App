@@ -78,7 +78,6 @@ public class TodoControllerTest {
 		verify(assembler).toModel(todoDTO);
 	}
 	
-	@DirtiesContext(methodMode = MethodMode.AFTER_METHOD)
 	@Test
 	@DisplayName("Should Return Hal_Json As Media Type")
 	public void shouldReturnHal_Json() {
