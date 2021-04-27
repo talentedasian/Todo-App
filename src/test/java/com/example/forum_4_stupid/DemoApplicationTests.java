@@ -37,6 +37,8 @@ import org.springframework.web.client.RestTemplate;
 import com.example.forum_4_stupid.dto.LoginRequest;
 import com.example.forum_4_stupid.dto.PhoneNumberDTO;
 import com.example.forum_4_stupid.dto.PhoneNumberRequest;
+import com.example.forum_4_stupid.dto.TodoDTO;
+import com.example.forum_4_stupid.dto.TodoRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.model.PhoneNumber;
 import com.example.forum_4_stupid.model.Todos;
@@ -173,6 +175,24 @@ class DemoApplicationTests {
 		errBadRequestJsonResponse.put("err", "400");
 		errBadRequestJsonResponse.put("reason", "Bad Request on one of the fields");
 		errBadRequestJsonResponse.put("body_errors", List.of("Error on field phoneNumber. size must be between 11 and 20"));
+		String expectedBadRequestMessageAsString = new ObjectMapper().writeValueAsString(errBadRequestJsonResponse);
+		
+		assertThat(expectedBadRequestMessageAsString,
+				equalTo(badRequestResponseBody));
+	}
+	
+	@Test
+	public void testBadRequestAddTodoDateInvalid() throws RestClientException, URISyntaxException, JsonProcessingException {
+		TodoRequest entity = new TodoRequest("test title", "test content", "longenough",
+				null, 32, 2, 0, 2, 2, true);
+		
+		BadRequest badRequest = assertThrows(BadRequest.class, 
+				() -> template.postForObject(new URI("http://localhost:" + port + "/api/todo/add-todo"), entity, TodoDTO.class));
+		String badRequestResponseBody = badRequest.getResponseBodyAsString();
+		Map<String, Object> errBadRequestJsonResponse = new LinkedHashMap<>();
+		errBadRequestJsonResponse.put("err", "400");
+		errBadRequestJsonResponse.put("reason", "Bad Request on one of the fields");
+		errBadRequestJsonResponse.put("body_errors", List.of("Error on field day. Value cannot be greater than 31"));
 		String expectedBadRequestMessageAsString = new ObjectMapper().writeValueAsString(errBadRequestJsonResponse);
 		
 		assertThat(expectedBadRequestMessageAsString,
