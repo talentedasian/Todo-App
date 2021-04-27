@@ -2,14 +2,19 @@ package com.example.forum_4_stupid.exceptionHandling;
 
 import java.lang.reflect.Field;
 import java.time.DateTimeException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.example.forum_4_stupid.exceptions.AccountDoesNotExistException;
@@ -19,6 +24,7 @@ import com.example.forum_4_stupid.exceptions.LoginFailedException;
 import com.example.forum_4_stupid.exceptions.PhoneNumberLimitHasReachedException;
 import com.example.forum_4_stupid.exceptions.PhoneNumberNotFoundByUsernameException;
 import com.example.forum_4_stupid.exceptions.TodoAlreadyExistException;
+import com.example.forum_4_stupid.exceptions.TodoNotCreatableLessThanCurrentYear;
 import com.example.forum_4_stupid.exceptions.TodoNotFoundException;
 import com.example.forum_4_stupid.exceptions.TodoNotSendableNoPhoneNumberAssociatedOnUser;
 
@@ -125,6 +131,13 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		exceptionMessage.setErr("400");
 		exceptionMessage.setReason("Bad Request");
 		exceptionMessage.setOptional("Invalid Date");
+		
+		if (ex.getCause() instanceof TodoNotCreatableLessThanCurrentYear) {
+			exceptionMessage.setErr("400");
+			exceptionMessage.setReason("Bad Request");
+			exceptionMessage.setOptional("Invalid Year");
+		}
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
@@ -140,5 +153,26 @@ public class ApiEndpointsException extends ResponseEntityExceptionHandler{
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
 	}
+	
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		BadRequestExceptionModel exceptionModel = new BadRequestExceptionModel();
+		List<FieldError> listFieldErrors = new ArrayList<>();
+		exceptionModel.setErr("400");
+		exceptionModel.setReason("Bad Request on one of the fields");
+		
+		for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
+			listFieldErrors.add(fieldError);
+		}
+		
+		exceptionModel.setFieldErrors(fieldErrors);
+		
+		
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		return handleExceptionInternal(ex, exceptionMessage, headers, HttpStatus.BAD_REQUEST, request);
+	}
+	
 	
 }

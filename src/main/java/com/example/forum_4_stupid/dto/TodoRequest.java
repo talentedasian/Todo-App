@@ -25,15 +25,14 @@ public class TodoRequest {
 	@Null
 	private LocalDateTime deadline;
 	
-	@Min(1)
-	@Max(31)
+	@Min(value = 1, message = "Value cannot be lower than 1 ")
+	@Max(value = 31, message = "Value cannot be greater than 31 "))
 	private int day; 
 	
 	@Min(1)
 	@Max(12)
 	private int month;
 	
-	@Min(2021L)
 	private int year;
 	
 	@Min(0)

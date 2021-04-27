@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.forum_4_stupid.dto.TodoRequest;
-import com.example.forum_4_stupid.exceptions.TodoNotSendableNoPhoneNumberAssociatedOnUser;
 import com.example.forum_4_stupid.model.PhoneNumber;
 import com.example.forum_4_stupid.service.PhoneService;
 import com.example.forum_4_stupid.service.TodoService;

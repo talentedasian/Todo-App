@@ -2,6 +2,7 @@ package com.example.forum_4_stupid.service;
 
 import static java.time.LocalDateTime.now;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -49,6 +50,9 @@ public class TodoService {
 	
 	public Todos addTodos (TodoRequest todoRequest) {
 		try {
+			if (todoRequest.getYear() != 0 && todoRequest.getYear() < 2021) {
+				throw new DateTimeException("Year cannot be lower than 2021. 0 is the only number accepeted to be lower than 2021", new TodoNotSendableDueToYearException());
+			}
 			var todos = new Todos(todoRequest.getYear(), todoRequest.getMonth(), todoRequest.getDay()
 					, todoRequest.getHour(), todoRequest.getMinute());
 			todos.setContent(todoRequest.getContent());
@@ -113,7 +117,7 @@ public class TodoService {
 		String messageToBeSentPrefix = "Hoy pukinginamo gawin mo na ung ";
 		
 		if(todoRequest.isSendable()) {
-			if(todoRequest.getYear() <= 2020) {
+			if(todoRequest.getYear() < 2021) {
 				throw new TodoNotSendableDueToYearException("Todo has year before 2021");
 			} else if(user.getPhoneNumber().size() == 0) {
 				throw new TodoNotSendableNoPhoneNumberAssociatedOnUser("User has no available phone numbers to send sms messages to"); 
