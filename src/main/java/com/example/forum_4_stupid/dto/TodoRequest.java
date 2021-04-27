@@ -33,7 +33,7 @@ public class TodoRequest {
 	@Max(12)
 	private int month;
 	
-	@Min(2021)
+	@Min(2021L)
 	private int year;
 	
 	@Min(0)

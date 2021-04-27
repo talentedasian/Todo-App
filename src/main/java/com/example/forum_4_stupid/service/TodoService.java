@@ -100,12 +100,10 @@ public class TodoService {
 		CompletableFuture.supplyAsync(() -> todosRepository.findAll())
 				.thenAccept((future) -> future.stream().
 						filter((filteredTodo) -> filteredTodo.getDeadline().isAfter(timeNow) ||
-								filteredTodo.getDeadline().isEqual(timeNow))
+								filteredTodo.getDeadline().isEqual(timeNow) ||
+								filteredTodo.getDeadline().compareTo(timeNow) < 0)
 						.forEach((deleteTodo) -> todosRepository.deleteById(deleteTodo.getId())));
 		
-		todosRepository.findAll().stream()
-			.filter(todos -> todos.getDeadline().compareTo(timeNow) < -1)
-			.forEach(filteredTodos -> todosRepository.deleteById(filteredTodos.getId()));
 	}
 	
 	@Async

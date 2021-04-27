@@ -41,8 +41,7 @@ public class TodoController {
 	}
 	
 	@PostMapping("/add-todo")
-	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest, BindingResult result) {
-		System.out.println(result.getFieldErrors() + " tanginamo");
+	public ResponseEntity<EntityModel<TodoDTO>> addTodo (@Valid @RequestBody TodoRequest todoRequest) {
 		TodoDTO todo = todoDtoMapper.save(todoRequest);
 		EntityModel<TodoDTO> assembler = todoAssembler.toModel(todo);
 		NestedDTOAssembler.addUserFromTodoNestedEntityLink(assembler);
