@@ -35,6 +35,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.forum_4_stupid.dto.LoginRequest;
+import com.example.forum_4_stupid.dto.PhoneNumberDTO;
+import com.example.forum_4_stupid.dto.PhoneNumberRequest;
 import com.example.forum_4_stupid.dto.UserDTO;
 import com.example.forum_4_stupid.model.PhoneNumber;
 import com.example.forum_4_stupid.model.Todos;
@@ -144,7 +146,7 @@ class DemoApplicationTests {
 	}
 	
 	@Test
-	public void testBadRequestUser() throws RestClientException, URISyntaxException, JsonProcessingException {
+	public void testBadRequestAuthSignup() throws RestClientException, URISyntaxException, JsonProcessingException {
 		LoginRequest entity = new LoginRequest("not", "longenough");
 		
 		BadRequest badRequest = assertThrows(BadRequest.class, 
@@ -154,6 +156,23 @@ class DemoApplicationTests {
 		errBadRequestJsonResponse.put("err", "400");
 		errBadRequestJsonResponse.put("reason", "Bad Request on one of the fields");
 		errBadRequestJsonResponse.put("body_errors", List.of("Error on field username. size must be between 8 and 20"));
+		String expectedBadRequestMessageAsString = new ObjectMapper().writeValueAsString(errBadRequestJsonResponse);
+		
+		assertThat(expectedBadRequestMessageAsString,
+				equalTo(badRequestResponseBody));
+	}
+	
+	@Test
+	public void testBadRequestAddPhoneNumber() throws RestClientException, URISyntaxException, JsonProcessingException {
+		PhoneNumberRequest entity = new PhoneNumberRequest("+639", "longenough");
+		
+		BadRequest badRequest = assertThrows(BadRequest.class, 
+				() -> template.postForObject(new URI("http://localhost:" + port + "/api/phone/add-phoneNumber"), entity, PhoneNumberDTO.class));
+		String badRequestResponseBody = badRequest.getResponseBodyAsString();
+		Map<String, Object> errBadRequestJsonResponse = new LinkedHashMap<>();
+		errBadRequestJsonResponse.put("err", "400");
+		errBadRequestJsonResponse.put("reason", "Bad Request on one of the fields");
+		errBadRequestJsonResponse.put("body_errors", List.of("Error on field phoneNumber. size must be between 11 and 20"));
 		String expectedBadRequestMessageAsString = new ObjectMapper().writeValueAsString(errBadRequestJsonResponse);
 		
 		assertThat(expectedBadRequestMessageAsString,
