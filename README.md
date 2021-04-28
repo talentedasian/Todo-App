@@ -92,7 +92,7 @@ the deadline of their Todos would soon meet. After some research and trials, I g
 2. Protected Resource Test Cases
 3. Create a keystore for signed JWTs.
 4. Host a postgresql database on the cloud to achieve duplicates of backend
-5. For now, the app uses Twillio's sms api. With this, the app can only send to limited phone numbers which are also verified by your Twillio account.
+5. For now, the app uses Twillio's sms api. With this, the app can only send to phone numbers which verified by your Twillio account.
 6. Give a warning if `todo` is set to sendable but there are no phone numbers registered for the user.
 7. Twillio Test Cases
 
